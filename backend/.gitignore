@@ -1,0 +1,17 @@
+.venv/
+
+*.pyc
+__pycache__/
+
+*.sqlite3
+
+*.log
+
+.vscode/
+.idea/
+
+frontend/node_modules/
+frontend/build/
+
+backend/*.env
+backend/local_settings.py

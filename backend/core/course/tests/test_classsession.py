@@ -1,5 +1,5 @@
 from django.test import TestCase
-from course.models import ClassSession
+from course.models.ClassSession import ClassSession
 from datetime import time
 
 class ClassSessionModelTest(TestCase):

@@ -16,7 +16,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-
+from django.contrib import admin
+from django.urls import path, include
+from django.http import HttpResponse
+def index(request):
+    return HttpResponse("Welcome — API is up. Use /users/ and /courses/")
 urlpatterns = [
+    path('', index, name='home'),
     path('admin/', admin.site.urls),
+    path('users/', include('users.urls')),  # مسیر users
+    path('courses/', include('courses.urls')),  # مسیر courses
 ]

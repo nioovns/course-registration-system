@@ -1,17 +1,12 @@
+# Virtual environment
 .venv/
 
-*.pyc
-__pycache__/
-
-*.sqlite3
-
-*.log
-
-.vscode/
+# IDE
 .idea/
 
-frontend/node_modules/
-frontend/build/
+# Python cache
+__pycache__/
+*.pyc
 
-backend/*.env
-backend/local_settings.py
+# Database
+db.sqlite3

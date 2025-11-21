@@ -1,3 +1,38 @@
+body {
+    font-family: "Dana-Regular";
+    
+}
+
+@font-face {
+    font-family: "Dana-Regular";
+    src: url("../Font/Dana-Regular.woff2")
+    format("woff2"),
+    url("../Font/Dana-Regular.ttf")
+    format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+html , body{
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow-x: hidden;
+
+}
+.loginpage,
+.loginpage * {
+  box-sizing:border-box;
+ 
+}
+.loginpage {
+  background: #ffffff;
+  height: 736px;
+  position: relative;
+  box-shadow: 0px 4px 15px 5px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  overflow-x: hidden;
+}
 
 
 

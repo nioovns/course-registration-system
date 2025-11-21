@@ -33,6 +33,63 @@ html , body{
   overflow: hidden;
   overflow-x: hidden;
 }
+.login-pic-side {
+  background: #ffffff;
+  padding: 167px 121px 167px 121px;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  width: 839px;
+  height: 1024px;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  overflow: hidden;
+}
+.frame-2,
+.frame-2 * {
+  box-sizing: border-box;
+}
+.frame-2 {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+}
+.group {
+  flex-shrink: 0;
+  width: 1000px;
+  height: 905px;
+  margin-top: -500px;
+  position: relative;
+  overflow: visible;
+}
+.div {
+  color: #000000;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 400;
+  position: relative;
+  display: flex;
+  margin-top:-250px;
+  align-items: flex-end;
+  justify-content: center;
+}
+.div2 {
+  color: #000000;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 400;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
 
 
 

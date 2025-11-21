@@ -162,3 +162,5 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),  # اعتبار: ۱ ساعت
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),     # اعتبار: ۱ روز
 }
+
+AUTH_USER_MODEL = 'users.User'

@@ -90,7 +90,342 @@ html , body{
   align-items: flex-end;
   justify-content: center;
 }
+.form {
+  background: #fafaff;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  justify-content: center;
+  width: 700px;
+  height: 1024px;
+  position: absolute;
+  left: calc(50% - -120px);
+  top: 50%;
+  translate: 0 -50%;
+  overflow: hidden;
+}
+.logo {
+  padding: 0px 0px 32px 0px;
+  flex-shrink: 0;
+  width: 358px;
+  height: 146px;
+  position: relative;
+}
+.frame-22 {
+  opacity: 0.8;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-end;
+  justify-content: center;
+  position: absolute;
+  left: 84px;
+  top: 28.5px;
+}
+.div3 {
+  color: #282c52;
+  text-align: left;
+  font-size: 22px;
+  font-weight: 500;
+  position: relative;
+}
+.div4 {
+  color: #282c52;
+  text-align: left;
+  font-size: 16px;
+  font-weight: 300;
+  position: relative;
+}
+.frame-23 {
+  padding: 0px 1px 0px 1px;
+  width: 109px;
+  height: 114px;
+  position: absolute;
+  left: 249px;
+  top: 0.5px;
+}
+.group-1 {
+  height: auto;
+  position:relative;
+  left: 1px;
+  top: -10px;
+  overflow: visible;
+}
+.user-name {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-end;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+}
+.div5 {
+  color: #282c52;
+  text-align: right;
+  font-size: 14px;
+  font-weight: 400;
+  position: relative;
+}
+.frame-3 {
+  background: #ffffff;
+  border-radius: 12px;
+  border-style: solid;
+  border-color: #e9ebff;
+  border-width: 1px;
+  padding: 13px 0px 13px 0px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  width: 360px;
+  height: 48px;
+  position: relative;
+  overflow: hidden;
+}
+.frame-24 {
+  display: flex;
+  flex-direction: row;
+  gap: 0px;
+  align-items: center;
+  justify-content: flex-end;
+  flex-shrink: 0;
+  width: 303px;
+  height: 23px;
+  position: relative;
+}
+.mdi-light-account {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  height: 48px;
+  position: relative;
+  overflow: visible;
+}
+.pass-word {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-end;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+}
+.frame-25 {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  align-self: stretch;
+  flex-shrink: 0;
+  position: relative;
+}
+.frame-26 {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  align-self: stretch;
+  flex-shrink: 0;
+  width: 135px;
+  position: relative;
+}
+.mdi-light-lock {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  height: 48px;
+  position: relative;
+  overflow: visible;
+}
+.div6:hover {
+  color: #3B175C;
+}
+.div6 {
+  color: #282c52;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 400;
+  position: relative;
+  cursor: pointer;
+}
+.capcha {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-end;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+}
+.frame-27 {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  width: 360px;
+  position: relative;
+}
+.frame-32 {
+  background: #ffffff;
+  border-radius: 12px;
+  border-style: solid;
+  border-color: #e9ebff;
+  border-width: 1px;
+  padding: 13px 0px 13px 0px;
+  display: flex;
+  flex-direction: row;
+  gap: 0px;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 1;
+  height: 48px;
+  position: relative;
+  overflow: hidden;
+}
+.frame-5 {
+  background: #ffffff;
+  border-radius: 12px;
+  flex: 1;
+  height: 47px;
+  position: relative;
+  overflow: hidden;
+}
+.image-2 {
+  width: 166px;
+  height: 51px;
+  position: absolute;
+  left: 13px;
+  top: -1.72px;
+  object-fit: cover;
+}
+.mdi-light-refresh {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 42px;
+  height: 48px;
+  position: relative;
+  overflow: visible;
+  cursor: pointer;
+}
+.frame-4 {
+  background: #ffffff;
+  border-radius: 12px;
+  border-style: solid;
+  border-color: #e9ebff;
+  border-width: 1px;
+  padding: 13px 0px 13px 0px;
+  display: flex;
+  flex-direction: row;
+  gap: 0px;
+  align-items: center;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  width: 111px;
+  height: 48px;
+  position: relative;
+  overflow: hidden;
+}
+.remember-me {
+  padding: 4px 0px 4px 0px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  width: 360px;
+  position: relative;
+}
+.frame-28 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  align-self: stretch;
+  flex-shrink: 0;
+  width: 334px;
+  position: relative;
+}
+.div7 {
+  color: #282c52;
+  text-align: right;
+  font-size: 14px;
+  font-weight: 400;
+  position: relative;
+  align-self: stretch;
+  padding-left: 243px;
+}
+.frame-6 {
+  background: #f5f2f2;
+  border-radius: 6px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  width: 18px;
+  height: 20px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
 
+.login-submit {
+  background: var(--primarycolor, #3b175c);
+  border-radius: 12px;
+  border-style: solid;
+  border-color: #3b175c;
+  border-width: 1px;
+  padding: 13px 0px 13px 0px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  width: 360px;
+  height: 63px;
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+}
+.div8 {
+  color: #ffffff;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  position: relative;
+  flex: 1;
+  height: 23px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.login-submit:hover {
+  background: #E6CD00;
+  border-color:#E6CD00 ;
+}
+.login-submit:active {
+  background: #E6CD00;
+  border-color:#E6CD00 ;
+}
 
 
 

@@ -9,7 +9,6 @@ class ClassSession(models.Model):
         ('mon', 'دوشنبه'),
         ('tue', 'سه‌شنبه'),
         ('wed', 'چهارشنبه'),
-        ('thu', 'پنج‌شنبه'),
     ]
 
     day = models.CharField(max_length=5, choices=DAY_CHOICES)

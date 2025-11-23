@@ -19,8 +19,11 @@ class CourseViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 
     def create(self, request):
-        # if Course.objects.filter(code=request.data["code"]).exists():
-        #     return Response({"error": "Course code already exists"}, status=400)
         course = self.service.create_course(request.data)
         serializer = CourseSerializer(course)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    def update(self, request, pk=None):
+        course = self.service.update_course(pk, request.data)
+        serializer = CourseSerializer(course)
+        return Response(serializer.data)

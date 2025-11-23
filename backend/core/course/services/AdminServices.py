@@ -18,3 +18,9 @@ class AdminService:
         serializer.is_valid(raise_exception=True)  
         course = serializer.save()  
         return course
+    
+    def update_course(self, course_id, data):
+        course = get_object_or_404(Course, id=course_id)
+        serializer = CourseSerializer(instance=course, data=data, partial=True)  
+        serializer.is_valid(raise_exception=True)
+        return serializer.save()

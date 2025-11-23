@@ -36,3 +36,22 @@ class CourseSerializer(serializers.ModelSerializer):
         course.prerequisites.set(prerequisites_data)
 
         return course
+    
+    def update(self, instance, validated_data):
+        for attr, value in validated_data.items():
+            if attr not in ['sessions', 'prerequisites']:
+                setattr(instance, attr, value)
+        
+        instance.save()
+
+        if 'prerequisites' in validated_data:
+            instance.prerequisites.set(validated_data['prerequisites'])
+
+        if 'sessions' in validated_data:
+            sessions_data = validated_data['sessions']
+            instance.sessions.all().delete()
+            for session_data in sessions_data:
+                session = ClassSession.objects.create(**session_data)
+                instance.sessions.add(session)
+
+        return instance

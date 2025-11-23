@@ -3,6 +3,7 @@ from rest_framework import status, viewsets
 from course.serializers.CourseSerializer import CourseSerializer
 from course.serializers.ClassSessionSerializer import ClassSessionSerializer
 from course.services.AdminServices import AdminService
+from course.models.Course import Course
 
 class CourseViewSet(viewsets.ViewSet):
     service = AdminService()
@@ -16,3 +17,10 @@ class CourseViewSet(viewsets.ViewSet):
         course = self.service.get_course(pk)
         serializer = CourseSerializer(course)
         return Response(serializer.data)
+
+    def create(self, request):
+        # if Course.objects.filter(code=request.data["code"]).exists():
+        #     return Response({"error": "Course code already exists"}, status=400)
+        course = self.service.create_course(request.data)
+        serializer = CourseSerializer(course)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)

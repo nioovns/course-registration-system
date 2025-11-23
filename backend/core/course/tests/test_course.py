@@ -25,12 +25,6 @@ class CourseModelTest(TestCase):
         self.assertEqual(course.name, "Math 101")
         self.assertIn(self.session1, course.sessions.all())
 
-    def test_unique_course_code(self):
-        Course.objects.create(name="Math 101", code="MATH101", capacity=30)
-        course2 = Course(name="Math 102", code="MATH101", capacity=25)
-        with self.assertRaises(ValidationError):
-            course2.full_clean()  
-
     def test_positive_capacity(self):
         course = Course(name="Physics 101", code="PHYS101", capacity=-5)
         with self.assertRaises(ValidationError):

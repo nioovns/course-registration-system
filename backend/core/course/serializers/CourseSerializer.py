@@ -16,7 +16,8 @@ class CourseSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'code', 'capacity', 'sessions', 'prerequisites']
 
     def validate_code(self, value):
-        if Course.objects.filter(code=value).exists():
+        qs = Course.objects.exclude(id=self.instance.id) if self.instance else Course.objects.all()
+        if qs.filter(code=value).exists():
             raise serializers.ValidationError("Course code must be unique")
         return value
     

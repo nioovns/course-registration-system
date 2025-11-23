@@ -27,3 +27,7 @@ class CourseViewSet(viewsets.ViewSet):
         course = self.service.update_course(pk, request.data)
         serializer = CourseSerializer(course)
         return Response(serializer.data)
+
+    def destroy(self, request, pk=None):
+        self.service.delete_course(pk)
+        return Response(status=status.HTTP_204_NO_CONTENT)

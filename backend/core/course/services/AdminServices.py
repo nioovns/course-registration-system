@@ -24,3 +24,8 @@ class AdminService:
         serializer = CourseSerializer(instance=course, data=data, partial=True)  
         serializer.is_valid(raise_exception=True)
         return serializer.save()
+
+    def delete_course(self, course_id):
+        course = get_object_or_404(Course, id=course_id)
+        course.delete()
+        

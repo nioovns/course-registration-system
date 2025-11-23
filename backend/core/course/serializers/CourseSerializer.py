@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from course.models.Course import Course
 from course.models.ClassSession import ClassSession
-
 from .ClassSessionSerializer import ClassSessionSerializer
 
 class CourseSerializer(serializers.ModelSerializer):

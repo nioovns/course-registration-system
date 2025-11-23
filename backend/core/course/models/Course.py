@@ -3,7 +3,7 @@ from .ClassSession import ClassSession
 
 class Course(models.Model):
     name = models.CharField(max_length=100)
-    code = models.CharField(max_length=20, unique=True)
+    code = models.CharField(max_length=20, unique=False)
     capacity = models.PositiveIntegerField()
 
     sessions = models.ManyToManyField(ClassSession, related_name="courses")

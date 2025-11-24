@@ -11,3 +11,10 @@ class users(AbstractUser):
         ADMIN = 'admin', _('Admin')
         STUDENT = 'student', _('Student')
         PROFESSOR = 'professor', _('Professor')
+
+        role = models.CharField(
+            max_length=10,
+            choices=Roles.choices,
+            default=Roles.STUDENT,
+            verbose_name=_("User Role")
+        )

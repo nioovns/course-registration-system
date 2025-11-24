@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     #jwt
     'rest_framework',
     'rest_framework_simplejwt',
-
+    #swagger
+    'drf_yasg',
 
 ]
 

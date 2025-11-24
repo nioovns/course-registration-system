@@ -57,3 +57,6 @@ class users(AbstractUser):
             # قانون ۲: اگر نقش استاد است، باید کد استادی داشته باشد
             if self.role == self.Roles.PROFESSOR and not self.professor_code:
                 raise ValidationError({'professor_code': _('برای نقش استاد، وارد کردن کد استادی الزامی است.')})
+
+            def __str__(self):
+                return f"{self.username} ({self.get_role_display()})"

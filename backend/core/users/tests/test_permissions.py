@@ -5,3 +5,12 @@ from rest_framework import status
 
 User = get_user_model()
 
+class RolePermissionTests(APITestCase):
+    def setUp(self):
+        self.student = User.objects.create_user(username='std', password='123', role=User.Roles.STUDENT)
+        self.professor = User.objects.create_user(username='prof', password='123', role=User.Roles.PROFESSOR)
+        self.admin = User.objects.create_user(username='adm', password='123', role=User.Roles.ADMIN)
+
+        self.student_url = reverse('student-dashboard')
+        self.professor_url = reverse('professor-dashboard')
+        self.admin_url = reverse('admin-dashboard')

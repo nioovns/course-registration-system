@@ -11,7 +11,6 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import CustomTokenObtainPairSerializer, UserSerializer
 
 
-
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
 

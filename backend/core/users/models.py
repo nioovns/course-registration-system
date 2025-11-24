@@ -34,3 +34,15 @@ class users(AbstractUser):
             verbose_name=_("Professor Code"),
             help_text=_("Required for professors")
         )
+
+        @property
+        def is_student(self):
+            return self.role == self.Roles.STUDENT
+
+        @property
+        def is_professor(self):
+            return self.role == self.Roles.PROFESSOR
+
+        @property
+        def is_admin_role(self):
+            return self.role == self.Roles.ADMIN or self.is_superuser

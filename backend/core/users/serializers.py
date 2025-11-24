@@ -11,11 +11,10 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         token = super().get_token(user)
         token['role'] = user.role
         token['username'] = user.username
-        if getattr(user, 'is_student', False) and getattr(user, 'student_id', None):
+        if user.is_student and user.student_id:
             token['student_id'] = user.student_id
-        if getattr(user, 'is_professor', False) and getattr(user, 'professor_code', None):
+        if user.is_professor and user.professor_code:
             token['professor_code'] = user.professor_code
-
         return token
 
     def validate(self, attrs):

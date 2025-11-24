@@ -42,5 +42,16 @@ class AdminLoginTests(APITestCase):
             response = self.client.post(self.login_url, data)
             self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+        def test_student_credentials_on_admin_login(self):
+            User.objects.create_user(
+                username='student1',
+                password='pass',
+                role=User.Roles.STUDENT,
+                student_id='99999'
+            )
+            response = self.client.post(self.login_url, {'username': 'student1', 'password': 'pass'})
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
 
 

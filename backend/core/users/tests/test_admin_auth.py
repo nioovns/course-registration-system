@@ -17,40 +17,40 @@ class AdminLoginTests(APITestCase):
             email='admin@university.com'
         )
 
-        def test_admin_can_login_with_correct_credentials(self):
-            data = {'username': self.admin_username, 'password': self.admin_password}
-            response = self.client.post(self.login_url, data)
-            self.assertEqual(response.status_code, status.HTTP_200_OK)
-            self.assertIn('access', response.data)
-            self.assertIn('refresh', response.data)
+    def test_admin_can_login_with_correct_credentials(self):
+        data = {'username': self.admin_username, 'password': self.admin_password}
+        response = self.client.post(self.login_url, data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn('access', response.data)
+        self.assertIn('refresh', response.data)
 
-        def test_admin_cannot_login_with_wrong_password(self):
-            data = {'username': self.admin_username, 'password': 'wrong_password'}
-            response = self.client.post(self.login_url, data)
-            self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-            self.assertNotIn('access', response.data)
+    def test_admin_cannot_login_with_wrong_password(self):
+        data = {'username': self.admin_username, 'password': 'wrong_password'}
+        response = self.client.post(self.login_url, data)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertNotIn('access', response.data)
 
-        def test_login_fails_with_non_existent_username(self):
-            data = {'username': 'ghost_user', 'password': 'password123'}
-            response = self.client.post(self.login_url, data)
-            self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+    def test_login_fails_with_non_existent_username(self):
+        data = {'username': 'ghost_user', 'password': 'password123'}
+        response = self.client.post(self.login_url, data)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-        def test_inactive_admin_cannot_login(self):
-            self.admin_user.is_active = False
-            self.admin_user.save()
-            data = {'username': self.admin_username, 'password': self.admin_password}
-            response = self.client.post(self.login_url, data)
-            self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+    def test_inactive_admin_cannot_login(self):
+        self.admin_user.is_active = False
+        self.admin_user.save()
+        data = {'username': self.admin_username, 'password': self.admin_password}
+        response = self.client.post(self.login_url, data)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-        def test_student_credentials_on_admin_login(self):
-            User.objects.create_user(
+    def test_student_credentials_on_admin_login(self):
+        User.objects.create_user(
                 username='student1',
                 password='pass',
                 role=User.Roles.STUDENT,
                 student_id='99999'
             )
-            response = self.client.post(self.login_url, {'username': 'student1', 'password': 'pass'})
-            self.assertEqual(response.status_code, status.HTTP_200_OK)
+        response = self.client.post(self.login_url, {'username': 'student1', 'password': 'pass'})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
 

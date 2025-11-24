@@ -147,4 +147,4 @@ SIMPLE_JWT = {
 }
 
 # settings.py
-AUTH_USER_MODEL = 'Users.User'
+AUTH_USER_MODEL = 'users.User'

@@ -6,7 +6,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 
-class users(AbstractUser):
+class Users(AbstractUser):
     class Roles(models.TextChoices):
         ADMIN = 'admin', _('Admin')
         STUDENT = 'student', _('Student')

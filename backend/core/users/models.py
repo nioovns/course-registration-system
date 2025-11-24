@@ -46,3 +46,14 @@ class users(AbstractUser):
         @property
         def is_admin_role(self):
             return self.role == self.Roles.ADMIN or self.is_superuser
+
+        def clean(self):
+            super().clean()
+
+            # قانون ۱: اگر نقش دانشجو است، باید شماره دانشجویی داشته باشد
+            if self.role == self.Roles.STUDENT and not self.student_id:
+                raise ValidationError({'student_id': _('برای نقش دانشجو، وارد کردن شماره دانشجویی الزامی است.')})
+
+            # قانون ۲: اگر نقش استاد است، باید کد استادی داشته باشد
+            if self.role == self.Roles.PROFESSOR and not self.professor_code:
+                raise ValidationError({'professor_code': _('برای نقش استاد، وارد کردن کد استادی الزامی است.')})

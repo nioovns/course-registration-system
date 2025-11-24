@@ -24,4 +24,9 @@ class AdminLoginTests(APITestCase):
             self.assertIn('access', response.data)
             self.assertIn('refresh', response.data)
 
+        def test_admin_cannot_login_with_wrong_password(self):
+            data = {'username': self.admin_username, 'password': 'wrong_password'}
+            response = self.client.post(self.login_url, data)
+            self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+            self.assertNotIn('access', response.data)
 

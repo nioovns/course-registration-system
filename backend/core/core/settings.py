@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     #jwt
     'rest_framework',
     'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
+
     #swagger
     'drf_yasg',
 

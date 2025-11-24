@@ -57,5 +57,5 @@ class User(AbstractUser):
                 raise ValidationError({'professor_code': _('For the professor role, entering a professor code is required.')})
 
 
-        def __str__(self):
-            return f"{self.username} ({self.get_role_display()})"
+    def __str__(self):
+        return f"{self.username} ({self.get_role_display()})"

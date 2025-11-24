@@ -51,10 +51,10 @@ class User(AbstractUser):
         super().clean()
 
         if self.role == self.Roles.STUDENT and not self.student_id:
-                raise ValidationError({'student_id': _('For the student role, entering a student number is required.')})
+            raise ValidationError({'student_id': _('For the student role, entering a student number is required.')})
 
         if self.role == self.Roles.PROFESSOR and not self.professor_code:
-                raise ValidationError({'professor_code': _('For the professor role, entering a professor code is required.')})
+            raise ValidationError({'professor_code': _('For the professor role, entering a professor code is required.')})
 
 
     def __str__(self):

@@ -16,3 +16,9 @@ class ProfessorDashboardView(APIView):
 
     def get(self, request):
         return Response({"message": "Welcome Professor!"})
+
+class StudentDashboardView(APIView):
+    permission_classes = [IsStudent]
+
+    def get(self, request):
+        return Response({"message": "Welcome Student!"})

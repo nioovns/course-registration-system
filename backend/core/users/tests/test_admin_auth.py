@@ -16,3 +16,12 @@ class AdminLoginTests(APITestCase):
             role=User.Roles.ADMIN,
             email='admin@university.com'
         )
+
+        def test_admin_can_login_with_correct_credentials(self):
+            data = {'username': self.admin_username, 'password': self.admin_password}
+            response = self.client.post(self.login_url, data)
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertIn('access', response.data)
+            self.assertIn('refresh', response.data)
+
+

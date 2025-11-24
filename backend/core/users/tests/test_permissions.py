@@ -45,5 +45,11 @@ class RolePermissionTests(APITestCase):
         response = self.client.get(self.admin_url)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_unauthenticated_user_cannot_access_anything(self):
+        self.client.logout()
+        response = self.client.get(self.admin_url)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
 
 

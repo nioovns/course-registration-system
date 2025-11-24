@@ -14,3 +14,11 @@ class RolePermissionTests(APITestCase):
         self.student_url = reverse('student-dashboard')
         self.professor_url = reverse('professor-dashboard')
         self.admin_url = reverse('admin-dashboard')
+
+    def test_student_can_access_student_dashboard(self):
+        self.client.force_authenticate(user=self.student)
+        response = self.client.get(self.student_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+

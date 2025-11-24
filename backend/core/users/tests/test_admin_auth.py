@@ -30,3 +30,8 @@ class AdminLoginTests(APITestCase):
             self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
             self.assertNotIn('access', response.data)
 
+        def test_login_fails_with_non_existent_username(self):
+            data = {'username': 'ghost_user', 'password': 'password123'}
+            response = self.client.post(self.login_url, data)
+            self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+

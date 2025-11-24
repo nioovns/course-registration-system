@@ -35,3 +35,12 @@ class AdminLoginTests(APITestCase):
             response = self.client.post(self.login_url, data)
             self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+        def test_inactive_admin_cannot_login(self):
+            self.admin_user.is_active = False
+            self.admin_user.save()
+            data = {'username': self.admin_username, 'password': self.admin_password}
+            response = self.client.post(self.login_url, data)
+            self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+

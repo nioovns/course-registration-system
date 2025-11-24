@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.auth.views import LogoutView
 #from django.contrib.auth.views import LogoutView
 from django.urls import path, include
 from drf_yasg import openapi
@@ -9,7 +10,6 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
-from backend.core.users.views import LogoutView , CustomTokenObtainPairView
 
 # تنظیمات سواگر (Swagger)
 schema_view = get_schema_view(

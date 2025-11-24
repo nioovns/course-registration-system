@@ -1,6 +1,7 @@
 from django.urls import path
 from django.urls import path
-from .views import CustomTokenObtainPairView, LogoutView, AdminDashboardView, ProfessorDashboardView, StudentDashboardView
+from .views import CustomTokenObtainPairView, LogoutView, AdminDashboardView, ProfessorDashboardView, \
+    StudentDashboardView, MeView
 
 from .views import (
     AdminDashboardView,
@@ -9,6 +10,8 @@ from .views import (
 )
 
 urlpatterns = [
+    path('me/', MeView.as_view(), name='user-profile'),
+
     path('dashboard/admin/', AdminDashboardView.as_view(), name='admin-dashboard'),
     path('dashboard/professor/', ProfessorDashboardView.as_view(), name='professor-dashboard'),
     path('dashboard/student/', StudentDashboardView.as_view(), name='student-dashboard'),

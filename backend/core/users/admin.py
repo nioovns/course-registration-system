@@ -11,3 +11,9 @@ class CustomUserAdmin(UserAdmin):
 
     list_filter = ('role', 'is_staff', 'is_superuser', 'is_active')
     search_fields = ('username', 'first_name', 'last_name', 'email', 'student_id', 'professor_code')
+
+    fieldsets = UserAdmin.fieldsets + (
+        ('اطلاعات تکمیلی دانشگاه', {
+            'fields': ('role', 'student_id', 'professor_code'),
+        }),
+    )

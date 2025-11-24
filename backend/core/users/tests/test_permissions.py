@@ -35,5 +35,10 @@ class RolePermissionTests(APITestCase):
         response = self.client.get(self.professor_url)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_student_CANNOT_access_admin_dashboard(self):
+        self.client.force_authenticate(user=self.student)
+        response = self.client.get(self.admin_url)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
 
 

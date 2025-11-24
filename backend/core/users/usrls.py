@@ -3,3 +3,4 @@ from .views import AdminDashboardView, ProfessorDashboardView, StudentDashboardV
 
 path('dashboard/admin/', AdminDashboardView.as_view(), name='admin-dashboard'),
 path('dashboard/professor/', ProfessorDashboardView.as_view(), name='professor-dashboard'),
+path('dashboard/student/', StudentDashboardView.as_view(), name='student-dashboard'),

@@ -12,13 +12,13 @@ class users(AbstractUser):
         STUDENT = 'student', _('Student')
         PROFESSOR = 'professor', _('Professor')
 
-        role = models.CharField(
+    role = models.CharField(
             max_length=10,
             choices=Roles.choices,
             default=Roles.STUDENT,
             verbose_name=_("User Role")
         )
-        student_id = models.CharField(
+    student_id = models.CharField(
             max_length=20,
             blank=True,
             null=True,
@@ -26,7 +26,7 @@ class users(AbstractUser):
             verbose_name=_("Student ID"),
             help_text=_("Required for students")
         )
-        professor_code = models.CharField(
+    professor_code = models.CharField(
             max_length=20,
             blank=True,
             null=True,
@@ -58,5 +58,5 @@ class users(AbstractUser):
             if self.role == self.Roles.PROFESSOR and not self.professor_code:
                 raise ValidationError({'professor_code': _('برای نقش استاد، وارد کردن کد استادی الزامی است.')})
 
-            def __str__(self):
-                return f"{self.username} ({self.get_role_display()})"
+        def __str__(self):
+            return f"{self.username} ({self.get_role_display()})"

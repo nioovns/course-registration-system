@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     #my app
-    'users',
+    'Users',
 
     #jwt
     'rest_framework',
@@ -147,4 +147,4 @@ SIMPLE_JWT = {
 }
 
 # settings.py
-AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = 'Users.User'

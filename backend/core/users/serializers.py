@@ -1,5 +1,9 @@
 # backend/core/users/serializers.py
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework import serializers
+from django.contrib.auth import get_user_model
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+User = get_user_model()
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
@@ -22,3 +26,8 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
             'user_id': self.user.id
         })
         return data
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'role', 'first_name', 'last_name', 'student_id', 'professor_code']

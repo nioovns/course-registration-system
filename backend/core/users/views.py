@@ -8,6 +8,8 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import CustomTokenObtainPairSerializer
 from rest_framework import status, permissions
 from rest_framework_simplejwt.tokens import RefreshToken
+from .serializers import CustomTokenObtainPairSerializer, UserSerializer
+
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):
@@ -27,7 +29,7 @@ class LogoutView(APIView):
             return Response({"message": "خروج با موفقیت انجام شد."}, status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
             return Response({"error": "توکن نامعتبر است."}, status=status.HTTP_400_BAD_REQUEST)
-
+# Me endpoint: current user profile
 
 class AdminDashboardView(APIView):
     permission_classes = [IsAdmin]

@@ -17,3 +17,9 @@ class CustomUserAdmin(UserAdmin):
             'fields': ('role', 'student_id', 'professor_code'),
         }),
     )
+
+    add_fieldsets = UserAdmin.add_fieldsets + (
+        ('اطلاعات تکمیلی دانشگاه', {
+            'fields': ('role', 'student_id', 'professor_code'),
+        }),
+    )

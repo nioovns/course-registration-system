@@ -18,3 +18,11 @@ class users(AbstractUser):
             default=Roles.STUDENT,
             verbose_name=_("User Role")
         )
+        student_id = models.CharField(
+            max_length=20,
+            blank=True,
+            null=True,
+            unique=True,
+            verbose_name=_("Student ID"),
+            help_text=_("Required for students")
+        )

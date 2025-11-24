@@ -30,6 +30,12 @@ class LogoutView(APIView):
         except Exception as e:
             return Response({"error": "توکن نامعتبر است."}, status=status.HTTP_400_BAD_REQUEST)
 # Me endpoint: current user profile
+class MeView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        serializer = UserSerializer(request.user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 class AdminDashboardView(APIView):
     permission_classes = [IsAdmin]

@@ -1,4 +1,7 @@
 from django.urls import path
+from django.urls import path
+from .views import CustomTokenObtainPairView, LogoutView, AdminDashboardView, ProfessorDashboardView, StudentDashboardView
+
 from .views import (
     AdminDashboardView,
     ProfessorDashboardView,

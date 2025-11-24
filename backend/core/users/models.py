@@ -26,3 +26,11 @@ class users(AbstractUser):
             verbose_name=_("Student ID"),
             help_text=_("Required for students")
         )
+        professor_code = models.CharField(
+            max_length=20,
+            blank=True,
+            null=True,
+            unique=True,
+            verbose_name=_("Professor Code"),
+            help_text=_("Required for professors")
+        )

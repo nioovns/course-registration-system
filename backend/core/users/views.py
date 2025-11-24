@@ -4,6 +4,9 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .permissions import IsAdmin, IsProfessor, IsStudent
+from rest_framework_simplejwt.views import TokenObtainPairView
+from .serializers import CustomTokenObtainPairSerializer
+
 
 class AdminDashboardView(APIView):
     permission_classes = [IsAdmin]

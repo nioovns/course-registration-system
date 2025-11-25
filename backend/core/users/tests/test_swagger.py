@@ -15,3 +15,13 @@ class SwaggerTests(APITestCase):
         url = reverse('schema-redoc')  # نامی که در urls.py دادیم
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_schema_json_loads_successfully(self):
+
+        # try two common variations for the format argument
+        try:
+            url = reverse('schema-json', kwargs={'format': 'json'})
+        except Exception:
+            url = reverse('schema-json', kwargs={'format': '.json'})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)

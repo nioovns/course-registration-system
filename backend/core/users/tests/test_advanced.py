@@ -54,3 +54,22 @@ class AdvancedAuthTests(APITestCase):
         self.assertEqual(token['role'], 'student')
         self.assertEqual(token['username'], 'student_adv')
         self.assertEqual(token['student_id'], '99123456')
+
+    def test_logout_blacklists_token(self):
+
+        login_resp = self.client.post(self.login_url, {
+            'username': 'student_adv',
+            'password': 'password123'
+        })
+        refresh_token = login_resp.data['refresh']
+        access_token = login_resp.data['access']
+
+        self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {access_token}')
+        logout_resp = self.client.post(self.logout_url, {'refresh': refresh_token})
+
+        self.assertEqual(logout_resp.status_code, status.HTTP_205_RESET_CONTENT)
+
+        refresh_url = reverse('token_refresh')
+        fail_resp = self.client.post(refresh_url, {'refresh': refresh_token})
+
+        self.assertEqual(fail_resp.status_code, status.HTTP_401_UNAUTHORIZED)

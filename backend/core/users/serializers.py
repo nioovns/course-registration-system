@@ -1,20 +1,24 @@
-# backend/core/users/serializers.py
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
 User = get_user_model()
+
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
+
+        # اضافه کردن اطلاعات به توکن
         token['role'] = user.role
         token['username'] = user.username
+
         if user.is_student and user.student_id:
             token['student_id'] = user.student_id
         if user.is_professor and user.professor_code:
             token['professor_code'] = user.professor_code
+
         return token
 
     def validate(self, attrs):
@@ -25,6 +29,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
             'user_id': self.user.id
         })
         return data
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

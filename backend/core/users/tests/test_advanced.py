@@ -36,3 +36,21 @@ class AdvancedAuthTests(APITestCase):
         self.assertEqual(token['username'], 'student_adv')
         # student id serialiazers
         self.assertEqual(token['student_id'], '99123456')
+
+    def test_jwt_payload_contains_custom_claims(self):
+
+        # 1. لاگین
+        response = self.client.post(self.login_url, {
+            'username': 'student_adv',
+            'password': 'password123'
+        })
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # 2. استخراج و دیکود کردن توکن
+        token_str = response.data['access']
+        token = AccessToken(token_str)
+
+        # 3. بررسی اینکه آیا اطلاعات ما داخل توکن هست؟
+        self.assertEqual(token['role'], 'student')
+        self.assertEqual(token['username'], 'student_adv')
+        self.assertEqual(token['student_id'], '99123456')

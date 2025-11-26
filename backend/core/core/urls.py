@@ -1,47 +1,33 @@
 from django.contrib import admin
-from django.contrib.auth.views import LogoutView
-#from django.contrib.auth.views import LogoutView
 from django.urls import path, include
-from drf_yasg import openapi
-from drf_yasg.views import get_schema_view
 from rest_framework import permissions
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-)
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+from rest_framework_simplejwt.views import TokenRefreshView
 
+from users.views import CustomTokenObtainPairView, LogoutView
 
-# تنظیمات سواگر (Swagger)
 schema_view = get_schema_view(
    openapi.Info(
       title="Course Registration API",
       default_version='v1',
-      description="API Documentation for Course Registration System",
-      terms_of_service="https://www.google.com/policies/terms/",
-      contact=openapi.Contact(email="contact@local.local"),
-      license=openapi.License(name="BSD License"),
+      description="API Documentation",
    ),
    public=True,
    permission_classes=(permissions.AllowAny,),
 )
 
-# همه آدرس‌ها در یک لیست واحد
 urlpatterns = [
-    # 1 admin panel
     path('admin/', admin.site.urls),
 
-    path('api/users/', include('users.urls')),
-
-
-    # 2 (JWT)
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/auth/login/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/auth/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/auth/logout/', LogoutView.as_view(), name='auth_logout'),
 
-    #path('api/users/', include('users.urls')),
+    # 2. Users App Routes
+    path('api/users/', include('users.urls')),
 
-    # 3 documentation API (Swagger & Redoc)
-    path('swagger<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    # 3. Swagger
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]

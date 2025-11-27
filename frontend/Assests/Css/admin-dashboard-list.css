@@ -906,4 +906,14 @@ body {
   top: 8.33%;
   overflow: visible;
 }
+.group {
+  width: 2.16%;
+  height: 60%;
+  position: absolute;
+  right: 1.43%;
+  left: 104%;
+  bottom: 20%;
+  top: 20%;
+  overflow: visible;
+}
 

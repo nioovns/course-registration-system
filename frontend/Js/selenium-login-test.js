@@ -12,3 +12,17 @@ async function buildDriver() {
   });
   return driver;
 }
+  async function waitAndType(driver, locator, text) {
+  const el = await driver.wait(until.elementLocated(locator), DEFAULT_TIMEOUT);
+  await driver.wait(until.elementIsVisible(el), DEFAULT_TIMEOUT);
+  await driver.wait(async () => (await el.isEnabled()) === true, DEFAULT_TIMEOUT);
+  await driver.executeScript(
+    "arguments[0].scrollIntoView({block: 'center', inline: 'center'});",
+    el
+  );
+  await el.clear();
+  if (text !== undefined && text !== null) {
+    await el.sendKeys(text);
+  }
+  return el;
+}

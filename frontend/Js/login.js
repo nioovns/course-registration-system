@@ -27,7 +27,8 @@ document.addEventListener("DOMContentLoaded", () => {
     input.dir = "rtl";
     return input;
   }
-  const usernameInput = createTextInput("username", "text", "نام کاربری");
+
+ const usernameInput = createTextInput("username", "text", "نام کاربری");
   const passwordInput = createTextInput("password", "password", "کلمه عبور");
   const captchaInput = createTextInput("captcha-input", "text", "کد امنیتی");
 
@@ -57,7 +58,8 @@ document.addEventListener("DOMContentLoaded", () => {
       captchaInput.value = "";
     });
   }
-   function createErrorElement(parent) {
+
+  function createErrorElement(parent) {
     const el = document.createElement("span");
     el.className = "error-inline";
     el.style.color = "#d00000";
@@ -83,7 +85,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-   if (rememberBox) {
+
+  if (rememberBox) {
     rememberBox.style.cursor = "pointer";
 
     rememberBox.addEventListener("click", () => {
@@ -97,6 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+
   const savedUser = localStorage.getItem("sabau-login-username");
   if (savedUser) {
     usernameInput.value = savedUser;
@@ -109,6 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
       localStorage.setItem("sabau-login-username", usernameInput.value.trim());
     }
   });
+
   let successBox = null;
 
   function showSuccessBox() {
@@ -118,10 +123,12 @@ document.addEventListener("DOMContentLoaded", () => {
     successBox.className = "success-box";
     successBox.textContent = "✔ با موفقیت وارد شدید";
 
-  
+    // نمایش زیر دکمه login
     loginBtn.insertAdjacentElement("afterend", successBox);
   }
-    function handleLogin() {
+
+
+  function handleLogin() {
     hideErrors();
 
     const u = usernameInput.value.trim();
@@ -136,7 +143,17 @@ document.addEventListener("DOMContentLoaded", () => {
       captchaInput.value = "";
       return showInlineError(captchaError, "کد امنیتی اشتباه است");
     }
- loginBtn.addEventListener("click", handleLogin);
+
+
+
+    if (!(u === "admin" && p === "1234")) {
+      return showInlineError(passError, "نام کاربری یا کلمه عبور اشتباه است");
+    }
+
+    showSuccessBox();
+  }
+
+  loginBtn.addEventListener("click", handleLogin);
 
   [usernameInput, passwordInput, captchaInput].forEach((el) =>
     el.addEventListener("keydown", (e) => e.key === "Enter" && handleLogin())

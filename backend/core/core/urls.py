@@ -26,7 +26,7 @@ urlpatterns = [
 
     # 2. Users and App Routes
     path('api/users/', include('users.urls')),
-    path('api/admin/', include('course.urls')),
+    path('api/', include('course.urls')),
 
     # 3. Swagger
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),

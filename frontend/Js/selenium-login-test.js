@@ -82,4 +82,27 @@ async function testSuccessfulLogin(driver) {
 
   console.log(" ✅ PASS: Success box is displayed after correct login.");
 }
+  async function testUsernameRequired(driver) {
+  console.log("\n[TEST 2] Username required...");
+  await driver.get(LOGIN_URL);
+
+  await waitAndClick(driver, By.css(".login-submit"));
+
+  const userError = await driver.wait(
+    until.elementLocated(By.css(".user-name .error-inline")),
+    DEFAULT_TIMEOUT
+  );
+  await driver.wait(until.elementIsVisible(userError), DEFAULT_TIMEOUT);
+
+  const text = await userError.getText();
+  console.log(" Inline error text (username):", JSON.stringify(text));
+
+  if (!text.includes("نام کاربری را وارد کنید")) {
+    throw new Error(
+      "Expected 'نام کاربری را وارد کنید' but got: '" + text + "'"
+    );
+  }
+
+  console.log(" ✅ PASS: Username required error is correct.");
+}
 

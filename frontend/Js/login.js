@@ -97,4 +97,15 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+const savedUser = localStorage.getItem("sabau-login-username");
+  if (savedUser) {
+    usernameInput.value = savedUser;
+    rememberMeState = true;
+    rememberBox.classList.add("checked");
+  }
 
+  usernameInput.addEventListener("input", () => {
+    if (rememberMeState) {
+      localStorage.setItem("sabau-login-username", usernameInput.value.trim());
+    }
+  });

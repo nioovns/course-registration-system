@@ -26,3 +26,15 @@ async function buildDriver() {
   }
   return el;
 }
+  async function waitAndClick(driver, locator) {
+  const el = await driver.wait(until.elementLocated(locator), DEFAULT_TIMEOUT);
+  await driver.wait(until.elementIsVisible(el), DEFAULT_TIMEOUT);
+  await driver.wait(async () => (await el.isEnabled()) === true, DEFAULT_TIMEOUT);
+  await driver.executeScript(
+    "arguments[0].scrollIntoView({block: 'center', inline: 'center'});",
+    el
+  );
+  await el.click();
+  return el;
+}
+

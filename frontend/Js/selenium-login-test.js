@@ -218,5 +218,23 @@ async function testWrongCaptcha(driver) {
 
   console.log(" ✅ PASS: Remember Me works correctly.");
 }
+async function runAllTests() {
+  const driver = await buildDriver();
 
+  try {
+    await testSuccessfulLogin(driver);
+    await testUsernameRequired(driver);
+    await testWrongPassword(driver);
+    await testWrongCaptcha(driver);
+    await testRememberMe(driver);
+
+    console.log("\n ALL TESTS PASSED SUCCESSFULLY.");
+  } catch (err) {
+    console.error("\n TEST FAILED:", err.message);
+  } finally {
+    await driver.quit();
+  }
+}
+
+runAllTests();
 

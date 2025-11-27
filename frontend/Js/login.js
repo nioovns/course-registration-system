@@ -121,7 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
     loginBtn.insertAdjacentElement("afterend", successBox);
   }
-function handleLogin() {
+    function handleLogin() {
     hideErrors();
 
     const u = usernameInput.value.trim();
@@ -136,3 +136,9 @@ function handleLogin() {
       captchaInput.value = "";
       return showInlineError(captchaError, "کد امنیتی اشتباه است");
     }
+ loginBtn.addEventListener("click", handleLogin);
+
+  [usernameInput, passwordInput, captchaInput].forEach((el) =>
+    el.addEventListener("keydown", (e) => e.key === "Enter" && handleLogin())
+  );
+});

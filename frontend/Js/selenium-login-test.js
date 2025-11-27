@@ -46,5 +46,16 @@ async function getCaptchaCode(driver) {
   const text = await captchaEl.getText();
   return text.trim();
 }
+async function fillBasicFields(driver, { username, password, captcha }) {
+  if (username !== undefined) {
+    await waitAndType(driver, By.id("username"), username);
+  }
+  if (password !== undefined) {
+    await waitAndType(driver, By.id("password"), password);
+  }
+  if (captcha !== undefined) {
+    await waitAndType(driver, By.id("captcha-input"), captcha);
+  }
+}
 
 

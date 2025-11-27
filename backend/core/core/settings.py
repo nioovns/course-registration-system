@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     #swagger
     'drf_yasg',
 
+    'course',
 ]
 
 MIDDLEWARE = [

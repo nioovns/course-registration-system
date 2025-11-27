@@ -4,8 +4,10 @@ from course.serializers.CourseSerializer import CourseSerializer
 from course.serializers.ClassSessionSerializer import ClassSessionSerializer
 from course.services.AdminServices import AdminService
 from course.models.Course import Course
+from users.permissions import IsAdmin
 
 class CourseViewSet(viewsets.ViewSet):
+    permission_classes= [IsAdmin]
     service = AdminService()
     
     def list(self, request):

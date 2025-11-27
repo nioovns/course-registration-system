@@ -24,8 +24,9 @@ urlpatterns = [
     path('api/auth/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/auth/logout/', LogoutView.as_view(), name='auth_logout'),
 
-    # 2. Users App Routes
+    # 2. Users and App Routes
     path('api/users/', include('users.urls')),
+    path('api/', include('course.urls')),
 
     # 3. Swagger
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),

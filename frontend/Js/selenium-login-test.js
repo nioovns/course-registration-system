@@ -37,4 +37,14 @@ async function buildDriver() {
   await el.click();
   return el;
 }
+async function getCaptchaCode(driver) {
+  const captchaEl = await driver.wait(
+    until.elementLocated(By.id("captcha-code")),
+    DEFAULT_TIMEOUT
+  );
+  await driver.wait(until.elementIsVisible(captchaEl), DEFAULT_TIMEOUT);
+  const text = await captchaEl.getText();
+  return text.trim();
+}
+
 

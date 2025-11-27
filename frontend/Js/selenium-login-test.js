@@ -105,4 +105,38 @@ async function testSuccessfulLogin(driver) {
 
   console.log(" ✅ PASS: Username required error is correct.");
 }
+async function testWrongPassword(driver) {
+  console.log("\n[TEST 3] Wrong password...");
+  await driver.get(LOGIN_URL);
+
+  const realCaptcha = await getCaptchaCode(driver);
+
+  await fillBasicFields(driver, {
+    username: "student",
+    password: "wrong-password",
+    captcha: realCaptcha,
+  });
+
+  await waitAndClick(driver, By.css(".login-submit"));
+
+  const passError = await driver.wait(
+    until.elementLocated(By.css(".pass-word .error-inline")),
+    DEFAULT_TIMEOUT
+  );
+  await driver.wait(until.elementIsVisible(passError), DEFAULT_TIMEOUT);
+
+  const text = await passError.getText();
+  console.log(" Inline error text (password):", JSON.stringify(text));
+
+  if (!text.includes("نام کاربری یا کلمه عبور اشتباه است")) {
+    throw new Error(
+      "Expected 'نام کاربری یا کلمه عبور اشتباه است' but got: '" +
+        text +
+        "'"
+    );
+  }
+
+  console.log(" ✅ PASS: Wrong-password error is correct.");
+}
+
 

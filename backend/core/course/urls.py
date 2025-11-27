@@ -8,5 +8,5 @@ router.register(r'courses', CourseViewSet, basename='course')
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('choices/', AllChoices.as_view(), name='all-choices'),
+    path('admin/choices/', AllChoices.as_view(), name='all-choices'),
 ]

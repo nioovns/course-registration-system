@@ -1,1 +1,66 @@
+html , body{
+    overflow: hidden;
+}
 
+body {
+    font-family: "Dana-Regular";
+    background: #3b175c;
+    
+}
+
+@font-face {
+    font-family: "Dana-Regular";
+    src: url("../Font/Dana-Regular.woff2")
+    format("woff2"),
+    url("../Font/Dana-Regular.ttf")
+    format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+.admin-dashboard-lesson-list,
+.admin-dashboard-lesson-list * {
+  box-sizing: border-box;
+}
+.admin-dashboard-lesson-list {
+  border-radius: 32px;
+  height: 1024px;
+  position: relative;
+}
+.main-page {
+  background: #3b175c;
+  width: 1900px;
+  height: 690px;
+  position: absolute;
+  left: -3px;
+  top: 0px;
+  overflow: hidden;
+}
+.datatable {
+  background: var(--white, #ffffff);
+  border-radius: 20px;
+  padding: 20px 0px 20px 0px;
+  width: 1189px;
+  height: 594px;
+  position: absolute;
+  right: 320px;
+  top: 80px;
+}
+.group-63 {
+  position: absolute;
+  inset: 0;
+}
+.table {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+  height: 12.22%;
+  position: absolute;
+  right: 0%;
+  left: 0%;
+  bottom: 77.56%;
+  top: 10.22%;
+}

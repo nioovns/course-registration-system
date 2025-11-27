@@ -614,3 +614,296 @@ body {
   );
   overflow: hidden;
 }
+
+.header {
+  padding: 0px 0px 16px 0px;
+  width: 278px;
+  height: 141px;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+}
+.frame-9 {
+  width: 139px;
+  height: 53px;
+  position: absolute;
+  left: 52px;
+  top: 127px;
+  overflow: hidden;
+}
+.group-102 {
+  height: auto;
+  position: absolute;
+  left: 240px;
+  top: 10px;
+  overflow: visible;
+  cursor: pointer;
+}
+.div6 {
+  color: #505d73;
+  text-align: center;
+  font-size: 25px;
+  line-height: 160%;
+  font-weight: 500;
+  position: absolute;
+  left: 39px;
+  top: 140px;
+  width: 200px;
+}
+.group-97 {
+  height: auto;
+  position: absolute;
+  left: 89px;
+  top: 41px;
+  overflow: visible;
+}
+.sidenav-menu {
+  padding: 0px 8px 48px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 278px;
+  height: 305px;
+  position: absolute;
+  left: -1px;
+  top: 224px;
+}
+.group-93:hover {
+  flex-shrink: 0;
+  width: 262px;
+  height: 52.8px;
+  position: static;
+  
+}
+.sidenav-link {
+  border-radius: 5px;
+  padding: 6.4px 24px 6.4px 24px;
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: center;
+  justify-content: flex-start;
+  width: 262px;
+  position: absolute;
+  left: 8px;
+  top: 0px;
+  cursor: pointer;
+}
+.sidenav-link :hover {
+  border-radius: 5px;
+  background-color: #E6CD00;
+  padding: 6.4px 24px 6.4px 24px;
+  gap: 16px;
+  align-items: center;
+  justify-content: flex-start;
+  width: 262px;
+  position: absolute;
+  cursor: pointer;
+  left: 8px;
+  top: 0px;
+}
+.sidenav-link.active {
+  border-radius: 5px;
+  background-color: #E6CD00;
+  padding: 6.4px 24px 6.4px 24px;
+  gap: 16px;
+  align-items: center;
+  justify-content: flex-start;
+  width: 262px;
+  position: absolute;
+  cursor: pointer;
+  left: 8px;
+  top: 0px;
+}
+.material-symbols-folder-managed {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  position: relative;
+  overflow: visible;
+}
+.material-symbols-folder-managed :hover{
+  flex-shrink: 0;
+  color: #000000;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  position: relative;
+  overflow: visible;
+}
+.div7 {
+  color: #4f4f4f;
+  text-align: right;
+  font-size: 20px;
+  line-height: 160%;
+  font-weight: 500;
+  position: relative;
+  flex: 1;
+}
+.group-16 {
+  position: absolute;
+  inset: 0;
+  top:1%;
+}
+.group-11{
+  cursor: pointer;
+}
+.frame-19 {
+  width: 100%;
+  height: 6.35%;
+  position: absolute;
+  right: 20.9%;
+  left: -6.2%;
+  bottom: 91.21%;
+  top: 0.2%;
+}
+.navbar {
+  background: #fbfbfb;
+  border-radius: 20px;
+  padding: 9px 0px 8px 0px;
+  width: 1190px;
+  height: 57px;
+  position: absolute;
+  left: 105px;
+  top: 8px;
+  box-shadow: var(
+    --navbar-shadow-box-shadow,
+    0px 2px 4px 0px rgba(0, 0, 0, 0.05),
+    0px 4px 12px 0px rgba(0, 0, 0, 0.07)
+  );
+  overflow: hidden;
+}
+.group-90 {
+  position: absolute;
+  inset: 0;
+}
+.container-fluid {
+  padding: 0px 12px 0px 12px;
+  width: 1093px;
+  height: 40px;
+  position: absolute;
+  left: 0px;
+  top: 9px;
+}
+.right-elements {
+  width: 91px;
+  height: 29px;
+  position: absolute;
+  left: 13.2px;
+  top: 5px;
+  overflow: hidden;
+}
+.solar-logout-outline {
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  left: 25px;
+  top: 27px;
+  transform: translate(-25px, -25px);
+  overflow: visible;
+  cursor: pointer;
+}
+.badge-with-notification {
+  width: 21px;
+  height: 18px;
+  position: absolute;
+  left: 35px;
+  top: 5.5px;
+}
+.icon4 {
+  display: flex;
+  flex-direction: row;
+  cursor: pointer;
+  gap: 0px;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  left: 0px;
+  top: 2px;
+  overflow: visible;
+}
+.badge-alternative {
+  background: var(--danger, #dc4c64);
+  border-radius: 10px;
+  padding: 1.9px 4.3px 1.9px 4.3px;
+  width: 14.6px;
+  height: 13.8px;
+  position: absolute;
+  left: 6px;
+  top: -5px;
+}
+._12 {
+  color: #fbfbfb;
+  text-align: left;
+  font-size: 9.600000381469727px;
+  line-height: 100%;
+  font-weight: 500;
+  text-transform: uppercase;
+  position: absolute;
+  left: 4.3px;
+  top: 1.9px;
+}
+.group-89 {
+  position: absolute;
+  inset: 0;
+
+}
+.group-96 {
+  width: 208.37px;
+  height: 25px;
+  position: static;
+}
+.date {
+  width: 2.16%;
+  height: 60%;
+  position: absolute;
+  right: 1.43%;
+  left: 104%;
+  bottom: 20%;
+  top: 20%;
+  overflow: visible;
+}
+._1-1404 {
+  color: #000000;
+  text-align: left;
+  width: 115px;
+  font-size: 13px;
+  line-height: 100%;
+  font-weight: 500;
+  text-transform: uppercase;
+  position: absolute;
+  left:1020px;
+  top: 16px;
+}
+.group-95 {
+  width: 61px;
+  height: 24px;
+  position: static;
+}
+
+.icon-park-time {
+  background: #ffffff;
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  left: 906px;
+  top: 9px;
+  overflow: hidden;
+  aspect-ratio: 1;
+}
+.group2 {
+  width: 83.33%;
+  height: 83.33%;
+  position: absolute;
+  right: 8.33%;
+  left: 70%;
+  bottom: 8.33%;
+  top: 8.33%;
+  overflow: visible;
+}
+

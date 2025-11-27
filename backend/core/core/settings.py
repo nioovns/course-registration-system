@@ -50,7 +50,6 @@ INSTALLED_APPS = [
     'drf_yasg',
 
     'course',
-    'rest_framework',
 ]
 
 MIDDLEWARE = [

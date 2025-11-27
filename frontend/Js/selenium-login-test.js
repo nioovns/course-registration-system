@@ -173,5 +173,50 @@ async function testWrongCaptcha(driver) {
 
   console.log(" ✅ PASS: Wrong-captcha error is correct.");
 }
+  async function testRememberMe(driver) {
+  console.log("\n[TEST 5] Remember Me behavior...");
+  await driver.get(LOGIN_URL);
+
+  const testUser = "rememberMeUser";
+
+  await waitAndType(driver, By.id("username"), testUser);
+
+  const rememberBox = await waitAndClick(
+    driver,
+    By.css(".remember-me .frame-6")
+  );
+
+  const cls = await rememberBox.getAttribute("class");
+  console.log(" Class after click:", cls);
+
+  if (!cls.includes("checked")) {
+    throw new Error("Remember box does not have 'checked' class after click.");
+  }
+  await driver.navigate().refresh();
+
+  const usernameInputAfter = await driver.wait(
+    until.elementLocated(By.id("username")),
+    DEFAULT_TIMEOUT
+  );
+  await driver.wait(until.elementIsVisible(usernameInputAfter), DEFAULT_TIMEOUT);
+  const valueAfter = await usernameInputAfter.getAttribute("value");
+
+  const rememberBoxAfter = await driver.findElement(
+    By.css(".remember-me .frame-6")
+  );
+  const clsAfter = await rememberBoxAfter.getAttribute("class");
+
+  console.log(" Username after reload:", JSON.stringify(valueAfter));
+  console.log(" Class after reload:", clsAfter);
+
+  if (valueAfter !== testUser) {
+    throw new Error("Username was not persisted in localStorage.");
+  }
+  if (!clsAfter.includes("checked")) {
+    throw new Error("Remember box is not 'checked' after reload.");
+  }
+
+  console.log(" ✅ PASS: Remember Me works correctly.");
+}
 
 

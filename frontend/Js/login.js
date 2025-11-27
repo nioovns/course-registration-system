@@ -83,3 +83,18 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+   if (rememberBox) {
+    rememberBox.style.cursor = "pointer";
+
+    rememberBox.addEventListener("click", () => {
+      rememberMeState = !rememberMeState;
+      rememberBox.classList.toggle("checked", rememberMeState);
+
+      if (rememberMeState) {
+        localStorage.setItem("sabau-login-username", usernameInput.value.trim());
+      } else {
+        localStorage.removeItem("sabau-login-username");
+      }
+    });
+  }
+

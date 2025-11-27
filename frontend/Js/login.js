@@ -121,4 +121,18 @@ document.addEventListener("DOMContentLoaded", () => {
   
     loginBtn.insertAdjacentElement("afterend", successBox);
   }
+function handleLogin() {
+    hideErrors();
 
+    const u = usernameInput.value.trim();
+    const p = passwordInput.value.trim();
+    const c = captchaInput.value.trim().toUpperCase();
+
+    if (!u) return showInlineError(userError, "نام کاربری را وارد کنید");
+    if (!p) return showInlineError(passError, "کلمه عبور را وارد کنید");
+    if (!c) return showInlineError(captchaError, "کد امنیتی را وارد کنید");
+    if (c !== currentCaptcha) {
+      generateCaptcha();
+      captchaInput.value = "";
+      return showInlineError(captchaError, "کد امنیتی اشتباه است");
+    }

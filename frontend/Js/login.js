@@ -57,3 +57,29 @@ document.addEventListener("DOMContentLoaded", () => {
       captchaInput.value = "";
     });
   }
+   function createErrorElement(parent) {
+    const el = document.createElement("span");
+    el.className = "error-inline";
+    el.style.color = "#d00000";
+    el.style.fontSize = "12px";
+    el.style.display = "none";
+    parent.appendChild(el);
+    return el;
+  }
+
+  const userError = createErrorElement(userField);
+  const passError = createErrorElement(passField);
+  const captchaError = createErrorElement(captchaField);
+
+  function showInlineError(el, msg) {
+    el.style.display = "block";
+    el.textContent = msg;
+  }
+
+  function hideErrors() {
+    [userError, passError, captchaError].forEach((e) => {
+      e.style.display = "none";
+      e.textContent = "";
+    });
+  }
+

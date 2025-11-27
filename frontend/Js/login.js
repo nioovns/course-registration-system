@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
-const savedUser = localStorage.getItem("sabau-login-username");
+  const savedUser = localStorage.getItem("sabau-login-username");
   if (savedUser) {
     usernameInput.value = savedUser;
     rememberMeState = true;
@@ -109,3 +109,16 @@ const savedUser = localStorage.getItem("sabau-login-username");
       localStorage.setItem("sabau-login-username", usernameInput.value.trim());
     }
   });
+  let successBox = null;
+
+  function showSuccessBox() {
+    if (successBox) successBox.remove();
+
+    successBox = document.createElement("div");
+    successBox.className = "success-box";
+    successBox.textContent = "✔ با موفقیت وارد شدید";
+
+  
+    loginBtn.insertAdjacentElement("afterend", successBox);
+  }
+

@@ -35,3 +35,25 @@ document.addEventListener("DOMContentLoaded", () => {
   passwordContainer.appendChild(passwordInput);
   captchaInputContainer.appendChild(captchaInput);
 
+  const captchaCodeEl = document.createElement("span");
+  captchaCodeEl.id = "captcha-code";
+  captchaCodeEl.className = "captcha-code";
+  captchaVisualContainer.appendChild(captchaCodeEl);
+
+  function generateCaptcha() {
+    const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+    let code = "";
+    for (let i = 0; i < 5; i++) code += chars[Math.floor(Math.random() * chars.length)];
+    currentCaptcha = code;
+    captchaCodeEl.textContent = code;
+  }
+
+  generateCaptcha();
+
+  if (refreshBtn) {
+    refreshBtn.style.cursor = "pointer";
+    refreshBtn.addEventListener("click", () => {
+      generateCaptcha();
+      captchaInput.value = "";
+    });
+  }

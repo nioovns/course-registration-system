@@ -138,5 +138,40 @@ async function testWrongPassword(driver) {
 
   console.log(" ✅ PASS: Wrong-password error is correct.");
 }
+async function testWrongCaptcha(driver) {
+  console.log("\n[TEST 4] Wrong captcha...");
+  await driver.get(LOGIN_URL);
+
+  const realCaptcha = await getCaptchaCode(driver);
+
+  // Build a wrong captcha (change last char)
+  let wrongCaptcha =
+    realCaptcha.slice(0, -1) + (realCaptcha.slice(-1) === "A" ? "B" : "A");
+
+  await fillBasicFields(driver, {
+    username: "student",
+    password: "123456",
+    captcha: wrongCaptcha,
+  });
+
+  await waitAndClick(driver, By.css(".login-submit"));
+
+  const captchaError = await driver.wait(
+    until.elementLocated(By.css(".capcha .error-inline")),
+    DEFAULT_TIMEOUT
+  );
+  await driver.wait(until.elementIsVisible(captchaError), DEFAULT_TIMEOUT);
+
+  const text = await captchaError.getText();
+  console.log(" Inline error text (captcha):", JSON.stringify(text));
+
+  if (!text.includes("کد امنیتی اشتباه است")) {
+    throw new Error(
+      "Expected 'کد امنیتی اشتباه است' but got: '" + text + "'"
+    );
+  }
+
+  console.log(" ✅ PASS: Wrong-captcha error is correct.");
+}
 
 

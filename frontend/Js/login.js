@@ -27,3 +27,11 @@ document.addEventListener("DOMContentLoaded", () => {
     input.dir = "rtl";
     return input;
   }
+  const usernameInput = createTextInput("username", "text", "نام کاربری");
+  const passwordInput = createTextInput("password", "password", "کلمه عبور");
+  const captchaInput = createTextInput("captcha-input", "text", "کد امنیتی");
+
+  usernameContainer.appendChild(usernameInput);
+  passwordContainer.appendChild(passwordInput);
+  captchaInputContainer.appendChild(captchaInput);
+

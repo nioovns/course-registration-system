@@ -57,5 +57,29 @@ async function fillBasicFields(driver, { username, password, captcha }) {
     await waitAndType(driver, By.id("captcha-input"), captcha);
   }
 }
+async function testSuccessfulLogin(driver) {
+  console.log("\n[TEST 1] Successful login...");
+  await driver.get(LOGIN_URL);
 
+  const realCaptcha = await getCaptchaCode(driver);
+
+  await fillBasicFields(driver, {
+    username: "admin",
+    password: "1234",
+    captcha: realCaptcha,
+  });
+
+  await waitAndClick(driver, By.css(".login-submit"));
+
+  const successBox = await driver.wait(
+    until.elementLocated(By.css(".success-box")),
+    DEFAULT_TIMEOUT
+  );
+  await driver.wait(until.elementIsVisible(successBox), DEFAULT_TIMEOUT);
+
+  const text = await successBox.getText();
+  console.log(" Success box text (for debug):", JSON.stringify(text));
+
+  console.log(" ✅ PASS: Success box is displayed after correct login.");
+}
 

@@ -8,7 +8,7 @@ from users.permissions import IsAdmin
 from course.services.CourseFilters import CourseFilter
 
 class CourseViewSet(viewsets.ViewSet):
-    # permission_classes= [IsAdmin]
+    permission_classes= [IsAdmin]
     service = AdminService()
     
     def list(self, request):

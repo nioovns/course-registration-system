@@ -7,7 +7,7 @@ from course.models.Course import Course
 from users.permissions import IsAdmin
 
 class CourseViewSet(viewsets.ViewSet):
-    permission_classes= [IsAdmin]
+    # permission_classes= [IsAdmin]
     service = AdminService()
     
     def list(self, request):

@@ -775,36 +775,7 @@ body {
   top: 0px;
   cursor: pointer;
 }
-.sidenav-link :hover {
-  background-color: #E6CD00;
-  border-radius: 5px;
-  padding: 6.4px 24px 6.4px 24px;
-  display: flex;
-  flex-direction: row;
-  gap: 16px;
-  align-items: center;
-  justify-content: flex-start;
-  width: 262px;
-  position: absolute;
-  left: 8px;
-  top: 0px;
-  cursor: pointer;
-}
-.sidenav-link.active {
-  background-color: #E6CD00;
-  border-radius: 5px;
-  padding: 6.4px 24px 6.4px 24px;
-  display: flex;
-  flex-direction: row;
-  gap: 16px;
-  align-items: center;
-  justify-content: flex-start;
-  width: 262px;
-  position: absolute;
-  left: 8px;
-  top: 0px;
-  cursor: pointer;
-}
+
 .material-symbols-folder-managed {
   flex-shrink: 0;
   width: 40px;
@@ -813,15 +784,7 @@ body {
   position: relative;
   overflow: visible;
 }
-.material-symbols-folder-managed :hover{
-  flex-shrink: 0;
-  color: #000000;
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
-  position: relative;
-  overflow: visible;
-}
+
 .div7 {
   color: #4f4f4f;
   text-align: right;
@@ -1755,5 +1718,29 @@ body {
 .div-9-span2 {
   color: #cc3333;
    
+}
+
+.sidenav-link.active {
+  background-color: #E6CD00;
+  color: #000;
+}
+
+.sidenav-link:hover {
+  background-color: #E6CD00;
+  color: #000;
+}
+
+.material-symbols-folder-managed {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  position: relative;
+  overflow: visible;
+  transition: transform 0.15s ease;
+}
+
+.material-symbols-folder-managed:hover {
+  transform: scale(1.05);
 }
 

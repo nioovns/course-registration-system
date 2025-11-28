@@ -125,8 +125,73 @@ body {
   font-size: 14.399999618530273px;
   line-height: 160%;
   font-weight: 500;
+  right:-50px;
   position: relative;
 }
+.Capacity{
+  color: var(--datatable-text-color, #212529);
+  text-align: right;
+  font-size: 14.399999618530273px;
+  line-height: 160%;
+  font-weight: 500;
+  left:10px;
+  position: relative;
+}
+.unit{
+  color: var(--datatable-text-color, #212529);
+  text-align: right;
+  font-size: 14.399999618530273px;
+  line-height: 160%;
+  font-weight: 500;
+  left:20px;
+  position: relative;
+}
+.time{
+  color: var(--datatable-text-color, #212529);
+  text-align: right;
+  font-size: 14.399999618530273px;
+  line-height: 160%;
+  font-weight: 500;
+  left:25px;
+  position: relative;
+}
+.place{
+  color: var(--datatable-text-color, #212529);
+  text-align: right;
+  font-size: 14.399999618530273px;
+  line-height: 160%;
+  font-weight: 500;
+  left:25px;
+  position: relative;
+}
+.operation{
+  color: var(--datatable-text-color, #212529);
+  text-align: right;
+  font-size: 14.399999618530273px;
+  line-height: 160%;
+  font-weight: 500;
+  left:10px;
+  position: relative;
+}
+.Lesson-code{
+  color: var(--datatable-text-color, #212529);
+  text-align: right;
+  font-size: 14.399999618530273px;
+  line-height: 160%;
+  font-weight: 500;
+  left:10px;
+  position: relative;
+}
+.Lesson-name{
+  color: var(--datatable-text-color, #212529);
+  text-align: right;
+  font-size: 14.399999618530273px;
+  line-height: 160%;
+  font-weight: 500;
+  left:5px;
+  position: relative;
+}
+
 .tbody {
   padding: 0px 4px 0px 4px;
   display: flex;

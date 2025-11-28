@@ -569,9 +569,19 @@ body {
   font-weight: 500;
   position: relative;
 }
+.new-lesson{
+  color: #3b175c;
+  text-align: right;
+  font-family: "Roboto-Medium", sans-serif;
+  font-size: 14.399999618530273px;
+  line-height: 160%;
+  font-weight: 500;
+  position: relative;
+  white-space: nowrap;
+}
 .frame-27 {
-  width: 24px;
-  height: 24px;
+  width: 50px;
+  height: 50px;
   position: absolute;
   left: 161px;
   top: 6px;
@@ -662,6 +672,15 @@ body {
   font-weight: 500;
   position: relative;
 }
+.search{
+  color: #3b175c;
+  text-align: right;
+  font-family: "Dana-Regular", sans-serif;
+  font-size: 14.399999618530273px;
+  line-height: 160%;
+  font-weight: 500;
+  position: relative;
+}
 .sidenav {
   background: #fbfbfb;
   border-radius: 20px;
@@ -689,17 +708,17 @@ body {
   top: 0px;
 }
 .frame-9 {
-  width: 139px;
-  height: 53px;
+  width: 25px;
+  height: 25px;
   position: absolute;
-  left: 52px;
+  left: -500px;
   top: 127px;
   overflow: hidden;
 }
 .group-102 {
   height: auto;
   position: absolute;
-  left: 240px;
+  left: -1000px;
   top: 10px;
   overflow: visible;
   cursor: pointer;
@@ -757,30 +776,34 @@ body {
   cursor: pointer;
 }
 .sidenav-link :hover {
-  border-radius: 5px;
   background-color: #E6CD00;
+  border-radius: 5px;
   padding: 6.4px 24px 6.4px 24px;
+  display: flex;
+  flex-direction: row;
   gap: 16px;
   align-items: center;
   justify-content: flex-start;
   width: 262px;
   position: absolute;
-  cursor: pointer;
   left: 8px;
   top: 0px;
+  cursor: pointer;
 }
 .sidenav-link.active {
-  border-radius: 5px;
   background-color: #E6CD00;
+  border-radius: 5px;
   padding: 6.4px 24px 6.4px 24px;
+  display: flex;
+  flex-direction: row;
   gap: 16px;
   align-items: center;
   justify-content: flex-start;
   width: 262px;
   position: absolute;
-  cursor: pointer;
   left: 8px;
   top: 0px;
+  cursor: pointer;
 }
 .material-symbols-folder-managed {
   flex-shrink: 0;
@@ -802,7 +825,16 @@ body {
 .div7 {
   color: #4f4f4f;
   text-align: right;
-  font-size: 20px;
+  font-size: 30px;
+  line-height: 160%;
+  font-weight: 500;
+  position: relative;
+  flex: 1;
+}
+.p-name{
+  color: #4f4f4f;
+  text-align: right;
+  font-size: 30px;
   line-height: 160%;
   font-weight: 500;
   position: relative;
@@ -820,7 +852,7 @@ body {
   width: 100%;
   height: 6.35%;
   position: absolute;
-  right: 20.9%;
+  right: 30.9%;
   left: -6.2%;
   bottom: 91.21%;
   top: 0.2%;
@@ -872,13 +904,27 @@ body {
   cursor: pointer;
 }
 .badge-with-notification {
-  width: 21px;
-  height: 18px;
+  width: 25px;
+  height: 25px;
   position: absolute;
   left: 35px;
   top: 5.5px;
 }
 .icon4 {
+  display: flex;
+  flex-direction: row;
+  cursor: pointer;
+  gap: 0px;
+  align-items: center;
+  justify-content: center;
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  left: 0px;
+  top: 2px;
+  overflow: visible;
+}
+.icon12{
   display: flex;
   flex-direction: row;
   cursor: pointer;
@@ -1022,6 +1068,27 @@ body {
   box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.3);
   overflow: hidden;
 }
+.login-submit:hover {
+  background: #14a44d;
+  border-radius: 20px;
+  border-style: solid;
+  border-color: #14a44d;
+  border-width: 1px;
+  padding: 13px 0px 13px 0px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 15%;
+  height: 28.63%;
+  position: absolute;
+  right: 49.42%;
+  left: 34.61%;
+  bottom: 0.83%;
+  top: 70.54%;
+  box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
 .div {
   color: var(--primarycolor, #3b175c);
   text-align: center;
@@ -1040,6 +1107,27 @@ body {
   border-radius: 20px;
   border-style: solid;
   border-color: #3b175c;
+  border-width: 1px;
+  padding: 13px 0px 13px 0px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 15%;
+  height: 28.63%;
+  position: absolute;
+  right: 27.97%;
+  left: 51.07%;
+  bottom: 0%;
+  top: 71.37%;
+  box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+.login-submit2:hover {
+  background: #cc3333;
+  border-radius: 20px;
+  border-style: solid;
+  border-color: #cc3333;
   border-width: 1px;
   padding: 13px 0px 13px 0px;
   display: flex;
@@ -1209,6 +1297,20 @@ body {
   top: 1.66%;
   height: 12.03%;
 }
+.new-lesson{
+  text-align: center;
+  font-family: "Dana-Medium", sans-serif;
+  font-size: 14.399999618530273px;
+  line-height: 160%;
+  font-weight: 500;
+  position: absolute;
+  right: 50.82%;
+  left: 32.48%;
+  width: 8.71%;
+  bottom: 86.31%;
+  top: 10.66%;
+  height: 12.03%;
+}
 .div-4-span {
   color: #4f4f4f;
 }
@@ -1265,6 +1367,22 @@ body {
   top: 2.07%;
   height: 12.03%;
 }
+
+.search{
+  text-align: right;
+  font-family: "Dana-Medium", sans-serif;
+  font-size: 14.399999618530273px;
+  line-height: 160%;
+  font-weight: 500;
+  position: absolute;
+  right: 49.63%;
+  left: 77.67%;
+  width: 8.71%;
+  bottom: 50.89%;
+  top: 16.07%;
+  height: 12.03%;
+}
+
 .div-5-span {
   color: #4f4f4f;
 }
@@ -1341,6 +1459,21 @@ body {
   top: 1.66%;
   height: 12.24%;
 }
+.manager{
+  text-align: right;
+  font-family: "Dana-Regular", sans-serif;
+  font-size: 18.399999618530273px;
+  line-height: 160%;
+  font-weight: 500;
+  position: absolute;
+  right: 40.47%;
+  left: 44.73%;
+  width: 9.81%;
+  bottom: 100%;
+  top: 100.66%;
+  height: 12.24%;
+
+}
 .div-6-span {
   color: #4f4f4f;
 }
@@ -1366,7 +1499,22 @@ body {
 .div7 {
   color: #6d747a;
   text-align: right;
-  font-family: "Dana-Medium", sans-serif;
+  font-family: "Dana-Regular", sans-serif;
+  font-size: 18.399999618530273px;
+  line-height: 160%;
+  font-weight: 500;
+  position: absolute;
+  right: 10.78%;
+  left: 0.98%;
+  width: 88.24%;
+  bottom: 15.69%;
+  top: 27.45%;
+  height: 56.86%;
+}
+.p-name{
+  color: #6d747a;
+  text-align: right;
+  font-family: "Dana-Regular", sans-serif;
   font-size: 14.399999618530273px;
   line-height: 160%;
   font-weight: 500;
@@ -1379,9 +1527,11 @@ body {
   height: 56.86%;
 }
 .group-102 {
-  width: 181px;
-  height: 88px;
+  width: 25px;
+  height: 25px;
+  left: -1200px;
   position: static;
+  
 }
 .group-99 {
   width: 181px;
@@ -1533,8 +1683,20 @@ body {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 10px;
-  height: 10px;
+  width: 16px;
+  height: 16px;
+  position: relative;
+  overflow: visible;
+}
+.icon12{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
   position: relative;
   overflow: visible;
 }

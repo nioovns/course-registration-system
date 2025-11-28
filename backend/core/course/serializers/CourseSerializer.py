@@ -2,6 +2,7 @@ from rest_framework import serializers
 from course.models.Course import Course
 from course.models.ClassSession import ClassSession
 from .ClassSessionSerializer import ClassSessionSerializer
+from users.models import User
 
 class CourseSerializer(serializers.ModelSerializer):
     sessions = ClassSessionSerializer(many=True)
@@ -13,8 +14,13 @@ class CourseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Course
-        fields = ['id', 'name', 'code', 'capacity', 'sessions', 'prerequisites']
-
+        fields = '__all__'
+        
+    def validate_professor(self, value):
+        if not value.role == User.Roles.PROFESSOR:
+            raise ValidationError("The professor must have the role of 'Professor'.")
+        return value
+    
     def validate_code(self, value):
         qs = Course.objects.exclude(id=self.instance.id) if self.instance else Course.objects.all()
         if qs.filter(code=value).exists():

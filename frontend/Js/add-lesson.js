@@ -342,3 +342,25 @@ document.addEventListener("DOMContentLoaded", () => {
       el.style.boxShadow = prevBoxShadow || "none";
     }, 1800);
   }
+ function initTextPlaceholder(el) {
+    if (!el) return;
+    const placeholder = (el.textContent || "").trim();
+    el.dataset.placeholder = placeholder;
+    el.dataset.cleared = "false";
+    el.style.opacity = "0.6";
+    el.style.cursor = "text";
+    el.setAttribute("contenteditable", "true");
+
+    const clearHandler = () => {
+      if (el.dataset.cleared === "false") {
+        el.textContent = "";
+        el.dataset.cleared = "true";
+        el.style.opacity = "1";
+      }
+    };
+
+    el.addEventListener("focus", clearHandler);
+    el.addEventListener("click", clearHandler);
+  }
+
+  [nameEl, codeEl, capacityEl, teacherEl, searchEl].forEach(initTextPlaceholder);

@@ -326,3 +326,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
     overlay.style.display = "flex";
   }
+
+  function highlightField(el) {
+    if (!el) return;
+    const prevOutline = el.style.outline;
+    const prevBoxShadow = el.style.boxShadow;
+
+    el.scrollIntoView({ behavior: "smooth", block: "center" });
+
+    el.style.outline = "2px solid #dc2626";
+    el.style.boxShadow = "0 0 0 2px rgba(220,38,38,0.3)";
+
+    setTimeout(() => {
+      el.style.outline = prevOutline || "none";
+      el.style.boxShadow = prevBoxShadow || "none";
+    }, 1800);
+  }

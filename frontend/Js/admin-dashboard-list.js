@@ -391,3 +391,95 @@ function showGlobalError(message) {
 
     pageInfoEl.textContent = `${startIndex} - ${endIndex} of ${total}`;
   }
+
+  function createPageDropdown() {
+    if (pageDropdown) return pageDropdown;
+
+    const dropdown = document.createElement("div");
+    dropdown.className = "page-dropdown";
+
+    Object.assign(dropdown.style, {
+      position: "absolute",
+      background: "#ffffff",
+      borderRadius: "8px",
+      boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+      minWidth: "90px",
+      zIndex: "9999",
+      padding: "4px 0",
+      direction: "rtl",
+      display: "none",
+      fontFamily: "inherit",
+      fontSize: "13px",
+    });
+
+    document.body.appendChild(dropdown);
+    pageDropdown = dropdown;
+    return dropdown;
+  }
+
+  function renderPageDropdownOptions() {
+    const dropdown = createPageDropdown();
+    if (!dropdown) return;
+
+    dropdown.innerHTML = "";
+    const totalPages = getTotalPages();
+
+    for (let i = 1; i <= totalPages; i++) {
+      const item = document.createElement("div");
+      item.textContent = `صفحه ${i}`;
+      Object.assign(item.style, {
+        padding: "6px 12px",
+        cursor: "pointer",
+        whiteSpace: "nowrap",
+        background: i === currentPage ? "#f3f3ff" : "#ffffff",
+        color: i === currentPage ? "#3b175c" : "#333",
+      });
+
+      item.addEventListener("mouseenter", () => {
+        item.style.background = "#f5f5f5";
+      });
+      item.addEventListener("mouseleave", () => {
+        item.style.background = i === currentPage ? "#f3f3ff" : "#ffffff";
+      });
+
+      item.addEventListener("click", () => {
+        currentPage = i;
+        closePageDropdown();
+        renderTable();
+      });
+
+      dropdown.appendChild(item);
+    }
+  }
+  
+  
+
+  function openPageDropdown() {
+    const dropdown = createPageDropdown();
+    if (!dropdown || !pageSelectContainer) return;
+
+    renderPageDropdownOptions();
+
+    const rect = pageSelectContainer.getBoundingClientRect();
+
+    Object.assign(dropdown.style, {
+      display: "block",
+      top: rect.bottom + 4 + "px",
+      left: rect.left + "px",
+      minWidth: rect.width + "px",
+    });
+  }
+
+  function closePageDropdown() {
+    if (!pageDropdown) return;
+    pageDropdown.style.display = "none";
+  }
+
+  function togglePageDropdown() {
+    const dropdown = createPageDropdown();
+    if (dropdown.style.display === "block") {
+      closePageDropdown();
+    } else {
+      openPageDropdown();
+    }
+  }

@@ -115,3 +115,17 @@ async function openDropdownAndSelect(driver, wrapperSelector, desiredText) {
  
   await driver.sleep(200);
 }
+async function closeGlobalMessageIfAny(driver) {
+  const overlays = await driver.findElements(By.css(".global-message-overlay"));
+  if (overlays.length === 0) return;
+
+  for (const ov of overlays) {
+    if (await ov.isDisplayed()) {
+      const btns = await ov.findElements(By.css("button"));
+      if (btns.length > 0) {
+        await btns[0].click(); 
+        await driver.sleep(200);
+      }
+    }
+  }
+}

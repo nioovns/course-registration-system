@@ -69,3 +69,49 @@ async function clearAndType(el, text) {
     await el.sendKeys(text);
   }
 }
+async function openDropdownAndSelect(driver, wrapperSelector, desiredText) {
+ 
+  const wrapper = await driver.findElement(By.css(wrapperSelector));
+
+ 
+  await driver.executeScript(
+    "arguments[0].scrollIntoView({block: 'center', inline: 'center'});",
+    wrapper
+  );
+
+  await driver.wait(until.elementIsVisible(wrapper), DEFAULT_TIMEOUT);
+
+  await driver.executeScript("arguments[0].click();", wrapper);
+
+  const dropdown = await driver.wait(
+    until.elementLocated(By.css(".lesson-dropdown")),
+    DEFAULT_TIMEOUT
+  );
+
+  await driver.wait(until.elementIsVisible(dropdown), DEFAULT_TIMEOUT);
+
+  const options = await dropdown.findElements(By.css("div"));
+  let clicked = false;
+
+  for (const opt of options) {
+    const t = (await opt.getText()).trim();
+    if (!desiredText || t === desiredText) {
+      await driver.executeScript("arguments[0].scrollIntoView({block:'center'});", opt);
+      await driver.executeScript("arguments[0].click();", opt);
+      clicked = true;
+      break;
+    }
+  }
+
+  if (!clicked && options.length > 0 && !desiredText) {
+    
+    const first = options[0];
+    await driver.executeScript("arguments[0].scrollIntoView({block:'center'});", first);
+    await driver.executeScript("arguments[0].click();", first);
+  } else if (!clicked && desiredText) {
+    throw new Error(`Option "${desiredText}" not found in dropdown ${wrapperSelector}`);
+  }
+
+ 
+  await driver.sleep(200);
+}

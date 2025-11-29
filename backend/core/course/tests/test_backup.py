@@ -11,7 +11,7 @@ class CourseViewSetTest(APITestCase):
     def setUp(self):
         self.client = APIClient()
 
-        # 1. ساخت یوزر ادمین
+        # ساخت یوزر ادمین
         self.user = User.objects.create_user(
             username='tester',
             password='password123',
@@ -19,27 +19,26 @@ class CourseViewSetTest(APITestCase):
             email='tester@example.com'
         )
 
-        # 2. لاگین (خط اضافه آخر تابع حذف شد)
         self.client.force_authenticate(user=self.user)
 
-        # 3. ساخت دیتای نمونه
+        # ساخت سشن کلاس
         self.session1 = ClassSession.objects.create(
             day='sat',
             start_time='14:00',
             end_time='16:00',
             room='301',
-            faculty='eng'  # اگر فیلد الزامی است اضافه کنید
+            faculty='eng'
         )
 
+        # --- اصلاح شده: حذف units=3 ---
         self.course1 = Course.objects.create(
             name="Math",
             code="M101",
-            capacity=30,
-            units=3  # اگر فیلد الزامی است
+            capacity=30
+            # units=3  <--- این خط را پاک کنید چون مدل شما این فیلد را ندارد
         )
         self.course1.sessions.add(self.session1)
 
-        # استفاده از reverse برای جلوگیری از غلط املایی در URL
         self.list_url = reverse('course-list')
         self.detail_url = reverse('course-detail', kwargs={'pk': self.course1.pk})
 

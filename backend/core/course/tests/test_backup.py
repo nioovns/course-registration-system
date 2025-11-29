@@ -5,7 +5,8 @@ from course.models.Course import Course
 from course.models.ClassSession import ClassSession
 from users.models import User
 
-
+#test-read
+#ok
 class CourseViewSetTest(APITestCase):
 
     def setUp(self):

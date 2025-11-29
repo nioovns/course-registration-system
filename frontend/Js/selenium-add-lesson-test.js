@@ -160,3 +160,28 @@ async function runTests() {
       throw new Error("Base UI elements are not correctly rendered.");
     }
     console.log("✅ TEST 1 PASSED");
+
+    // ---------- TEST 2: Placeholder & search non-editable ----------
+    console.log("\n[TEST 2] Placeholder behavior & search field read-only...");
+
+    const searchEl = await driver.findElement(By.css(".th4 .search"));
+    const searchBefore = (await searchEl.getText()).trim();
+    const contentEditable = await searchEl.getAttribute("contenteditable");
+    const pointerEvents = await searchEl.getCssValue("pointer-events");
+
+    console.log(' Search text:', `"${searchBefore}"`);
+    console.log(" contenteditable:", contentEditable);
+    console.log(" pointer-events:", pointerEvents);
+
+   
+    if (searchBefore !== "جستجو") {
+      throw new Error('Search placeholder text should be "جستجو".');
+    }
+    if (contentEditable !== "false") {
+      throw new Error("Search field must have contenteditable=false.");
+    }
+    if (pointerEvents !== "none") {
+      throw new Error('Search must have "pointer-events: none" to be non-interactive.');
+    }
+
+    console.log("✅ TEST 2 PASSED");

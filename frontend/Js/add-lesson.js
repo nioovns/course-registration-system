@@ -549,3 +549,23 @@ document.addEventListener("DOMContentLoaded", () => {
       updateExtraGroups(initialUnits);
     }
   }
+
+  function loadLessons() {
+    try {
+      const raw = localStorage.getItem("sabau-lessons");
+      if (!raw) return [];
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function saveLessons(list) {
+    localStorage.setItem("sabau-lessons", JSON.stringify(list));
+  }
+
+  function getNextId(list) {
+    if (!list.length) return 1;
+    return Math.max(...list.map((l) => Number(l.id) || 0)) + 1;
+  }

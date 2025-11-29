@@ -492,3 +492,32 @@ document.addEventListener("DOMContentLoaded", () => {
     .map(r => ({ value: r, label: r }));
   const unitOptions = [1,2,3,4]
     .map(u => ({ value: u, label: String(u) }));
+
+    const unitsField = initDropdownField({ wrapper: unitsWrapper, labelEl: unitsTextEl });
+  if (unitsWrapper && unitsField) {
+    createDropdown(unitsWrapper, unitOptions, (opt) => {
+      unitsField.setValue(opt.label);
+      const val = parseInt(opt.value, 10);
+      updateExtraGroups(val);
+    });
+  }
+
+  const dayField1 = initDropdownField({ wrapper: dayWrapper1, labelEl: dayTextEl1 });
+  const timeField1 = initDropdownField({ wrapper: timeWrapper1, labelEl: timeTextEl1 });
+  if (dayWrapper1 && dayField1) createDropdown(dayWrapper1, dayOptions, (opt) => dayField1.setValue(opt.label));
+  if (timeWrapper1 && timeField1) createDropdown(timeWrapper1, timeOptions, (opt) => timeField1.setValue(opt.label));
+
+  const dayField2 = initDropdownField({ wrapper: gp1Wrapper, labelEl: gp1TextEl });
+  const timeField2 = initDropdownField({ wrapper: gp2Wrapper, labelEl: gp2TextEl });
+  if (gp1Wrapper && dayField2) createDropdown(gp1Wrapper, dayOptions, (opt) => dayField2.setValue(opt.label));
+  if (gp2Wrapper && timeField2) createDropdown(gp2Wrapper, timeOptions, (opt) => timeField2.setValue(opt.label));
+
+  const roomField1 = initDropdownField({ wrapper: roomWrapper1, labelEl: roomTextEl1 });
+  const facultyField1 = initDropdownField({ wrapper: facultyWrapper1, labelEl: facultyTextEl1 });
+  if (roomWrapper1 && roomField1) createDropdown(roomWrapper1, roomOptions, (opt) => roomField1.setValue(opt.label));
+  if (facultyWrapper1 && facultyField1) createDropdown(facultyWrapper1, facultyOptions, (opt) => facultyField1.setValue(opt.label));
+
+  const roomField2 = initDropdownField({ wrapper: gp3Wrapper, labelEl: gp3TextEl });
+  const facultyField2 = initDropdownField({ wrapper: gp4Wrapper, labelEl: gp4TextEl });
+  if (gp3Wrapper && roomField2) createDropdown(gp3Wrapper, roomOptions, (opt) => roomField2.setValue(opt.label));
+  if (gp4Wrapper && facultyField2) createDropdown(gp4Wrapper, facultyOptions, (opt) => facultyField2.setValue(opt.label));

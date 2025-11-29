@@ -527,3 +527,116 @@ function showGlobalError(message) {
   window.addEventListener("resize", () => {
     repositionFooter();
   });
+
+  function clearTbody() {
+    if (tbody) tbody.innerHTML = "";
+  }
+
+  function createRow(lesson) {
+    const row = document.createElement("div");
+    row.className = "tr2";
+    row.dataset.lessonId = lesson.id;
+
+    row.innerHTML = `
+      <div class="td">
+        <img class="group-10" src="../Image/trash.svg" alt="حذف" />
+        <img class="group-11" src="../Image/Group 7.svg" alt="ویرایش" />
+      </div>
+      <div class="td2">
+        <div class="_200">${lesson.location || ""}</div>
+      </div>
+      <div class="td2">
+        <div class="_16-14-16-14">
+          ${lesson.schedule ? lesson.schedule.replace(/\n/g, "<br />") : ""}
+        </div>
+      </div>
+      <div class="td2">
+        <div class="div3">${lesson.teacher || ""}</div>
+      </div>
+      <div class="td2">
+        <div class="_unit">${lesson.units != null ? lesson.units : ""}</div>
+      </div>
+      <div class="td2">
+        <div class="_30">${lesson.capacity != null ? lesson.capacity : ""}</div>
+      </div>
+      <div class="td2">
+        <div class="_45789">${lesson.code || ""}</div>
+      </div>
+      <div class="td2">
+        <div class="_1">${lesson.name || ""}</div>
+      </div>
+    `;
+
+    const deleteIcon = row.querySelector(".group-10");
+    const editIcon = row.querySelector(".group-11");
+
+    if (deleteIcon) {
+      deleteIcon.style.cursor = "pointer";
+      deleteIcon.addEventListener("click", () => handleDeleteLesson(lesson.id));
+    }
+
+    if (editIcon) {
+      editIcon.style.cursor = "pointer";
+      editIcon.addEventListener("click", () => handleEditLesson(lesson));
+    }
+
+    return row;
+  }
+
+  function renderTable() {
+    if (!tbody) return;
+
+    clearTbody();
+
+    if (!filteredLessons.length) {
+      const empty = document.createElement("div");
+      empty.style.padding = "12px";
+      empty.style.fontSize = "13px";
+      empty.style.color = "#777";
+      empty.style.textAlign = "center";
+      empty.textContent = "درسی برای نمایش وجود ندارد.";
+      tbody.appendChild(empty);
+
+      updatePageIndicator();
+      updatePageInfo();
+      renderPageDropdownOptions();
+      repositionFooter();
+      return;
+    }
+
+    const totalPages = getTotalPages();
+    if (currentPage > totalPages) currentPage = totalPages;
+
+    const pageItems = paginate(filteredLessons, currentPage, PAGE_SIZE);
+    pageItems.forEach((lesson) => tbody.appendChild(createRow(lesson)));
+
+    updatePageIndicator();
+    updatePageInfo();
+    renderPageDropdownOptions();
+    repositionFooter();
+  }
+
+  // ---------- حذف و ویرایش ----------
+ function handleDeleteLesson(id) {
+  const lesson = lessons.find((l) => l.id === id);
+  const name = lesson ? lesson.name : "این درس";
+
+  showConfirmDialog({
+    title: "حذف درس",
+    message: `آیا از حذف درس «${name}» مطمئن هستید؟\nاین عملیات غیرقابل بازگشت است.`,
+    confirmText: "حذف درس",
+    cancelText: "انصراف",
+    onConfirm: () => {
+      // حذف واقعی بعد از تأیید
+      lessons = lessons.filter((l) => l.id !== id);
+      filteredLessons = filteredLessons.filter((l) => l.id !== id);
+      saveLessons();
+
+      if (!filteredLessons.length) {
+        currentPage = 1;
+      }
+
+      renderTable();
+    },
+  });
+}

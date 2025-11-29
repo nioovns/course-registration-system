@@ -31,10 +31,12 @@ class CourseViewSet(viewsets.ViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
     def update(self, request, pk=None):
+        get_object_or_404(Course, pk=pk)
         course = self.service.update_course(pk, request.data)
         serializer = CourseSerializer(course)
         return Response(serializer.data)
 
     def destroy(self, request, pk=None):
+        get_object_or_404(Course, pk=pk) #
         self.service.delete_course(pk)
         return Response(status=status.HTTP_204_NO_CONTENT)

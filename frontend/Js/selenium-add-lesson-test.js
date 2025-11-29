@@ -139,3 +139,24 @@ async function runTests() {
     console.log("Opening page:", BASE_URL);
     await driver.get(BASE_URL);
     await driver.manage().setTimeouts({ implicit: 3000 });
+
+    // ---------- TEST 1: Page basic elements ----------
+    console.log("\n[TEST 1] Page loads and base elements exist...");
+
+    const saveBtn = await driver.findElement(By.css(".group-98 .login-submit"));
+    const cancelBtn = await driver.findElement(By.css(".group-98 .login-submit2"));
+    const nameEl = await driver.findElement(By.css(".group-65 ._1"));
+    const unitsEl = await driver.findElement(By.css(".group-68 ._3"));
+
+    const saveDisplayed = await saveBtn.isDisplayed();
+    const nameText = (await nameEl.getText()).trim();
+    const unitsText = (await unitsEl.getText()).trim();
+
+    console.log(" Save button visible:", saveDisplayed);
+    console.log(" Initial lesson name text:", `"${nameText}"`);
+    console.log(" Initial units text:", `"${unitsText}"`);
+
+    if (!saveDisplayed || !nameText || !unitsText) {
+      throw new Error("Base UI elements are not correctly rendered.");
+    }
+    console.log("✅ TEST 1 PASSED");

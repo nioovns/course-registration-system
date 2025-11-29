@@ -645,4 +645,68 @@ function showGlobalError(message) {
     localStorage.setItem("sabau-current-lesson-id", String(lesson.id));
     window.location.href = "edit-lesson.html";
   }
+
+  function applySearch(term) {
+    const value = term.trim().toLowerCase();
+    if (!value) {
+      filteredLessons = [...lessons];
+      currentPage = 1;
+      renderTable();
+      return;
+    }
+
+    filteredLessons = lessons.filter((lesson) => {
+      return (
+        (lesson.name || "").toLowerCase().includes(value) ||
+        (lesson.code || "").toLowerCase().includes(value) ||
+        (lesson.teacher || "").toLowerCase().includes(value) ||
+        (lesson.location || "").toLowerCase().includes(value) ||
+        (lesson.schedule || "").toLowerCase().includes(value)
+      );
+    });
+
+    currentPage = 1;
+    renderTable();
+
+    if (!filteredLessons.length) {
+      showGlobalError("درسی با این مشخصات پیدا نشد.");
+    }
+  }
+
   
+
+  function initSearchBox() {
+  if (!searchContainer) return;
+
+  const input = document.createElement("input");
+  input.type = "text";
+  input.className = "dashboard-search-input";
+  input.placeholder = "جستجو";
+
+  Object.assign(input.style, {
+    border: "none",
+    outline: "none",
+    background: "transparent",
+    fontFamily: "inherit",
+    fontSize: "14px",
+    flex: "1",
+    minWidth: "80px",
+    direction: "rtl",
+    textAlign: "right",
+    marginRight: "30px",
+  });
+
+  searchContainer.style.display = "flex";
+  searchContainer.style.alignItems = "center";
+  searchContainer.style.gap = "6px";
+
+  searchContainer.appendChild(input);
+
+  input.addEventListener("input", () => {
+    applySearch(input.value);
+  });
+
+  searchContainer.addEventListener("click", () => {
+    input.focus();
+  });
+}

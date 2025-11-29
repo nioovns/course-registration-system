@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const bellBadge = document.querySelector(".badge-with-notification ._12");
   const bellWrapper = document.querySelector(".badge-with-notification");
 
-  const PAGE_SIZE = 5;
+  const PAGE_SIZE = 7;
   let currentPage = 1;
   let pageDropdown = null; 
   let globalOverlay = null;

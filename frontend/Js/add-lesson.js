@@ -299,3 +299,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
     return overlay;
   }
+
+  function showConfirmDialog({ title, message, confirmText, cancelText, onConfirm }) {
+    const overlay = createConfirmOverlay();
+
+    if (confirmTitleEl) confirmTitleEl.textContent = title || "تأیید عملیات";
+    if (confirmMsgEl) confirmMsgEl.textContent = message || "";
+    if (confirmYesBtn) confirmYesBtn.textContent = confirmText || "تأیید";
+    if (confirmNoBtn) confirmNoBtn.textContent = cancelText || "انصراف";
+
+    const newYes = confirmYesBtn.cloneNode(true);
+    const newNo = confirmNoBtn.cloneNode(true);
+    confirmYesBtn.parentNode.replaceChild(newYes, confirmYesBtn);
+    confirmNoBtn.parentNode.replaceChild(newNo, confirmNoBtn);
+    confirmYesBtn = newYes;
+    confirmNoBtn = newNo;
+
+    confirmYesBtn.addEventListener("click", () => {
+      overlay.style.display = "none";
+      if (typeof onConfirm === "function") onConfirm();
+    });
+
+    confirmNoBtn.addEventListener("click", () => {
+      overlay.style.display = "none";
+    });
+
+    overlay.style.display = "flex";
+  }

@@ -273,3 +273,66 @@ function showGlobalError(message) {
     if (msgEl) msgEl.textContent = message;
     overlay.style.display = "flex";
   }
+
+  const defaultLessons = [
+    {
+      id: 1,
+      name: "ریاضی 1",
+      code: "45789",
+      capacity: 30,
+      units: 3,
+      teacher: "فاطمه فتاحی",
+      location: "مهندسی - کلاس 200",
+      schedule: "شنبه 16-14\nدوشنبه 16-14",
+    },
+    {
+      id: 2,
+      name: "برنامه‌نویسی پیشرفته",
+      code: "45800",
+      capacity: 40,
+      units: 3,
+      teacher: "علی حسینی",
+      location: "مهندسی - کلاس 305",
+      schedule: "یکشنبه 10-8\nسه‌شنبه 10-8",
+    },
+    {
+      id: 3,
+      name: "ساختمان داده‌ها",
+      code: "46012",
+      capacity: 35,
+      units: 3,
+      teacher: "مریم نادری",
+      location: "مهندسی - کلاس 150",
+      schedule: "شنبه 12-10\nسه‌شنبه 12-10",
+    },
+    {
+      id: 4,
+      name: "پایگاه داده‌ها",
+      code: "46200",
+      capacity: 30,
+      units: 3,
+      teacher: "سینا کریمی",
+      location: "مهندسی - کلاس 210",
+      schedule: "دوشنبه 12-10\nچهارشنبه 12-10",
+    },
+    {
+      id: 5,
+      name: "سیستم‌عامل",
+      code: "46510",
+      capacity: 25,
+      units: 3,
+      teacher: "نرگس آقایی",
+      location: "مهندسی - کلاس 120",
+      schedule: "یکشنبه 14-12\nسه‌شنبه 14-12",
+    },
+    {
+      id: 6,
+      name: "مدار منطقی",
+      code: "45220",
+      capacity: 28,
+      units: 3,
+      teacher: "مهدی مرادی",
+      location: "مهندسی - کلاس 220",
+      schedule: "شنبه 10-8\nدوشنبه 10-8",
+    },
+  ];

@@ -521,3 +521,31 @@ document.addEventListener("DOMContentLoaded", () => {
   const facultyField2 = initDropdownField({ wrapper: gp4Wrapper, labelEl: gp4TextEl });
   if (gp3Wrapper && roomField2) createDropdown(gp3Wrapper, roomOptions, (opt) => roomField2.setValue(opt.label));
   if (gp4Wrapper && facultyField2) createDropdown(gp4Wrapper, facultyOptions, (opt) => facultyField2.setValue(opt.label));
+
+  function updateExtraGroups(units) {
+    if (!gp1Wrapper || !gp2Wrapper) return;
+
+    if (units <= 2) {
+      gp1Wrapper.style.display = "none";
+      gp2Wrapper.style.display = "none";
+      if (gp3Wrapper) gp3Wrapper.style.display = "none";
+      if (gp4Wrapper) gp4Wrapper.style.display = "none";
+
+      if (dayField2) dayField2.reset();
+      if (timeField2) timeField2.reset();
+      if (roomField2) roomField2.reset();
+      if (facultyField2) facultyField2.reset();
+    } else {
+      gp1Wrapper.style.display = gp1InitialDisplay || "flex";
+      gp2Wrapper.style.display = gp2InitialDisplay || "flex";
+      if (gp3Wrapper) gp3Wrapper.style.display = gp3InitialDisplay || "flex";
+      if (gp4Wrapper) gp4Wrapper.style.display = gp4InitialDisplay || "flex";
+    }
+  }
+
+  if (unitsTextEl) {
+    const initialUnits = parseInt((unitsTextEl.textContent || "").trim(), 10);
+    if (!isNaN(initialUnits)) {
+      updateExtraGroups(initialUnits);
+    }
+  }

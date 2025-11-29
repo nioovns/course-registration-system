@@ -761,3 +761,14 @@ if (newLessonBtn) {
     
   });
 }
+
+if (bellWrapper) {
+    bellWrapper.style.cursor = "pointer";
+    bellWrapper.addEventListener("click", () => {
+      if (bellBadge) {
+        bellBadge.textContent = "";
+        bellBadge.parentElement.style.display = "none";
+      }
+      showGlobalError("اعلان جدیدی برای نمایش وجود ندارد.");
+    });
+  }

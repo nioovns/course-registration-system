@@ -17,8 +17,8 @@ class CourseViewSetTest(APITestCase):
         self.user = User.objects.create_user(
             username='tester',
             password='password123',
-            role='admin'
-
+            role=User.Roles.ADMIN,  # نقش ادمین می‌دیم F
+            email='tester@example.com'
         )
         self.client.force_authenticate(user=self.user)
 

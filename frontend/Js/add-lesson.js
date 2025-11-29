@@ -731,3 +731,35 @@ document.addEventListener("DOMContentLoaded", () => {
       location: finalLocation,
     });
     saveLessons(lessons);
+
+     const overlay = createGlobalOverlay();
+    const titleEl = overlay.querySelector(".global-message-title");
+    const msgEl = overlay.querySelector(".global-message-text");
+    if (titleEl) titleEl.querySelector("span:last-child").textContent = "ثبت موفق";
+    if (msgEl) msgEl.textContent = "درس با موفقیت ثبت شد.\nدر حال بازگشت به لیست دروس...";
+    overlay.style.display = "flex";
+
+    setTimeout(() => {
+      window.location.href = "admin-dashboard-list.html";
+    }, 1200);
+  }
+
+  if (saveBtn) {
+    saveBtn.style.cursor = "pointer";
+    saveBtn.addEventListener("click", handleSave);
+  }
+
+  if (cancelBtn) {
+    cancelBtn.style.cursor = "pointer";
+    cancelBtn.addEventListener("click", () => {
+      showConfirmDialog({
+        title: "انصراف از ثبت درس",
+        message: "آیا مطمئن هستید می‌خواهید تغییرات را رها کرده و به لیست دروس بازگردید؟",
+        confirmText: "بله، بازگشت",
+        cancelText: "ادامه ثبت",
+        onConfirm: () => {
+          window.location.href = "admin-dashboard-list.html";
+        },
+      });
+    });
+  }

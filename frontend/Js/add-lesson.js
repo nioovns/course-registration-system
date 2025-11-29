@@ -763,3 +763,19 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
   }
+
+   if (bellWrapper) {
+    bellWrapper.style.cursor = "pointer";
+    bellWrapper.addEventListener("click", () => {
+      if (bellBadge) {
+        bellBadge.textContent = "";
+        bellBadge.parentElement.style.display = "none";
+      }
+      const overlay = createGlobalOverlay();
+      const titleEl = overlay.querySelector(".global-message-title span:last-child");
+      const msgEl = overlay.querySelector(".global-message-text");
+      if (titleEl) titleEl.textContent = "اعلان‌ها";
+      if (msgEl) msgEl.textContent = "اعلان جدیدی برای نمایش وجود ندارد.";
+      overlay.style.display = "flex";
+    });
+  }

@@ -60,3 +60,38 @@ async function main() {
     }
 
     console.log("✅ TEST 1 PASSED\n");
+
+    
+
+    // ========== TEST 2: Next / Previous page ==========
+    console.log("[TEST 2] Next & Previous page buttons...");
+
+    const nextBtn = await driver.findElement(By.css(".table-footer .frame-1"));
+    const prevBtn = await driver.findElement(By.css(".table-footer .frame-2"));
+
+    await nextBtn.click();
+    await sleep(500);
+
+    rows = await waitForRows(driver);
+    console.log(`  Rows on second page: ${rows.length}`);
+    if (rows.length < 1 || rows.length > 5) {
+      throw new Error("Unexpected number of rows on second page.");
+    }
+
+    pageIndicatorText = await pageIndicatorEl.getText();
+    console.log(`  Page indicator on second page: ${pageIndicatorText}`);
+    if (pageIndicatorText.trim() !== "2") {
+      throw new Error("Expected page indicator to be '2' on second page.");
+    }
+
+    await prevBtn.click();
+    await sleep(500);
+
+    pageIndicatorText = await pageIndicatorEl.getText();
+    console.log(`  Page indicator after going back: ${pageIndicatorText}`);
+    if (pageIndicatorText.trim() !== "1") {
+      throw new Error("Expected page indicator to be '1' after going back to first page.");
+    }
+
+    console.log("✅ TEST 2 PASSED\n");
+

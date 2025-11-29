@@ -39,3 +39,24 @@ async function openDropdownAndSelect(driver, dropdownSelector, desiredText) {
 
   throw new Error(`Option "${desiredText}" not found in dropdown ${dropdownSelector}`);
 }
+async function forceClickAndType(driver, selector, text) {
+  const el = await driver.findElement(By.css(selector));
+
+  
+  await driver.executeScript("arguments[0].scrollIntoView({block:'center'});", el);
+  await driver.sleep(200);
+
+ 
+  await driver.executeScript("arguments[0].click();", el);
+  await driver.sleep(200);
+
+ 
+  await el.sendKeys(Key.chord(Key.CONTROL, "a"), text);
+  await driver.sleep(200);
+}
+
+
+const BASE_URL = "http://127.0.0.1:5500/Pages/add-lesson.html";
+
+
+const DEFAULT_TIMEOUT = 10000;

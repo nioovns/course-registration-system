@@ -357,3 +357,13 @@ function showGlobalError(message) {
 
   let lessons = loadLessons();
   let filteredLessons = [...lessons];
+
+  function getTotalPages() {
+    if (!filteredLessons.length) return 1;
+    return Math.max(1, Math.ceil(filteredLessons.length / PAGE_SIZE));
+  }
+
+  function paginate(list, page, size) {
+    const start = (page - 1) * size;
+    return list.slice(start, start + size);
+  }

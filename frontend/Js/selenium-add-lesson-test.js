@@ -60,3 +60,12 @@ const BASE_URL = "http://127.0.0.1:5500/Pages/add-lesson.html";
 
 
 const DEFAULT_TIMEOUT = 10000;
+
+async function clearAndType(el, text) {
+  await el.click();
+  await el.sendKeys(Key.chord(Key.CONTROL, "a"));
+  await el.sendKeys(Key.BACK_SPACE);
+  if (text) {
+    await el.sendKeys(text);
+  }
+}

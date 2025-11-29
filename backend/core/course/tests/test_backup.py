@@ -13,6 +13,8 @@ class CourseViewSetTest(APITestCase):
         self.client = APIClient()
 
         # ساخت یوزر ادمین
+
+
         self.user = User.objects.create_user(
             username='tester',
             password='password123',
@@ -59,3 +61,4 @@ class CourseViewSetTest(APITestCase):
         url = reverse('course-detail', args=[999])
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+

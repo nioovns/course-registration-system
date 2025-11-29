@@ -35,7 +35,8 @@ class CourseViewSetTest(APITestCase):
             capacity=30
         )
         self.course1.sessions.add(self.session1)
-        self.client = APIClient()
+        #f
+        #self.client = APIClient()
 
     def test_list_courses(self):
         response = self.client.get("/api/admin/courses/")

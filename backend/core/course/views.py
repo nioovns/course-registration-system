@@ -1,3 +1,4 @@
+from django.http import Http404
 from rest_framework.response import Response
 from rest_framework import status, viewsets
 from course.serializers.CourseSerializer import CourseSerializer
@@ -6,7 +7,7 @@ from course.services.AdminServices import AdminService
 from course.models.Course import Course
 from users.permissions import IsAdmin
 from course.services.CourseFilters import CourseFilter
-
+from django.shortcuts import get_object_or_404  #
 class CourseViewSet(viewsets.ViewSet):
     permission_classes= [IsAdmin]
     service = AdminService()
@@ -19,6 +20,8 @@ class CourseViewSet(viewsets.ViewSet):
 
     def retrieve(self, request, pk=None):
         course = self.service.get_course(pk)
+        if course is None: #
+            raise Http404("Course not found") #
         serializer = CourseSerializer(course)
         return Response(serializer.data)
 

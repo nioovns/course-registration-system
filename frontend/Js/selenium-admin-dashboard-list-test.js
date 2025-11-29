@@ -61,7 +61,7 @@ async function main() {
 
     console.log("✅ TEST 1 PASSED\n");
 
-    
+
 
     // ========== TEST 2: Next / Previous page ==========
     console.log("[TEST 2] Next & Previous page buttons...");
@@ -94,4 +94,32 @@ async function main() {
     }
 
     console.log("✅ TEST 2 PASSED\n");
+
+    // ========== TEST 3: Page dropdown ==========
+    console.log("[TEST 3] Page dropdown...");
+
+    const selectContainer = await driver.findElement(By.css(".table-footer .select"));
+    await selectContainer.click();
+
+    const dropdown = await driver.wait(
+      until.elementLocated(By.css(".page-dropdown")),
+      5000
+    );
+
+    const page2Option = await dropdown.findElement(
+      By.xpath(".//div[contains(normalize-space(.), 'صفحه 2')]")
+    );
+    await page2Option.click();
+
+    await sleep(500);
+    pageIndicatorText = await pageIndicatorEl.getText();
+    console.log(`  Page indicator after selecting page 2 from dropdown: ${pageIndicatorText}`);
+    if (pageIndicatorText.trim() !== "2") {
+      throw new Error("Expected page indicator to be '2' after selecting page 2 from dropdown.");
+    }
+
+    console.log("✅ TEST 3 PASSED\n");
+
+    await prevBtn.click();
+    await sleep(500);
 

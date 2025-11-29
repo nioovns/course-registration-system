@@ -794,3 +794,67 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
   }
+
+  (function () {
+    function updateDateTime() {
+      const now = new Date();
+      const persianDate = new Intl.DateTimeFormat("fa-IR", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }).format(now);
+      const persianTime = new Intl.DateTimeFormat("fa-IR", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      }).format(now);
+
+      const target = document.querySelector("._1-1404");
+      if (target) {
+        target.textContent = `${persianDate} | ${persianTime}`;
+        target.style.whiteSpace = "nowrap";
+      }
+    }
+
+    updateDateTime();
+    setInterval(updateDateTime, 60000);
+  })();
+});
+
+
+
+
+(function () {
+  function updateDateTime() {
+    const now = new Date();
+
+    const persianDate = new Intl.DateTimeFormat("fa-IR", {
+      day: "numeric",
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      
+    }).format(now);
+
+    const persianTime = new Intl.DateTimeFormat("fa-IR", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    }).format(now);
+
+    
+    const dateTarget = document.querySelector("._1-1404");
+
+    if (!dateTarget) {
+      
+      console.warn("Element with class _1-1404 not found");
+      return;
+    }
+
+    dateTarget.textContent = `${persianTime} | ${persianDate}`;
+  }
+
+  updateDateTime();
+  setInterval(updateDateTime, 1000);
+})();

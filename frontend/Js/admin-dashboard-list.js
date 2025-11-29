@@ -350,3 +350,10 @@ function showGlobalError(message) {
       return [...defaultLessons];
     }
   }
+
+  function saveLessons() {
+    localStorage.setItem("sabau-lessons", JSON.stringify(lessons));
+  }
+
+  let lessons = loadLessons();
+  let filteredLessons = [...lessons];

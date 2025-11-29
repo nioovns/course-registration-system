@@ -185,3 +185,67 @@ async function runTests() {
     }
 
     console.log("✅ TEST 2 PASSED");
+
+    // ---------- TEST 3: Units dropdown shows/hides gp1..gp4 correctly ----------
+    console.log("\n[TEST 3] Units dropdown shows/hides gp1..gp4 correctly...");
+
+    const gp1Wrapper = await driver.findElement(By.css(".group-102 .gp1"));
+    const gp2Wrapper = await driver.findElement(By.css(".group-102 .gp2"));
+    const gp3Wrapper = await driver.findElement(By.css(".group-101 .gp3"));
+    const gp4Wrapper = await driver.findElement(By.css(".group-101 .gp4"));
+
+    
+    async function getDisplay(el) {
+      return await driver.executeScript(
+        "return window.getComputedStyle(arguments[0]).display;",
+        el
+      );
+    }
+
+  
+    await openDropdownAndSelect(driver, ".group-68 .frame-34", "2");
+    await driver.sleep(300);
+
+    const gp1_u2 = await getDisplay(gp1Wrapper);
+    const gp2_u2 = await getDisplay(gp2Wrapper);
+    const gp3_u2 = await getDisplay(gp3Wrapper);
+    const gp4_u2 = await getDisplay(gp4Wrapper);
+
+    console.log(" Under units=2 -> gp1 display:", gp1_u2);
+    console.log(" Under units=2 -> gp2 display:", gp2_u2);
+    console.log(" Under units=2 -> gp3 display:", gp3_u2);
+    console.log(" Under units=2 -> gp4 display:", gp4_u2);
+
+    if (
+      gp1_u2 !== "none" ||
+      gp2_u2 !== "none" ||
+      gp3_u2 !== "none" ||
+      gp4_u2 !== "none"
+    ) {
+      throw new Error("gp1..gp4 should have display:none when units <= 2.");
+    }
+
+   
+    await openDropdownAndSelect(driver, ".group-68 .frame-34", "3");
+    await driver.sleep(300);
+
+    const gp1_u3 = await getDisplay(gp1Wrapper);
+    const gp2_u3 = await getDisplay(gp2Wrapper);
+    const gp3_u3 = await getDisplay(gp3Wrapper);
+    const gp4_u3 = await getDisplay(gp4Wrapper);
+
+    console.log(" Under units=3 -> gp1 display:", gp1_u3);
+    console.log(" Under units=3 -> gp2 display:", gp2_u3);
+    console.log(" Under units=3 -> gp3 display:", gp3_u3);
+    console.log(" Under units=3 -> gp4 display:", gp4_u3);
+
+    if (
+      gp1_u3 === "none" ||
+      gp2_u3 === "none" ||
+      gp3_u3 === "none" ||
+      gp4_u3 === "none"
+    ) {
+      throw new Error("gp1..gp4 should be visible (display != none) when units > 2.");
+    }
+
+    console.log("✅ TEST 3 PASSED");

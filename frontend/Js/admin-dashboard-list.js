@@ -495,3 +495,35 @@ function showGlobalError(message) {
       closePageDropdown();
     }
   });
+   function repositionFooter() {
+    if (!datatable || !footer) return;
+
+    const rows = tbody ? tbody.querySelectorAll(".tr2") : [];
+    let topPx;
+
+    const dtRect = datatable.getBoundingClientRect();
+
+    if (rows && rows.length > 0) {
+      const lastRow = rows[rows.length - 1];
+      const rowRect = lastRow.getBoundingClientRect();
+      const offset = rowRect.bottom - dtRect.top;
+      topPx = offset + 10;
+    } else {
+      const thead = document.querySelector(".datatable .thead");
+      if (thead) {
+        const headRect = thead.getBoundingClientRect();
+        const offset = headRect.bottom - dtRect.top;
+        topPx = offset + 10;
+      } else {
+        topPx = 100;
+      }
+    }
+
+    footer.style.position = "absolute";
+    footer.style.top = topPx + "px";
+    footer.style.bottom = "auto";
+  }
+
+  window.addEventListener("resize", () => {
+    repositionFooter();
+  });

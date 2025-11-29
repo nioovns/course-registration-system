@@ -225,3 +225,23 @@ async function main() {
     }
 
     console.log("✅ TEST 5 PASSED\n");
+
+     // ========== TEST 6: New lesson button navigation ==========
+    console.log("[TEST 6] New lesson button -> add-lesson.html...");
+
+    await driver.get(DASHBOARD_URL);
+    const newLessonBtn = await driver.findElement(By.css(".frame-28"));
+    await newLessonBtn.click();
+
+    await driver.wait(async () => {
+      const url = await driver.getCurrentUrl();
+      return url.includes(ADD_LESSON_URL_FRAGMENT);
+    }, 5000);
+
+    const currentUrlAdd = await driver.getCurrentUrl();
+    console.log(`  URL after clicking new lesson: ${currentUrlAdd}`);
+    if (!currentUrlAdd.includes(ADD_LESSON_URL_FRAGMENT)) {
+      throw new Error("Expected to navigate to add-lesson.html after clicking 'تعریف درس جدید'.");
+    }
+
+    console.log("✅ TEST 6 PASSED\n");

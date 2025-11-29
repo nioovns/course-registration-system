@@ -129,3 +129,13 @@ async function closeGlobalMessageIfAny(driver) {
     }
   }
 }
+
+async function runTests() {
+  const options = new chrome.Options();
+ 
+  const driver = await new Builder().forBrowser("chrome").setChromeOptions(options).build();
+
+  try {
+    console.log("Opening page:", BASE_URL);
+    await driver.get(BASE_URL);
+    await driver.manage().setTimeouts({ implicit: 3000 });

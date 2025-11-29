@@ -18,7 +18,7 @@ class CourseSerializer(serializers.ModelSerializer):
         
     def validate_professor(self, value):
         if not value.role == User.Roles.PROFESSOR:
-            raise ValidationError("The professor must have the role of 'Professor'.")
+            raise serializers.ValidationError("The professor must have the role of 'Professor'.")
         return value
     
     def validate_code(self, value):

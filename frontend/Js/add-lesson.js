@@ -364,3 +364,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   [nameEl, codeEl, capacityEl, teacherEl, searchEl].forEach(initTextPlaceholder);
+
+  if (searchEl) {
+    searchEl.setAttribute("contenteditable", "false");
+    searchEl.style.pointerEvents = "none";
+    searchEl.style.opacity = "0.55";
+    searchEl.style.userSelect = "none";
+  }

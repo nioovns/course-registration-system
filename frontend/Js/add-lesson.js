@@ -674,3 +674,60 @@ document.addEventListener("DOMContentLoaded", () => {
 
     return true;
   }
+
+  function handleSave() {
+    const name = (nameEl?.textContent || "").trim();
+    const code = (codeEl?.textContent || "").trim();
+    const capStr = (capacityEl?.textContent || "").trim();
+    const teacher = (teacherEl?.textContent || "").trim();
+
+    const unitsStr = unitsField ? unitsField.getValue() : (unitsTextEl?.textContent || "").trim();
+    const units = unitsStr ? parseInt(unitsStr, 10) : 0;
+    const capacity = capStr ? parseInt(capStr, 10) : 0;
+
+    const d1 = dayField1?.getValue() || "";
+    const t1 = timeField1?.getValue() || "";
+    const d2 = dayField2?.getValue() || "";
+    const t2 = timeField2?.getValue() || "";
+
+    const f1 = facultyField1?.getValue() || "";
+    const r1 = roomField1?.getValue() || "";
+    const f2 = facultyField2?.getValue() || "";
+    const r2 = roomField2?.getValue() || "";
+
+    const schedule1 = d1 && t1 ? `${d1} ${t1}` : "";
+    const schedule2 = d2 && t2 ? `${d2} ${t2}` : "";
+    const location1 = f1 && r1 ? `${f1} - کلاس ${r1}` : "";
+    const location2 = f2 && r2 ? `${f2} - کلاس ${r2}` : "";
+
+    const data = {
+      name,
+      code,
+      capacity,
+      units,
+      teacher,
+      schedule1,
+      schedule2,
+      location1,
+      location2,
+    };
+
+    if (!validate(data)) return;
+
+    let finalSchedule = schedule1;
+    let finalLocation = location1;
+    if (schedule2) finalSchedule += "\n" + schedule2;
+    if (location2) finalLocation += "\n" + location2;
+
+    const lessons = loadLessons();
+    lessons.push({
+      id: getNextId(lessons),
+      name,
+      code,
+      capacity,
+      units,
+      teacher,
+      schedule: finalSchedule,
+      location: finalLocation,
+    });
+    saveLessons(lessons);

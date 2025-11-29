@@ -371,3 +371,113 @@ document.addEventListener("DOMContentLoaded", () => {
     searchEl.style.opacity = "0.55";
     searchEl.style.userSelect = "none";
   }
+
+  let openDropdown = null;
+  function closeDropdown() {
+    if (openDropdown) {
+      openDropdown.style.display = "none";
+      openDropdown = null;
+    }
+  }
+
+  document.addEventListener("click", (e) => {
+    if (openDropdown && !openDropdown.contains(e.target)) {
+      closeDropdown();
+    }
+  });
+
+  function createDropdown(anchorEl, options, onSelect) {
+    const dropdown = document.createElement("div");
+    dropdown.className = "lesson-dropdown";
+    Object.assign(dropdown.style, {
+      position: "absolute",
+      background: "#ffffff",
+      borderRadius: "8px",
+      boxShadow: "0 4px 16px rgba(0,0,0,0.15)",
+      minWidth: "100px",
+      zIndex: "9999",
+      padding: "4px 0",
+      direction: "rtl",
+      fontFamily: "inherit",
+      fontSize: "13px",
+      maxHeight: "220px",
+      overflowY: "auto",
+      display: "none",
+    });
+
+    options.forEach((opt) => {
+      const item = document.createElement("div");
+      item.textContent = opt.label;
+      Object.assign(item.style, {
+        padding: "6px 12px",
+        cursor: "pointer",
+        whiteSpace: "nowrap",
+      });
+      item.addEventListener("mouseenter", () => {
+        item.style.background = "#f5f5f5";
+      });
+      item.addEventListener("mouseleave", () => {
+        item.style.background = "#ffffff";
+      });
+      item.addEventListener("click", () => {
+        onSelect(opt);
+        closeDropdown();
+      });
+      dropdown.appendChild(item);
+    });
+
+    document.body.appendChild(dropdown);
+
+    anchorEl.style.cursor = "pointer";
+    anchorEl.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const rect = anchorEl.getBoundingClientRect();
+      dropdown.style.left = rect.left + "px";
+      dropdown.style.top = rect.bottom + 4 + "px";
+      dropdown.style.minWidth = rect.width + "px";
+
+      if (openDropdown && openDropdown !== dropdown) {
+        closeDropdown();
+      }
+      dropdown.style.display = "block";
+      openDropdown = dropdown;
+    });
+
+    return dropdown;
+  }
+
+  function initDropdownField({ wrapper, labelEl }) {
+    if (!wrapper || !labelEl) return null;
+
+    const placeholder = (labelEl.textContent || "").trim();
+    labelEl.dataset.placeholder = placeholder;
+    labelEl.dataset.filled = "false";
+    labelEl.style.opacity = "0.5";
+
+    wrapper.style.cursor = "pointer";
+
+    wrapper.addEventListener("click", () => {
+      if (labelEl.dataset.filled === "false") {
+        labelEl.textContent = "";
+        labelEl.style.opacity = "1";
+      }
+    });
+
+    return {
+      getValue() {
+        if (labelEl.dataset.filled === "false") return "";
+        return (labelEl.textContent || "").trim();
+      },
+      setValue(v) {
+        labelEl.textContent = v;
+        labelEl.dataset.filled = "true";
+        labelEl.style.opacity = "1";
+      },
+      reset() {
+        labelEl.textContent = labelEl.dataset.placeholder || "";
+        labelEl.dataset.filled = "false";
+        labelEl.style.opacity = "0.5";
+      },
+      el: labelEl,
+    };
+  }

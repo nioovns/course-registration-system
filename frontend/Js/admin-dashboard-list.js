@@ -238,3 +238,32 @@ function createConfirmOverlay() {
 
   return overlay;
 }
+function showConfirmDialog({ title, message, confirmText, cancelText, onConfirm }) {
+  const overlay = createConfirmOverlay();
+
+  if (confirmTitleEl && title) confirmTitleEl.textContent = title;
+  if (confirmMsgEl && message) confirmMsgEl.textContent = message;
+  if (confirmYesBtn && confirmText) confirmYesBtn.textContent = confirmText;
+  if (confirmNoBtn && cancelText) confirmNoBtn.textContent = cancelText;
+
+  // پاک کردن لیسنر قبلی دکمه‌ها
+  const newYesBtn = confirmYesBtn.cloneNode(true);
+  const newNoBtn = confirmNoBtn.cloneNode(true);
+
+  confirmYesBtn.parentNode.replaceChild(newYesBtn, confirmYesBtn);
+  confirmNoBtn.parentNode.replaceChild(newNoBtn, confirmNoBtn);
+
+  confirmYesBtn = newYesBtn;
+  confirmNoBtn = newNoBtn;
+
+  confirmYesBtn.addEventListener("click", () => {
+    overlay.style.display = "none";
+    if (typeof onConfirm === "function") onConfirm();
+  });
+
+  confirmNoBtn.addEventListener("click", () => {
+    overlay.style.display = "none";
+  });
+
+  overlay.style.display = "flex";
+}

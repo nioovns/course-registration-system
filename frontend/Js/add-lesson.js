@@ -12,3 +12,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const unitsWrapper = document.querySelector(".group-68 .frame-34");
   const unitsTextEl = document.querySelector(".group-68 ._3");
+
+  
+  const logoutIcon = document.querySelector(".solar-logout-outline");
+  const bellWrapper = document.querySelector(".badge-with-notification");
+  const bellBadge = document.querySelector(".badge-with-notification ._12");

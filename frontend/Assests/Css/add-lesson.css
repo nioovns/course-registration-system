@@ -1864,3 +1864,8 @@ body {
     box-shadow: none !important;
 }
 
+.gp1, .gp2, .gp3, .gp4 {
+    min-height: 49px !important;
+    display: flex;
+    align-items: center;
+}

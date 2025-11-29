@@ -249,3 +249,14 @@ async function runTests() {
     }
 
     console.log("✅ TEST 3 PASSED");
+
+     console.log("\n All add-lesson tests finished.");
+
+  } catch (err) {
+    console.error("\n❌ TEST FAILED:", err.message);
+  } finally {
+    await driver.quit();
+  }
+}
+
+runTests();

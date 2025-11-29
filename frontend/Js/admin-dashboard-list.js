@@ -640,3 +640,9 @@ function showGlobalError(message) {
     },
   });
 }
+
+ function handleEditLesson(lesson) {
+    localStorage.setItem("sabau-current-lesson-id", String(lesson.id));
+    window.location.href = "edit-lesson.html";
+  }
+  

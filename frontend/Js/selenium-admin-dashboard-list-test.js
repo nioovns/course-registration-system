@@ -25,4 +25,14 @@ async function clickWhenVisible(driver, locator, timeout = 5000) {
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+async function main() {
+  const options = new chrome.Options();
 
+  const driver = await new Builder().forBrowser("chrome").setChromeOptions(options).build();
+
+  try {
+    console.log("🚀 Starting admin-dashboard-list tests...\n");
+
+    await driver.get(DASHBOARD_URL);
+    await driver.executeScript("window.localStorage.removeItem('sabau-lessons');");
+    await driver.navigate().refresh();

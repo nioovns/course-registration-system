@@ -283,3 +283,27 @@ async function main() {
     }
 
     console.log("✅ TEST 7 PASSED\n");
+
+    // ========== TEST 8: Date/time element basic presence check ==========
+    console.log("[TEST 8] Date/time element basic presence check...");
+
+    await driver.get(DASHBOARD_URL);
+    await sleep(1000);
+
+    let dateElements = await driver.findElements(By.css("._1-1404"));
+
+    if (dateElements.length === 0) {
+      console.warn("⚠️ Element ._1-1404 not found on the page.");
+    } else {
+      const dateEl = dateElements[0];
+      const dateText = await dateEl.getText();
+      console.log(` Date/time text: "${dateText}"`);
+
+      if (!dateText || dateText.trim() === "") {
+        console.warn("⚠️ Date/time element ._1-1404 is empty (no text set).");
+      } else {
+        console.log(" Date/time element has non-empty text.");
+      }
+    }
+
+    console.log("✅ TEST 8 FINISHED (no hard assertion)\n");

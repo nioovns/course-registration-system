@@ -123,3 +123,52 @@ async function main() {
     await prevBtn.click();
     await sleep(500);
 
+// ========== TEST 4: Delete lesson - modal appears ==========
+    console.log("[TEST 4] Delete lesson - modal appears...");
+
+    await driver.get(DASHBOARD_URL);
+    await driver.executeScript("window.localStorage.removeItem('sabau-lessons');");
+    await driver.navigate().refresh();
+
+    let rowsBeforeCancel = await waitForRows(driver);
+    console.log(` Rows before delete (for modal test): ${rowsBeforeCancel.length}`);
+
+    if (rowsBeforeCancel.length === 0) {
+      throw new Error("No rows found before delete (modal test).");
+    }
+
+    const firstTrash = await rowsBeforeCancel[0].findElement(By.css(".group-10"));
+
+    try {
+      await firstTrash.click();
+    } catch (e) {
+      console.warn(" Normal click on trash failed, trying JS click...");
+      await driver.executeScript("arguments[0].click();", firstTrash);
+    }
+
+ 
+    await sleep(400);
+
+   
+    const cancelBtn = await driver.wait(
+      until.elementLocated(By.xpath("//button[contains(normalize-space(.), 'انصراف')]")),
+      5000
+    );
+
+    const confirmDeleteBtn = await driver.findElement(
+      By.xpath("//button[contains(normalize-space(.), 'حذف درس')]")
+    );
+
+    console.log(" Delete modal buttons are present:");
+    console.log(" - Cancel button displayed?:", await cancelBtn.isDisplayed());
+    console.log(
+      " - Confirm button displayed?:",
+      await confirmDeleteBtn.isDisplayed()
+    );
+
+   
+    console.log("✅ TEST 4 PASSED\n");
+
+    await driver.get(DASHBOARD_URL);
+    await driver.executeScript("window.localStorage.removeItem('sabau-lessons');");
+    await driver.navigate().refresh();

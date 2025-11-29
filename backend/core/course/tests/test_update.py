@@ -48,6 +48,8 @@ class CourseUpdateTests(APITestCase):
             "sessions": [self.session1.id, self.session2.id] #
         }
         response = self.client.put(self.url, data, format='json')
+        if response.status_code == 400: #
+            print("\n>>> ERROR DATA:", response.data) #
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.course.refresh_from_db()
         self.assertEqual(self.course.name, "Updated Course")

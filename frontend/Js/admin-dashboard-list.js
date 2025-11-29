@@ -367,3 +367,27 @@ function showGlobalError(message) {
     const start = (page - 1) * size;
     return list.slice(start, start + size);
   }
+
+  function updatePageIndicator() {
+    if (pageIndicatorEl) {
+      pageIndicatorEl.textContent = String(currentPage);
+    }
+  }
+
+  function updatePageInfo() {
+    if (!pageInfoEl) return;
+
+    const total = filteredLessons.length;
+    if (total === 0) {
+      pageInfoEl.textContent = "0 of 0";
+      return;
+    }
+
+    const totalPages = getTotalPages();
+    if (currentPage > totalPages) currentPage = totalPages;
+
+    const startIndex = (currentPage - 1) * PAGE_SIZE + 1;
+    const endIndex = Math.min(currentPage * PAGE_SIZE, total);
+
+    pageInfoEl.textContent = `${startIndex} - ${endIndex} of ${total}`;
+  }

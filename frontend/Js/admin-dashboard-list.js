@@ -772,3 +772,7 @@ if (bellWrapper) {
       showGlobalError("اعلان جدیدی برای نمایش وجود ندارد.");
     });
   }
+
+  initSearchBox();
+  renderTable();
+});

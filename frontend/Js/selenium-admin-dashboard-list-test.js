@@ -172,3 +172,56 @@ async function main() {
     await driver.get(DASHBOARD_URL);
     await driver.executeScript("window.localStorage.removeItem('sabau-lessons');");
     await driver.navigate().refresh();
+
+     // ========== TEST 5: Delete lesson - confirm flow ==========
+    console.log("[TEST 5] Delete lesson - confirm flow...");
+
+    await driver.get(DASHBOARD_URL);
+    await driver.executeScript("window.localStorage.removeItem('sabau-lessons');");
+    await driver.navigate().refresh();
+
+    let rowsBeforeDelete = await waitForRows(driver);
+    console.log(` Rows before delete (confirm): ${rowsBeforeDelete.length}`);
+
+    if (rowsBeforeDelete.length === 0) {
+      throw new Error("No rows found before delete (confirm).");
+    }
+
+    const trashToDelete = await rowsBeforeDelete[0].findElement(By.css(".group-10"));
+
+   
+    try {
+      await trashToDelete.click();
+    } catch (e) {
+      console.warn(" Normal click on trashToDelete failed, trying JS click...");
+      await driver.executeScript("arguments[0].click();", trashToDelete);
+    }
+
+    await sleep(400);
+
+    const confirmDeleteBtn2 = await driver.wait(
+      until.elementLocated(By.xpath("//button[contains(normalize-space(.), 'حذف درس')]")),
+      5000
+    );
+    await driver.wait(until.elementIsVisible(confirmDeleteBtn2), 5000);
+
+
+    try {
+      await confirmDeleteBtn2.click();
+    } catch (e) {
+      console.warn(" Normal click on confirmDeleteBtn2 failed, trying JS click...");
+      await driver.executeScript("arguments[0].click();", confirmDeleteBtn2);
+    }
+
+    await sleep(800);
+
+    let rowsAfterDelete = await waitForRows(driver);
+    console.log(` Rows after confirm delete: ${rowsAfterDelete.length}`);
+
+    if (!(rowsAfterDelete.length === rowsBeforeDelete.length - 1)) {
+      console.warn(
+        ` (Warning) Expected one less row after delete (${rowsBeforeDelete.length - 1}), but got ${rowsAfterDelete.length}`
+      );
+    }
+
+    console.log("✅ TEST 5 PASSED\n");

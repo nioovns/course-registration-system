@@ -63,6 +63,7 @@ class CourseViewSetTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 '''
 
+# test for retrieve def ---> in views
 from rest_framework.test import APITestCase, APIClient
 from rest_framework import status
 from django.urls import reverse

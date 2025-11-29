@@ -653,15 +653,7 @@ body {
   top: 4px;
   overflow: visible;
 }
-.div5 {
-  color: #3b175c;
-  text-align: right;
-  font-family: "Dana-Medium", sans-serif;
-  font-size: 14.399999618530273px;
-  line-height: 160%;
-  font-weight: 500;
-  position: relative;
-}
+
 .sidenav {
   background: #fbfbfb;
   border-radius: 20px;
@@ -909,8 +901,9 @@ body {
   font-weight: 500;
   text-transform: uppercase;
   position: absolute;
-  left:1020px;
+  left:994px;
   top: 16px;
+  white-space: nowrap;
 }
 .group-95 {
   width: 61px;
@@ -991,4 +984,34 @@ body {
 
 .material-symbols-folder-managed:hover {
   transform: scale(1.05);
+}
+._30 {
+  color: #212529;
+  text-align: left;
+  font-family: "Roboto-Light", sans-serif;
+  font-size: 14.4px;
+  line-height: 160%;
+  font-weight: 300 !important; 
+  position: relative;
+}
+
+._unit {
+  color: #212529;
+  text-align: left;
+  font-family: "Roboto-Light", sans-serif;
+  font-size: 14.4px;
+  line-height: 160%;
+  font-weight: 300 !important;
+  position: relative;
+}
+
+._1 {
+  color: var(--datatable-text-color, #212529);
+  text-align: left;
+  font-family: "Dana-Light", sans-serif;
+  font-size: 14.4px;
+  line-height: 160%;
+  font-weight: 300;
+  position: relative;
+  white-space: nowrap; 
 }

@@ -672,6 +672,21 @@ body {
   font-weight: 500;
   position: relative;
 }
+.div5 {
+  text-align: right;
+  font-family: "Dana-Medium", sans-serif;
+  font-size: 14.399999618530273px;
+  line-height: 160%;
+  font-weight: 500;
+  position: absolute;
+  right: 49.63%;
+  left: 39.67%;
+  width: 8.71%;
+  bottom: 85.89%;
+  top: 2.07%;
+  height: 12.03%;
+}
+
 .search{
   color: #3b175c;
   text-align: right;
@@ -1316,20 +1331,7 @@ body {
   height: 88px;
   position: static;
 }
-.div5 {
-  text-align: right;
-  font-family: "Dana-Medium", sans-serif;
-  font-size: 14.399999618530273px;
-  line-height: 160%;
-  font-weight: 500;
-  position: absolute;
-  right: 49.63%;
-  left: 39.67%;
-  width: 8.71%;
-  bottom: 85.89%;
-  top: 2.07%;
-  height: 12.03%;
-}
+
 
 .search{
   text-align: right;

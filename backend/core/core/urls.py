@@ -25,8 +25,8 @@ urlpatterns = [
     path('api/auth/logout/', LogoutView.as_view(), name='auth_logout'),
 
     # 2. Users and App Routes
-    path('api/users/', include('backend.core.users.urls')),
-    path('api/', include('course.urls')),
+    path('api/users/', include('users.urls')),
+    path('api/course/', include('course.urls')),
 
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     # 3. Swagger

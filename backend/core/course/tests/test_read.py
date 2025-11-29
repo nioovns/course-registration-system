@@ -3,12 +3,25 @@ from rest_framework import status
 from django.urls import reverse
 from course.models.Course import Course
 from course.models.ClassSession import ClassSession
-
+from users.models import User
+from rest_framework.test import APITestCase, APIClient
 
 class CourseViewSetTest(APITestCase):
     
     
     def setUp(self):
+
+        self.client = APIClient()
+
+        # create user admin
+        self.user = User.objects.create_user(
+            username='tester',
+            password='password123',
+            role='admin'
+
+        )
+        self.client.force_authenticate(user=self.user)
+
         self.session1 = ClassSession.objects.create(
             day='sat',
             start_time='14:00',

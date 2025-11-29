@@ -737,3 +737,27 @@ function showGlobalError(message) {
       togglePageDropdown();
     });
   }
+
+   if (logoutIcon) {
+  logoutIcon.style.cursor = "pointer";
+  logoutIcon.addEventListener("click", () => {
+    showConfirmDialog({
+      title: "خروج از حساب",
+      message: "آیا مطمئن هستید که می‌خواهید از حساب کاربری خود خارج شوید؟",
+      confirmText: "خروج",
+      cancelText: "انصراف",
+      onConfirm: () => {
+        
+        window.location.href = "login.html";
+      },
+    });
+  });
+}
+
+if (newLessonBtn) {
+  newLessonBtn.style.cursor = "pointer";
+  newLessonBtn.addEventListener("click", () => {
+    window.location.href = "add-lesson.html";
+    
+  });
+}

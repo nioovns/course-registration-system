@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    
+
   const tbody = document.querySelector(".datatable .tbody");
   const datatable = document.querySelector(".datatable");
   const tableEl = document.querySelector(".datatable .table");
@@ -21,3 +21,84 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentPage = 1;
   let pageDropdown = null; 
   let globalOverlay = null;
+
+  function createGlobalOverlay() {
+    if (globalOverlay) return globalOverlay;
+
+    const overlay = document.createElement("div");
+    overlay.className = "global-error-overlay";
+    Object.assign(overlay.style, {
+      position: "fixed",
+      inset: "0",
+      background: "rgba(0,0,0,0.45)",
+      display: "none",
+      alignItems: "center",
+      justifyContent: "center",
+      zIndex: "9999",
+    });
+
+    const box = document.createElement("div");
+    box.className = "global-error-box";
+    Object.assign(box.style, {
+      background: "#ffffff",
+      borderRadius: "16px",
+      padding: "20px 24px",
+      maxWidth: "380px",
+      width: "90%",
+      boxShadow: "0 10px 35px rgba(0,0,0,0.25)",
+      textAlign: "center",
+      direction: "rtl",
+      fontFamily: "inherit",
+    });
+
+    const title = document.createElement("div");
+    title.textContent = "پیام سیستم";
+    Object.assign(title.style, {
+      fontSize: "16px",
+      fontWeight: "600",
+      marginBottom: "8px",
+      color: "#b00020",
+    });
+
+    const msgEl = document.createElement("div");
+    msgEl.className = "global-error-message";
+    Object.assign(msgEl.style, {
+      fontSize: "13px",
+      color: "#333",
+      marginBottom: "16px",
+      lineHeight: "1.6",
+      whiteSpace: "pre-line",
+    });
+
+    const btn = document.createElement("button");
+    btn.textContent = "باشه";
+    Object.assign(btn.style, {
+      border: "none",
+      borderRadius: "999px",
+      padding: "8px 18px",
+      background: "#3b175c",
+      color: "#ffffff",
+      cursor: "pointer",
+      fontSize: "13px",
+    });
+
+    btn.addEventListener("click", () => {
+      overlay.style.display = "none";
+    });
+
+    box.appendChild(title);
+    box.appendChild(msgEl);
+    box.appendChild(btn);
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+
+    globalOverlay = overlay;
+    return overlay;
+  }
+
+  
+let confirmOverlay = null;
+let confirmTitleEl = null;
+let confirmMsgEl = null;
+let confirmYesBtn = null;
+let confirmNoBtn = null;

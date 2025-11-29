@@ -245,3 +245,41 @@ async function main() {
     }
 
     console.log("✅ TEST 6 PASSED\n");
+
+    // ========== TEST 7: Logout with confirm dialog ==========
+    console.log("[TEST 7] Logout confirm dialog...");
+
+    await driver.get(DASHBOARD_URL);
+
+    const logoutIcon = await driver.findElement(By.css(".solar-logout-outline"));
+    await logoutIcon.click();
+
+    const logoutCancelBtn = await driver.wait(
+      until.elementLocated(By.xpath("//button[contains(normalize-space(.), 'انصراف')]")),
+      5000
+    );
+    await logoutCancelBtn.click();
+    await sleep(500);
+
+    let currentUrl = await driver.getCurrentUrl();
+    console.log(`  URL after cancel logout: ${currentUrl}`);
+
+    await logoutIcon.click();
+    const logoutConfirmBtn = await driver.wait(
+      until.elementLocated(By.xpath("//button[contains(normalize-space(.), 'خروج')]")),
+      5000
+    );
+    await logoutConfirmBtn.click();
+
+    await driver.wait(async () => {
+      const url = await driver.getCurrentUrl();
+      return url.includes(LOGIN_URL_FRAGMENT);
+    }, 5000);
+
+    currentUrl = await driver.getCurrentUrl();
+    console.log(`  URL after confirming logout: ${currentUrl}`);
+    if (!currentUrl.includes(LOGIN_URL_FRAGMENT)) {
+      throw new Error("Expected to navigate to login.html after confirming logout.");
+    }
+
+    console.log("✅ TEST 7 PASSED\n");

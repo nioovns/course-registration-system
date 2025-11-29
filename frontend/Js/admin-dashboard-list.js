@@ -483,3 +483,15 @@ function showGlobalError(message) {
       openPageDropdown();
     }
   }
+
+  document.addEventListener("click", (e) => {
+    if (!pageSelectContainer) return;
+    if (
+      pageDropdown &&
+      pageDropdown.style.display === "block" &&
+      !pageSelectContainer.contains(e.target) &&
+      !pageDropdown.contains(e.target)
+    ) {
+      closePageDropdown();
+    }
+  });

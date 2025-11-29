@@ -673,8 +673,6 @@ function showGlobalError(message) {
     }
   }
 
-  
-
   function initSearchBox() {
   if (!searchContainer) return;
 
@@ -710,3 +708,32 @@ function showGlobalError(message) {
     input.focus();
   });
 }
+
+  if (prevBtn) {
+    prevBtn.style.cursor = "pointer";
+    prevBtn.addEventListener("click", () => {
+      if (currentPage > 1) {
+        currentPage -= 1;
+        renderTable();
+      }
+    });
+  }
+
+  if (nextBtn) {
+    nextBtn.style.cursor = "pointer";
+    nextBtn.addEventListener("click", () => {
+      const totalPages = getTotalPages();
+      if (currentPage < totalPages) {
+        currentPage += 1;
+        renderTable();
+      }
+    });
+  }
+
+  if (pageSelectContainer) {
+    pageSelectContainer.style.cursor = "pointer";
+    pageSelectContainer.addEventListener("click", (e) => {
+      e.stopPropagation();
+      togglePageDropdown();
+    });
+  }

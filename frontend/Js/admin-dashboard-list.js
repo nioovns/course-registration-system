@@ -102,3 +102,139 @@ let confirmTitleEl = null;
 let confirmMsgEl = null;
 let confirmYesBtn = null;
 let confirmNoBtn = null;
+
+function createConfirmOverlay() {
+  if (confirmOverlay) return confirmOverlay;
+
+  const overlay = document.createElement("div");
+  Object.assign(overlay.style, {
+    position: "fixed",
+    inset: "0",
+    background: "rgba(15, 23, 42, 0.55)", 
+    display: "none",
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: "10000",
+  });
+
+  const box = document.createElement("div");
+  Object.assign(box.style, {
+    background: "#ffffff",
+    borderRadius: "20px",
+    padding: "22px 24px 18px 24px",
+    maxWidth: "380px",
+    width: "90%",
+    boxShadow: "0 18px 45px rgba(15,23,42,0.35)",
+    direction: "rtl",
+    fontFamily: "inherit",
+    position: "relative",
+  });
+
+
+  const iconWrap = document.createElement("div");
+  Object.assign(iconWrap.style, {
+    width: "42px",
+    height: "42px",
+    borderRadius: "999px",
+    background: "rgba(239, 68, 68, 0.08)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: "12px",
+  });
+
+  const iconInner = document.createElement("div");
+  iconInner.textContent = "!";
+  Object.assign(iconInner.style, {
+    width: "24px",
+    height: "24px",
+    borderRadius: "999px",
+    background: "#ef4444",
+    color: "#ffffff",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontWeight: "700",
+    fontSize: "16px",
+  });
+
+  iconWrap.appendChild(iconInner);
+
+  
+  const titleEl = document.createElement("div");
+  Object.assign(titleEl.style, {
+    fontSize: "15px",
+    fontWeight: "600",
+    color: "#0f172a",
+    marginBottom: "4px",
+  });
+  titleEl.textContent = "خروج از حساب";
+
+
+  const msgEl = document.createElement("div");
+  Object.assign(msgEl.style, {
+    fontSize: "13px",
+    color: "#4b5563",
+    marginBottom: "16px",
+    lineHeight: "1.7",
+  });
+  msgEl.textContent = "آیا مطمئن هستید که می‌خواهید از حساب خود خارج شوید؟";
+
+  const btnRow = document.createElement("div");
+  Object.assign(btnRow.style, {
+    display: "flex",
+    flexDirection: "row-reverse",
+    gap: "8px",
+    marginTop: "4px",
+  });
+
+  const yesBtn = document.createElement("button");
+  yesBtn.textContent = "خروج";
+  Object.assign(yesBtn.style, {
+    border: "none",
+    borderRadius: "999px",
+    padding: "8px 18px",
+    background: "linear-gradient(135deg, #ef4444, #b91c1c)",
+    color: "#ffffff",
+    cursor: "pointer",
+    fontSize: "13px",
+    fontWeight: "500",
+    boxShadow: "0 8px 20px rgba(185,28,28,0.35)",
+  });
+
+  const noBtn = document.createElement("button");
+  noBtn.textContent = "انصراف";
+  Object.assign(noBtn.style, {
+    border: "1px solid #e5e7eb",
+    borderRadius: "999px",
+    padding: "8px 16px",
+    background: "#ffffff",
+    color: "#374151",
+    cursor: "pointer",
+    fontSize: "13px",
+  });
+
+  btnRow.appendChild(yesBtn);
+  btnRow.appendChild(noBtn);
+
+  box.appendChild(iconWrap);
+  box.appendChild(titleEl);
+  box.appendChild(msgEl);
+  box.appendChild(btnRow);
+  overlay.appendChild(box);
+  document.body.appendChild(overlay);
+
+  confirmOverlay = overlay;
+  confirmTitleEl = titleEl;
+  confirmMsgEl = msgEl;
+  confirmYesBtn = yesBtn;
+  confirmNoBtn = noBtn;
+
+  overlay.addEventListener("click", (e) => {
+    if (e.target === overlay) {
+      overlay.style.display = "none";
+    }
+  });
+
+  return overlay;
+}

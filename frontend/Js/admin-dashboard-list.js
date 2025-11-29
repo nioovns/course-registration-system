@@ -336,3 +336,17 @@ function showGlobalError(message) {
       schedule: "شنبه 10-8\nدوشنبه 10-8",
     },
   ];
+
+  function loadLessons() {
+    try {
+      const raw = localStorage.getItem("sabau-lessons");
+      if (!raw) return [...defaultLessons];
+      const parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed) || parsed.length === 0) return [...defaultLessons];
+      return parsed;
+    } catch (e) {
+      console.error("Error reading lessons:", e);
+      showGlobalError("خطا در خواندن اطلاعات دروس. لطفاً صفحه را مجدداً باز کنید.");
+      return [...defaultLessons];
+    }
+  }

@@ -307,3 +307,14 @@ async function main() {
     }
 
     console.log("✅ TEST 8 FINISHED (no hard assertion)\n");
+
+    console.log(" All admin-dashboard-list tests finished.");
+  } catch (err) {
+    console.error(" TEST FAILED:", err.message);
+  } finally {
+    await sleep(1000);
+    await driver.quit();
+  }
+}
+
+main();

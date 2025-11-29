@@ -481,3 +481,14 @@ document.addEventListener("DOMContentLoaded", () => {
       el: labelEl,
     };
   }
+
+  const dayOptions = ["شنبه","یکشنبه","دوشنبه","سه‌شنبه","چهارشنبه"]
+    .map(d => ({ value: d, label: d }));
+  const timeOptions = ["8-10","10-12","14-16","16-18"]
+    .map(t => ({ value: t, label: t }));
+  const facultyOptions = ["مهندسی","علوم","فنی","ادبیات","الهیات"]
+    .map(f => ({ value: f, label: f }));
+  const roomOptions = ["100","120","150","200","203","210","220","305"]
+    .map(r => ({ value: r, label: r }));
+  const unitOptions = [1,2,3,4]
+    .map(u => ({ value: u, label: String(u) }));

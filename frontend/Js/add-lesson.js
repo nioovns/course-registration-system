@@ -167,3 +167,135 @@ document.addEventListener("DOMContentLoaded", () => {
     if (msgEl) msgEl.textContent = text;
     overlay.style.display = "flex";
   }
+  let confirmOverlay = null;
+  let confirmTitleEl = null;
+  let confirmMsgEl = null;
+  let confirmYesBtn = null;
+  let confirmNoBtn = null;
+
+  function createConfirmOverlay() {
+    if (confirmOverlay) return confirmOverlay;
+
+    const overlay = document.createElement("div");
+    Object.assign(overlay.style, {
+      position: "fixed",
+      inset: "0",
+      background: "rgba(15,23,42,0.55)",
+      display: "none",
+      alignItems: "center",
+      justifyContent: "center",
+      zIndex: "10000",
+    });
+
+    const box = document.createElement("div");
+    Object.assign(box.style, {
+      background: "#ffffff",
+      borderRadius: "20px",
+      padding: "20px 24px 16px 24px",
+      maxWidth: "380px",
+      width: "90%",
+      boxShadow: "0 18px 45px rgba(15,23,42,0.35)",
+      direction: "rtl",
+      fontFamily: "inherit",
+      position: "relative",
+    });
+
+    const iconWrap = document.createElement("div");
+    Object.assign(iconWrap.style, {
+      width: "42px",
+      height: "42px",
+      borderRadius: "999px",
+      background: "rgba(59,23,92,0.06)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      marginBottom: "10px",
+    });
+
+    const iconInner = document.createElement("div");
+    Object.assign(iconInner.style, {
+      width: "24px",
+      height: "24px",
+      borderRadius: "999px",
+      background: "#3b175c",
+      color: "#ffffff",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontWeight: "700",
+      fontSize: "15px",
+    });
+    iconInner.textContent = "?";
+    iconWrap.appendChild(iconInner);
+
+    const title = document.createElement("div");
+    Object.assign(title.style, {
+      fontSize: "15px",
+      fontWeight: "600",
+      color: "#0f172a",
+      marginBottom: "4px",
+    });
+
+    const msg = document.createElement("div");
+    Object.assign(msg.style, {
+      fontSize: "13px",
+      color: "#4b5563",
+      marginBottom: "16px",
+      lineHeight: "1.7",
+    });
+
+    const btnRow = document.createElement("div");
+    Object.assign(btnRow.style, {
+      display: "flex",
+      flexDirection: "row-reverse",
+      gap: "8px",
+      marginTop: "4px",
+    });
+
+    const yesBtn = document.createElement("button");
+    Object.assign(yesBtn.style, {
+      border: "none",
+      borderRadius: "999px",
+      padding: "8px 18px",
+      background: "linear-gradient(135deg, #3b175c, #6d28d9)",
+      color: "#ffffff",
+      cursor: "pointer",
+      fontSize: "13px",
+      fontWeight: "500",
+    });
+
+    const noBtn = document.createElement("button");
+    Object.assign(noBtn.style, {
+      border: "1px solid #e5e7eb",
+      borderRadius: "999px",
+      padding: "8px 16px",
+      background: "#ffffff",
+      color: "#374151",
+      cursor: "pointer",
+      fontSize: "13px",
+    });
+
+    btnRow.appendChild(yesBtn);
+    btnRow.appendChild(noBtn);
+
+    box.appendChild(iconWrap);
+    box.appendChild(title);
+    box.appendChild(msg);
+    box.appendChild(btnRow);
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+
+    confirmOverlay = overlay;
+    confirmTitleEl = title;
+    confirmMsgEl = msg;
+    confirmYesBtn = yesBtn;
+    confirmNoBtn = noBtn;
+
+    overlay.addEventListener("click", (e) => {
+      if (e.target === overlay) {
+        overlay.style.display = "none";
+      }
+    });
+
+    return overlay;
+  }

@@ -267,3 +267,9 @@ function showConfirmDialog({ title, message, confirmText, cancelText, onConfirm 
 
   overlay.style.display = "flex";
 }
+function showGlobalError(message) {
+    const overlay = createGlobalOverlay();
+    const msgEl = overlay.querySelector(".global-error-message");
+    if (msgEl) msgEl.textContent = message;
+    overlay.style.display = "flex";
+  }

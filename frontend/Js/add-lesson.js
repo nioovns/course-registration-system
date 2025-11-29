@@ -569,3 +569,108 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!list.length) return 1;
     return Math.max(...list.map((l) => Number(l.id) || 0)) + 1;
   }
+
+   function validate(data) {
+    
+    const errors = [];
+
+    
+    if (!data.name) {
+      errors.push({
+        field: "نام درس",
+        message: "نام درس را وارد کنید.",
+        el: nameEl,
+      });
+    }
+
+    
+    if (!data.code) {
+      errors.push({
+        field: "کد درس",
+        message: "کد درس را وارد کنید.",
+        el: codeEl,
+      });
+    } else if (!/^\d+$/.test(data.code)) {
+      errors.push({
+        field: "کد درس",
+        message: "کد درس باید فقط شامل عدد باشد.",
+        el: codeEl,
+      });
+    }
+
+    
+    if (!data.capacity || isNaN(data.capacity) || data.capacity <= 0) {
+      errors.push({
+        field: "ظرفیت",
+        message: "ظرفیت را به صورت یک عدد مثبت وارد کنید.",
+        el: capacityEl,
+      });
+    }
+
+    
+    if (!data.units || isNaN(data.units) || data.units <= 0) {
+      errors.push({
+        field: "واحد",
+        message: "تعداد واحد درس را انتخاب کنید.",
+        el: unitsTextEl,
+      });
+    }
+
+    
+    if (!data.teacher) {
+      errors.push({
+        field: "نام استاد",
+        message: "نام استاد را وارد کنید.",
+        el: teacherEl,
+      });
+    }
+
+    
+    if (!data.schedule1) {
+      errors.push({
+        field: "زمان برگزاری",
+        message: "حداقل یک بازه‌ی زمانی برای برگزاری درس انتخاب کنید.",
+        el: dayTextEl1 || timeTextEl1,
+      });
+    }
+
+    if (!data.location1) {
+      errors.push({
+        field: "مکان برگزاری",
+        message: "حداقل یک مکان برگزاری برای درس انتخاب کنید.",
+        el: roomTextEl1 || facultyTextEl1,
+      });
+    }
+
+    if (data.units > 2) {
+      const hasSecondSchedule = !!data.schedule2;
+      const hasSecondLocation = !!data.location2;
+
+      if (!hasSecondSchedule) {
+        errors.push({
+          field: "زمان دوم",
+          message: "برای درس‌های بیش از ۲ واحد، باید زمان دوم را نیز وارد کنید.",
+          el: gp1TextEl || gp2TextEl || dayTextEl1,
+        });
+      }
+
+      if (!hasSecondLocation) {
+        errors.push({
+          field: "مکان دوم",
+          message: "برای درس‌های بیش از ۲ واحد، باید مکان دوم را نیز وارد کنید.",
+          el: gp3TextEl || gp4TextEl || roomTextEl1,
+        });
+      }
+    }
+
+    
+    if (errors.length > 0) {
+      showGlobalErrorList(errors);
+      if (errors[0].el) {
+        highlightField(errors[0].el);
+      }
+      return false;
+    }
+
+    return true;
+  }

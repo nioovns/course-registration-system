@@ -628,3 +628,40 @@ function getText(el) {
       building2: getText(building2El),
     };
   }
+
+  function validateLesson(data) {
+    const errors = [];
+
+    if (!data.name) errors.push("فیلد «نام درس» نباید خالی باشد.");
+    if (!data.code) errors.push("فیلد «کد درس» نباید خالی باشد.");
+    if (!data.teacher) errors.push("فیلد «نام استاد» نباید خالی باشد.");
+
+    if (!data.capacity || isNaN(data.capacity) || data.capacity <= 0) {
+      errors.push("فیلد «ظرفیت» باید یک عدد مثبت باشد.");
+    }
+
+    if (!data.units || isNaN(data.units) || data.units <= 0) {
+      errors.push("فیلد «واحد» باید صحیح وارد شود.");
+    }
+
+    if (!data.day1 || !data.time1) {
+      errors.push("زمان برگزاری اول (روز و ساعت) باید کامل وارد شود.");
+    }
+
+    if (!data.room1 || !data.building1) {
+      errors.push("مکان برگزاری اول (کلاس و دانشکده) باید کامل وارد شود.");
+    }
+
+    if (data.units > 2) {
+      const time2Full = data.day2 && data.time2;
+      const place2Full = data.room2 && data.building2;
+
+      if (!time2Full || !place2Full) {
+        errors.push(
+          "برای دروس بیشتر از دو واحد، زمان و مکان دوم باید به‌طور کامل وارد شوند."
+        );
+      }
+    }
+
+    return errors;
+  }

@@ -511,3 +511,96 @@ const unitOptions = [1, 2, 3, 4].map((n) => ({ value: n, label: String(n) }));
   
   attachDropdownToBox(".gp3", room2El, roomOptions);
   attachDropdownToBox(".gp4", building2El, buildingOptions);
+
+   function loadLessons() {
+    try {
+      const raw = localStorage.getItem("sabau-lessons");
+      if (!raw) return [];
+      const parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed)) return [];
+      return parsed;
+    } catch (e) {
+      console.error("Error reading lessons:", e);
+      return [];
+    }
+  }
+
+  function saveLessons(list) {
+    localStorage.setItem("sabau-lessons", JSON.stringify(list));
+  }
+
+  const lessons = loadLessons();
+  const currentIdStr = localStorage.getItem("sabau-current-lesson-id");
+  const currentId = currentIdStr ? parseInt(currentIdStr, 10) : null;
+  const currentLesson = lessons.find((l) => l.id === currentId);
+
+  if (!currentLesson) {
+    showValidationOverlay([
+      "درس مورد نظر برای ویرایش پیدا نشد. لطفاً دوباره از لیست دروس وارد صفحه ویرایش شوید.",
+    ]);
+  } else {
+    
+    if (nameEl) {
+      nameEl.textContent = currentLesson.name || "";
+      nameEl.dataset.cleared = "true";
+    }
+    if (codeEl) {
+      codeEl.textContent = currentLesson.code || "";
+      codeEl.dataset.cleared = "true";
+    }
+    if (capacityEl) {
+      capacityEl.textContent =
+        currentLesson.capacity != null ? String(currentLesson.capacity) : "";
+      capacityEl.dataset.cleared = "true";
+    }
+    if (unitsEl) {
+      unitsEl.textContent =
+        currentLesson.units != null ? String(currentLesson.units) : "";
+      unitsEl.dataset.cleared = "true";
+      setSecondTimePlaceVisibility(currentLesson.units);
+    }
+    if (teacherEl) {
+      teacherEl.textContent = currentLesson.teacher || "";
+      teacherEl.dataset.cleared = "true";
+    }
+
+    if (day1El) {
+      day1El.textContent = currentLesson.day1 || "شنبه";
+      day1El.dataset.cleared = "true";
+    }
+    if (time1El) {
+      time1El.textContent = currentLesson.time1 || "14-16";
+      time1El.dataset.cleared = "true";
+    }
+    if (room1El) {
+      room1El.textContent =
+        currentLesson.room1 != null ? String(currentLesson.room1) : "200";
+      room1El.dataset.cleared = "true";
+    }
+    if (building1El) {
+      building1El.textContent = currentLesson.building1 || "مهندسی";
+      building1El.dataset.cleared = "true";
+    }
+
+    
+    if (currentLesson.units > 2) {
+      if (day2El) {
+        day2El.textContent = currentLesson.day2 || "دوشنبه";
+        day2El.dataset.cleared = "true";
+      }
+      if (time2El) {
+        time2El.textContent = currentLesson.time2 || "10-12";
+        time2El.dataset.cleared = "true";
+      }
+      if (room2El) {
+        room2El.textContent =
+          currentLesson.room2 != null ? String(currentLesson.room2) : "203";
+        room2El.dataset.cleared = "true";
+      }
+      if (building2El) {
+        building2El.textContent = currentLesson.building2 || "الهیات";
+        building2El.dataset.cleared = "true";
+      }
+    }
+  }
+

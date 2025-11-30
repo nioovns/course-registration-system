@@ -414,3 +414,12 @@ let openDropdownEl = null;
   const bellBadge = document.querySelector(".badge-with-notification ._12");
 
   const searchEl = document.querySelector(".search");
+
+  if (searchEl) {
+    searchEl.dataset.placeholder = "جستجو";
+    searchEl.textContent = "جستجو";
+    searchEl.contentEditable = "false";
+    searchEl.style.opacity = "0.55";
+    searchEl.style.pointerEvents = "none";
+    searchEl.style.userSelect = "none";
+  }

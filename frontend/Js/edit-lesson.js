@@ -455,3 +455,59 @@ function setSecondTimePlaceVisibility(unitsValue) {
   });
 
 }
+
+const unitOptions = [1, 2, 3, 4].map((n) => ({ value: n, label: String(n) }));
+  const dayOptions = [
+    "شنبه",
+    "یکشنبه",
+    "دوشنبه",
+    "سه‌شنبه",
+    "چهارشنبه",
+  ].map((d) => ({ value: d, label: d }));
+  const timeOptions = ["8-10", "10-12", "14-16", "16-18"].map(
+    (t) => ({ value: t, label: t })
+  );
+  const roomOptions = ["200", "203", "305", "120", "150"].map((r) => ({
+    value: r,
+    label: r,
+  }));
+  const buildingOptions = ["مهندسی", "علوم", "الهیات", "ادبیات"].map((b) => ({
+    value: b,
+    label: b,
+  }));
+
+  function attachDropdownToBox(boxSelector, valueEl, options, onChange) {
+    const box = document.querySelector(boxSelector);
+    if (!box || !valueEl) return;
+    box.style.cursor = "pointer";
+
+    box.addEventListener("click", (e) => {
+      e.stopPropagation();
+      createDropdown(box, options, (opt) => {
+        valueEl.textContent = opt.label;
+        if (valueEl.dataset) valueEl.dataset.cleared = "true";
+        if (typeof onChange === "function") onChange(opt.value);
+      });
+    });
+  }
+
+  
+  attachDropdownToBox(".frame-34", unitsEl, unitOptions, (val) => {
+    setSecondTimePlaceVisibility(val);
+  });
+
+  
+  attachDropdownToBox(".select", day1El, dayOptions);
+  attachDropdownToBox(".select2", time1El, timeOptions);
+
+
+  attachDropdownToBox(".gp1", day2El, dayOptions);
+  attachDropdownToBox(".gp2", time2El, timeOptions);
+
+ 
+  attachDropdownToBox(".select3", room1El, roomOptions);
+  attachDropdownToBox(".select4", building1El, buildingOptions);
+
+  
+  attachDropdownToBox(".gp3", room2El, roomOptions);
+  attachDropdownToBox(".gp4", building2El, buildingOptions);

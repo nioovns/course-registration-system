@@ -326,3 +326,63 @@ document.addEventListener("DOMContentLoaded", () => {
 
     overlay.style.display = "flex";
   }
+let openDropdownEl = null;
+  function createDropdown(triggerEl, options, onSelect) {
+    if (openDropdownEl) {
+      openDropdownEl.remove();
+      openDropdownEl = null;
+    }
+
+    const rect = triggerEl.getBoundingClientRect();
+
+    const dd = document.createElement("div");
+    dd.className = "fake-dropdown";
+    Object.assign(dd.style, {
+      position: "fixed",
+      top: rect.bottom + 4 + "px",
+      left: rect.left + "px",
+      minWidth: rect.width + "px",
+      background: "#fff",
+      borderRadius: "8px",
+      boxShadow: "0 8px 25px rgba(15,23,42,.25)",
+      padding: "4px 0",
+      direction: "rtl",
+      fontFamily: "inherit",
+      fontSize: "13px",
+      zIndex: "9999",
+      maxHeight: "220px",
+      overflowY: "auto",
+    });
+
+    options.forEach((opt) => {
+      const item = document.createElement("div");
+      item.textContent = opt.label;
+      Object.assign(item.style, {
+        padding: "6px 10px",
+        cursor: "pointer",
+        whiteSpace: "nowrap",
+      });
+      item.addEventListener("mouseenter", () => {
+        item.style.background = "#f3f4ff";
+      });
+      item.addEventListener("mouseleave", () => {
+        item.style.background = "transparent";
+      });
+      item.addEventListener("click", () => {
+        onSelect(opt);
+        dd.remove();
+        openDropdownEl = null;
+      });
+      dd.appendChild(item);
+    });
+
+    document.body.appendChild(dd);
+    openDropdownEl = dd;
+  }
+
+  document.addEventListener("click", (e) => {
+    if (openDropdownEl && !openDropdownEl.contains(e.target)) {
+      openDropdownEl.remove();
+      openDropdownEl = null;
+    }
+  });

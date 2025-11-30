@@ -981,6 +981,7 @@ body {
   position: absolute;
   left:992px;
   top: 16px;
+  white-space: nowrap;
 }
 .group-95 {
   width: 61px;

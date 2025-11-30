@@ -127,6 +127,7 @@ body {
   font-weight: 500;
   right:-50px;
   position: relative;
+  
 }
 .Capacity{
   color: var(--datatable-text-color, #212529);
@@ -951,8 +952,9 @@ body {
   font-weight: 500;
   text-transform: uppercase;
   position: absolute;
-  left:1020px;
+  left:986px;
   top: 16px;
+  white-space: nowrap;
 }
 .group-95 {
   width: 61px;
@@ -1135,6 +1137,7 @@ body {
   bottom: 86.1%;
   top: 1.66%;
   height: 12.24%;
+  
 }
 .div-2-span {
   color: #4f4f4f;
@@ -1744,3 +1747,95 @@ body {
   transform: scale(1.05);
 }
 
+*:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.gp1, .gp2, .gp3, .gp4 {
+    min-height: 49px !important;
+    display: flex;
+    align-items: center;
+}
+.gp1 {
+  border-radius: 8px;
+  border-style: solid;
+  border-color: #4f4f4f;
+  border-width: 1px;
+  padding: 5px 12px 5px 12px;
+  display: flex;
+  flex-direction: row;
+  gap: 0px;
+  align-items: center;
+  justify-content: flex-start;
+  width: 72px;
+  height: 49px;
+  position: absolute;
+  left: 295px;
+  top: 100px;
+}
+.gp2 {
+  border-radius: 8px;
+  border-style: solid;
+  border-color: #4f4f4f;
+  border-width: 1px;
+  padding: 5px 12px 5px 12px;
+  display: flex;
+  flex-direction: row;
+  gap: 0px;
+  align-items: center;
+  justify-content: flex-start;
+  width: 85px;
+  height: 49px;
+  position: absolute;
+  left: 376px;
+  top: 100px;
+}
+.my-gp {
+  color: #6d747a;
+  text-align: center;
+  font-family: var(
+    --paragraph-standard-font-family,
+    "Roboto-Regular",
+    sans-serif
+  );
+  font-size: var(--paragraph-standard-font-size, 16px);
+  line-height: var(--paragraph-standard-line-height, 160%);
+  font-weight: var(--paragraph-standard-font-weight, 400);
+  position: relative;
+  flex: 1;
+}
+.gp3 {
+  border-radius: 8px;
+  border-style: solid;
+  border-color: #4f4f4f;
+  border-width: 1px;
+  padding: 5px 12px 5px 12px;
+  display: flex;
+  flex-direction: row;
+  gap: 0px;
+  align-items: center;
+  justify-content: flex-start;
+  width: 72px;
+  height: 49px;
+  position: absolute;
+  left: 70px;
+  top: 100px;
+}
+.gp4 {
+  border-radius: 8px;
+  border-style: solid;
+  border-color: #4f4f4f;
+  border-width: 1px;
+  padding: 5px 12px 5px 12px;
+  display: flex;
+  flex-direction: row;
+  gap: 0px;
+  align-items: center;
+  justify-content: flex-start;
+  width: 98px;
+  height: 49px;
+  position: absolute;
+  left: 150px;
+  top: 100px;
+}

@@ -712,3 +712,128 @@ function getText(el) {
       });
     });
   }
+
+  let notifOverlay = null;
+
+  function getNotifOverlay() {
+    if (notifOverlay) return notifOverlay;
+
+    const overlay = document.createElement("div");
+    overlay.style.position = "fixed";
+    overlay.style.inset = "0";
+    overlay.style.display = "none";
+    overlay.style.alignItems = "center";
+    overlay.style.justifyContent = "center";
+    overlay.style.background = "rgba(15,23,42,0.45)";
+    overlay.style.zIndex = "9999";
+
+    const box = document.createElement("div");
+    box.style.background = "#fff";
+    box.style.borderRadius = "20px";
+    box.style.padding = "20px 24px 16px";
+    box.style.width = "90%";
+    box.style.maxWidth = "360px";
+    box.style.direction = "rtl";
+    box.style.fontFamily = "inherit";
+    box.style.boxShadow = "0 18px 45px rgba(15,23,42,0.35)";
+    box.style.textAlign = "right";
+
+    const header = document.createElement("div");
+    header.style.display = "flex";
+    header.style.alignItems = "center";
+    header.style.gap = "10px";
+    header.style.marginBottom = "8px";
+
+    const iconWrap = document.createElement("div");
+    iconWrap.style.width = "34px";
+    iconWrap.style.height = "34px";
+    iconWrap.style.borderRadius = "999px";
+    iconWrap.style.background = "rgba(59,23,92,0.12)";
+    iconWrap.style.display = "flex";
+    iconWrap.style.alignItems = "center";
+    iconWrap.style.justifyContent = "center";
+
+    const iconInner = document.createElement("div");
+    iconInner.textContent = "i";
+    iconInner.style.width = "20px";
+    iconInner.style.height = "20px";
+    iconInner.style.borderRadius = "999px";
+    iconInner.style.background = "#3b175c";
+    iconInner.style.color = "#fff";
+    iconInner.style.display = "flex";
+    iconInner.style.alignItems = "center";
+    iconInner.style.justifyContent = "center";
+    iconInner.style.fontWeight = "700";
+    iconInner.style.fontSize = "13px";
+
+    iconWrap.appendChild(iconInner);
+
+    const title = document.createElement("div");
+    title.textContent = "اعلان‌ها";
+    title.style.fontSize = "14px";
+    title.style.fontWeight = "600";
+    title.style.color = "#111827";
+
+    header.appendChild(iconWrap);
+    header.appendChild(title);
+
+    const msg = document.createElement("div");
+    msg.textContent = "اعلان جدیدی برای نمایش وجود ندارد.";
+    msg.style.fontSize = "13px";
+    msg.style.color = "#4b5563";
+    msg.style.lineHeight = "1.7";
+    msg.style.marginBottom = "14px";
+
+    const btnRow = document.createElement("div");
+    btnRow.style.display = "flex";
+    btnRow.style.justifyContent = "flex-start";
+
+    const okBtn = document.createElement("button");
+    okBtn.textContent = "متوجه شدم";
+    okBtn.style.border = "none";
+    okBtn.style.borderRadius = "999px";
+    okBtn.style.padding = "7px 16px";
+    okBtn.style.cursor = "pointer";
+    okBtn.style.fontSize = "13px";
+    okBtn.style.background = "linear-gradient(135deg,#3b175c,#6b21a8)";
+    okBtn.style.color = "#fff";
+    okBtn.style.boxShadow = "0 8px 20px rgba(107,33,168,0.35)";
+
+    okBtn.addEventListener("click", () => {
+      overlay.style.display = "none";
+    });
+
+    btnRow.appendChild(okBtn);
+    box.appendChild(header);
+    box.appendChild(msg);
+    box.appendChild(btnRow);
+    overlay.appendChild(box);
+
+    overlay.addEventListener("click", (e) => {
+      if (e.target === overlay) overlay.style.display = "none";
+    });
+
+    document.body.appendChild(overlay);
+    notifOverlay = overlay;
+    return overlay;
+  }
+
+  function showNotificationMessage() {
+    const overlay = getNotifOverlay();
+    overlay.style.display = "flex";
+  }
+
+  if (bellWrapper) {
+    bellWrapper.style.cursor = "pointer";
+    bellWrapper.addEventListener("click", () => {
+      
+      if (bellBadge && bellBadge.parentElement) {
+        bellBadge.textContent = "";
+        bellBadge.parentElement.style.display = "none";
+      }
+      
+      showNotificationMessage();
+    });
+  }
+
+});

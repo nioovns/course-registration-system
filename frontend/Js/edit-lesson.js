@@ -604,3 +604,27 @@ const unitOptions = [1, 2, 3, 4].map((n) => ({ value: n, label: String(n) }));
     }
   }
 
+function getText(el) {
+    return el ? el.textContent.trim() : "";
+  }
+
+  function collectLessonData() {
+    const unitsNum = parseInt(getText(unitsEl), 10);
+
+    return {
+      id: currentLesson ? currentLesson.id : null,
+      name: getText(nameEl),
+      code: getText(codeEl),
+      capacity: parseInt(getText(capacityEl), 10) || 0,
+      units: isNaN(unitsNum) ? 0 : unitsNum,
+      teacher: getText(teacherEl),
+      day1: getText(day1El),
+      time1: getText(time1El),
+      room1: getText(room1El),
+      building1: getText(building1El),
+      day2: getText(day2El),
+      time2: getText(time2El),
+      room2: getText(room2El),
+      building2: getText(building2El),
+    };
+  }

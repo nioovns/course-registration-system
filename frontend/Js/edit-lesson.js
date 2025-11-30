@@ -386,3 +386,31 @@ let openDropdownEl = null;
       openDropdownEl = null;
     }
   });
+
+  const nameEl = document.querySelector(".frame-3 ._1");
+  const codeEl = document.querySelector(".frame-32 ._493284");
+  const capacityEl = document.querySelector(".frame-33 ._30");
+  const unitsEl = document.querySelector(".frame-34 ._3");
+  const teacherEl = document.querySelector(".frame-35 .p-name");
+  const day1El = document.querySelector(".select .one");
+  const time1El = document.querySelector(".select2 .one");
+  const day2El = document.querySelector(".gp1 .one");
+  const time2El = document.querySelector(".gp2 .one");
+  const room1El = document.querySelector(".select3 .one2");
+  const building1El = document.querySelector(".select4 .one");
+  const room2El = document.querySelector(".gp3 .one2");
+  const building2El = document.querySelector(".gp4 .my-gp");
+
+  const gp1 = document.querySelector(".gp1");
+  const gp2 = document.querySelector(".gp2");
+  const gp3 = document.querySelector(".gp3");
+  const gp4 = document.querySelector(".gp4");
+
+  const submitBtn = document.querySelector(".login-submit");
+  const cancelBtn = document.querySelector(".login-submit2");
+
+  const logoutIcon = document.querySelector(".solar-logout-outline");
+  const bellWrapper = document.querySelector(".badge-with-notification");
+  const bellBadge = document.querySelector(".badge-with-notification ._12");
+
+  const searchEl = document.querySelector(".search");

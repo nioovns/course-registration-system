@@ -665,3 +665,35 @@ function getText(el) {
 
     return errors;
   }
+
+  if (submitBtn) {
+    submitBtn.style.cursor = "pointer";
+    submitBtn.addEventListener("click", () => {
+      const data = collectLessonData();
+      const errors = validateLesson(data);
+
+      if (errors.length > 0) {
+        showValidationOverlay(errors);
+        return;
+      }
+
+      
+      const idx = lessons.findIndex((l) => l.id === data.id);
+      if (idx !== -1) {
+        lessons[idx] = Object.assign({}, lessons[idx], data);
+        saveLessons(lessons);
+      }
+
+      showSuccessOverlay("درس با موفقیت ویرایش شد", () => {
+       
+        window.location.href = "admin-dashboard-list.html";
+      });
+    });
+  }
+
+  if (cancelBtn) {
+    cancelBtn.style.cursor = "pointer";
+    cancelBtn.addEventListener("click", () => {
+      window.location.href = "admin-dashboard-list.html";
+    });
+  }

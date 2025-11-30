@@ -307,3 +307,22 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.appendChild(confirmOverlay);
     return confirmOverlay;
   }
+   function showConfirmDialog({ title, message, confirmText, cancelText, onConfirm }) {
+    const overlay = createConfirmOverlay();
+    if (title) confirmTitleEl.textContent = title;
+    if (message) confirmMsgEl.textContent = message;
+    if (confirmText) confirmYesBtn.textContent = confirmText;
+    if (cancelText) confirmNoBtn.textContent = cancelText;
+
+    
+    const newYes = confirmYesBtn.cloneNode(true);
+    confirmYesBtn.parentNode.replaceChild(newYes, confirmYesBtn);
+    confirmYesBtn = newYes;
+
+    confirmYesBtn.addEventListener("click", () => {
+      overlay.style.display = "none";
+      if (typeof onConfirm === "function") onConfirm();
+    });
+
+    overlay.style.display = "flex";
+  }

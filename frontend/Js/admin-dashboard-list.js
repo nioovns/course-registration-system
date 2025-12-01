@@ -1,11 +1,12 @@
-document.addEventListener("DOMContentLoaded", () => {
 
+document.addEventListener("DOMContentLoaded", () => {
+  
   const tbody = document.querySelector(".datatable .tbody");
   const datatable = document.querySelector(".datatable");
   const tableEl = document.querySelector(".datatable .table");
   const newLessonBtn = document.querySelector(".frame-28");
 
-  const pageIndicatorEl = document.querySelector(".table-footer .one"); 
+  const pageIndicatorEl = document.querySelector(".table-footer .one"); // عدد وسط select
   const pageInfoEl = document.querySelector(".table-footer ._1-10-of-14");
   const pageSelectContainer = document.querySelector(".table-footer .select");
   const prevBtn = document.querySelector(".table-footer .frame-2");
@@ -17,9 +18,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const bellBadge = document.querySelector(".badge-with-notification ._12");
   const bellWrapper = document.querySelector(".badge-with-notification");
 
-  const PAGE_SIZE = 7;
+  const PAGE_SIZE = 5;
   let currentPage = 1;
   let pageDropdown = null; 
+
   let globalOverlay = null;
 
   function createGlobalOverlay() {
@@ -170,7 +172,7 @@ function createConfirmOverlay() {
   });
   titleEl.textContent = "خروج از حساب";
 
-
+ 
   const msgEl = document.createElement("div");
   Object.assign(msgEl.style, {
     fontSize: "13px",
@@ -180,6 +182,7 @@ function createConfirmOverlay() {
   });
   msgEl.textContent = "آیا مطمئن هستید که می‌خواهید از حساب خود خارج شوید؟";
 
+  // دکمه‌ها
   const btnRow = document.createElement("div");
   Object.assign(btnRow.style, {
     display: "flex",
@@ -224,11 +227,13 @@ function createConfirmOverlay() {
   overlay.appendChild(box);
   document.body.appendChild(overlay);
 
+  
   confirmOverlay = overlay;
   confirmTitleEl = titleEl;
   confirmMsgEl = msgEl;
   confirmYesBtn = yesBtn;
   confirmNoBtn = noBtn;
+
 
   overlay.addEventListener("click", (e) => {
     if (e.target === overlay) {
@@ -238,6 +243,7 @@ function createConfirmOverlay() {
 
   return overlay;
 }
+
 function showConfirmDialog({ title, message, confirmText, cancelText, onConfirm }) {
   const overlay = createConfirmOverlay();
 
@@ -267,13 +273,16 @@ function showConfirmDialog({ title, message, confirmText, cancelText, onConfirm 
 
   overlay.style.display = "flex";
 }
-function showGlobalError(message) {
+
+
+  function showGlobalError(message) {
     const overlay = createGlobalOverlay();
     const msgEl = overlay.querySelector(".global-error-message");
     if (msgEl) msgEl.textContent = message;
     overlay.style.display = "flex";
   }
 
+  
   const defaultLessons = [
     {
       id: 1,
@@ -358,6 +367,7 @@ function showGlobalError(message) {
   let lessons = loadLessons();
   let filteredLessons = [...lessons];
 
+ 
   function getTotalPages() {
     if (!filteredLessons.length) return 1;
     return Math.max(1, Math.ceil(filteredLessons.length / PAGE_SIZE));
@@ -392,6 +402,7 @@ function showGlobalError(message) {
     pageInfoEl.textContent = `${startIndex} - ${endIndex} of ${total}`;
   }
 
+  
   function createPageDropdown() {
     if (pageDropdown) return pageDropdown;
 
@@ -484,6 +495,7 @@ function showGlobalError(message) {
     }
   }
 
+  
   document.addEventListener("click", (e) => {
     if (!pageSelectContainer) return;
     if (
@@ -495,7 +507,9 @@ function showGlobalError(message) {
       closePageDropdown();
     }
   });
-   function repositionFooter() {
+
+  
+  function repositionFooter() {
     if (!datatable || !footer) return;
 
     const rows = tbody ? tbody.querySelectorAll(".tr2") : [];
@@ -616,7 +630,7 @@ function showGlobalError(message) {
     repositionFooter();
   }
 
-  // ---------- حذف و ویرایش ----------
+  
  function handleDeleteLesson(id) {
   const lesson = lessons.find((l) => l.id === id);
   const name = lesson ? lesson.name : "این درس";
@@ -627,7 +641,7 @@ function showGlobalError(message) {
     confirmText: "حذف درس",
     cancelText: "انصراف",
     onConfirm: () => {
-      // حذف واقعی بعد از تأیید
+      
       lessons = lessons.filter((l) => l.id !== id);
       filteredLessons = filteredLessons.filter((l) => l.id !== id);
       saveLessons();
@@ -641,8 +655,9 @@ function showGlobalError(message) {
   });
 }
 
- function handleEditLesson(lesson) {
+  function handleEditLesson(lesson) {
     localStorage.setItem("sabau-current-lesson-id", String(lesson.id));
+    
     window.location.href = "edit-lesson.html";
   }
 
@@ -672,6 +687,8 @@ function showGlobalError(message) {
       showGlobalError("درسی با این مشخصات پیدا نشد.");
     }
   }
+
+  
 
   function initSearchBox() {
   if (!searchContainer) return;
@@ -709,6 +726,7 @@ function showGlobalError(message) {
   });
 }
 
+ 
   if (prevBtn) {
     prevBtn.style.cursor = "pointer";
     prevBtn.addEventListener("click", () => {
@@ -730,6 +748,7 @@ function showGlobalError(message) {
     });
   }
 
+  
   if (pageSelectContainer) {
     pageSelectContainer.style.cursor = "pointer";
     pageSelectContainer.addEventListener("click", (e) => {
@@ -738,7 +757,8 @@ function showGlobalError(message) {
     });
   }
 
-   if (logoutIcon) {
+  
+  if (logoutIcon) {
   logoutIcon.style.cursor = "pointer";
   logoutIcon.addEventListener("click", () => {
     showConfirmDialog({
@@ -757,12 +777,13 @@ function showGlobalError(message) {
 if (newLessonBtn) {
   newLessonBtn.style.cursor = "pointer";
   newLessonBtn.addEventListener("click", () => {
+
     window.location.href = "add-lesson.html";
-    
+
   });
 }
-
-if (bellWrapper) {
+ 
+  if (bellWrapper) {
     bellWrapper.style.cursor = "pointer";
     bellWrapper.addEventListener("click", () => {
       if (bellBadge) {
@@ -780,34 +801,37 @@ if (bellWrapper) {
 
 (function () {
   function updateDateTime() {
-    const now = new Date();
+  const now = new Date();
 
-    const persianDate = new Intl.DateTimeFormat("fa-IR", {
-      day: "numeric",
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      
-    }).format(now);
+  const dateFormatter = new Intl.DateTimeFormat("fa-IR-u-ca-persian", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
 
-    const persianTime = new Intl.DateTimeFormat("fa-IR", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    }).format(now);
+  const timeFormatter = new Intl.DateTimeFormat("fa-IR", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
 
-    
-    const dateTarget = document.querySelector("._1-1404");
+  const parts = dateFormatter.formatToParts(now);
+  const weekday = parts.find(p => p.type === "weekday")?.value ?? "";
+  const day = parts.find(p => p.type === "day")?.value ?? "";
+  const month = parts.find(p => p.type === "month")?.value ?? "";
+  const year = parts.find(p => p.type === "year")?.value ?? "";
 
-    if (!dateTarget) {
-      
-      console.warn("Element with class _1-1404 not found");
-      return;
-    }
+  const persianTime = timeFormatter.format(now);
+  const persianDate = `${weekday} ${day} ${month} ${year}`;
 
+  const dateTarget = document.querySelector("._1-1404");
+  if (dateTarget) {
     dateTarget.textContent = `${persianTime} | ${persianDate}`;
   }
+}
 
   updateDateTime();
+  
   setInterval(updateDateTime, 1000);
 })();

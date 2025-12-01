@@ -106,3 +106,19 @@ async function run() {
       console.log("✅ PASS: gp3/gp4 visible for units=3");
     else
       console.log("❌ FAIL: gp3/gp4 NOT visible when units=3");
+
+    console.log("\n=== TEST 4: Cancel button ===");
+
+    await driver.get("http://localhost:5500/Pages/edit-lesson.html");
+    await driver.sleep(700);
+
+    await forceClick(driver, ".login-submit2");
+    await driver.sleep(800);
+
+    const url = await driver.getCurrentUrl();
+
+    if (url.includes("admin-dashboard-list"))
+      console.log("✅ PASS: Cancel navigates back");
+    else
+      console.log("❌ FAIL: Cancel did NOT redirect");
+

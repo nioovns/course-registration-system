@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Course, ClassSession
+from course.models.Course import Course
+from course.models.ClassSession import ClassSession
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):

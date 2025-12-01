@@ -839,34 +839,35 @@ function getText(el) {
 
 (function () {
   function updateDateTime() {
-    const now = new Date();
+  const now = new Date();
 
-    const persianDate = new Intl.DateTimeFormat("fa-IR", {
-      day: "numeric",
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      
-    }).format(now);
+  const dateFormatter = new Intl.DateTimeFormat("fa-IR-u-ca-persian", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
 
-    const persianTime = new Intl.DateTimeFormat("fa-IR", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    }).format(now);
+  const timeFormatter = new Intl.DateTimeFormat("fa-IR", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
 
-    
-    const dateTarget = document.querySelector("._1-1404");
+  const parts = dateFormatter.formatToParts(now);
+  const weekday = parts.find(p => p.type === "weekday")?.value ?? "";
+  const day = parts.find(p => p.type === "day")?.value ?? "";
+  const month = parts.find(p => p.type === "month")?.value ?? "";
+  const year = parts.find(p => p.type === "year")?.value ?? "";
 
-    if (!dateTarget) {
-      
-      console.warn("Element with class _1-1404 not found");
-      return;
-    }
+  const persianTime = timeFormatter.format(now);
+  const persianDate = `${weekday} ${day} ${month} ${year}`;
 
+  const dateTarget = document.querySelector("._1-1404");
+  if (dateTarget) {
     dateTarget.textContent = `${persianTime} | ${persianDate}`;
   }
-
+}
   updateDateTime();
   setInterval(updateDateTime, 1000);
 })();

@@ -66,7 +66,7 @@ async function run() {
     .build();
 
   try {
-    // ---------------------------------------
+   
     console.log("\n=== TEST 1: Load page & read initial data ===");
 
     await driver.get("http://127.0.0.1:5500/Pages/edit-lesson.html");
@@ -79,3 +79,16 @@ async function run() {
       console.log("✅ PASS: Page loaded & initial text found");
     else
       console.log("❌ FAIL: Missing prefill text");
+
+    
+
+    console.log("\n=== TEST 2: Edit name field safely (DIV input) ===");
+
+    await setDivText(driver, "._1", "درس ویرایش‌ شده تستی");
+
+    const editedName = await readText(driver, "._1");
+
+    if (editedName.includes("ویرایش"))
+      console.log("✅ PASS: Name edited successfully");
+    else
+      console.log("❌ FAIL: Name NOT updated");

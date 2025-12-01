@@ -835,3 +835,4 @@ if (newLessonBtn) {
   
   setInterval(updateDateTime, 1000);
 })();
+

@@ -80,7 +80,7 @@ async function run() {
     else
       console.log("❌ FAIL: Missing prefill text");
 
-    
+
 
     console.log("\n=== TEST 2: Edit name field safely (DIV input) ===");
 
@@ -92,3 +92,17 @@ async function run() {
       console.log("✅ PASS: Name edited successfully");
     else
       console.log("❌ FAIL: Name NOT updated");
+
+
+    console.log("\n=== TEST 3: Set units to 3 and check gp3/gp4 visibility ===");
+
+    await setDivText(driver, "._3", "3");
+    await driver.sleep(400);
+
+    const gp3 = await driver.findElement(By.css(".gp3")).isDisplayed().catch(() => false);
+    const gp4 = await driver.findElement(By.css(".gp4")).isDisplayed().catch(() => false);
+
+    if (gp3 && gp4)
+      console.log("✅ PASS: gp3/gp4 visible for units=3");
+    else
+      console.log("❌ FAIL: gp3/gp4 NOT visible when units=3");

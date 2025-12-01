@@ -3,6 +3,7 @@ from rest_framework import status
 from django.urls import reverse
 from course.models import Course
 from users.models import User
+from course.models.Course import Course
 
 
 class CourseDeleteTests(APITestCase):

@@ -1,7 +1,8 @@
 from rest_framework.test import APITestCase, APIClient
 from rest_framework import status
 from django.urls import reverse
-from course.models import Course, ClassSession
+from course.models.Course import Course
+from course.models.ClassSession import ClassSession
 from datetime import time
 from users.models import User  # ایمپورت مدل یوزر
 
@@ -31,14 +32,14 @@ class CourseUpdateTests(APITestCase):
             end_time=time(12,0),
             room="B202"
         )
-        
+
         self.course = Course.objects.create(
             name="Testt Course",
             code="COURSE188",
             capacity=30
         )
         self.course.sessions.set([self.session1, self.session2])
-        self.url = reverse('course-detail', kwargs={'pk': self.course.id}) 
+        self.url = reverse('course-detail', kwargs={'pk': self.course.id})
 
     def test_successful_update(self):
         data = {
@@ -105,7 +106,7 @@ class CourseUpdateTests(APITestCase):
         data = {
             "name": "Course with Too High Capacity",
             "code": "COURSE1",
-            "capacity": -5,  
+            "capacity": -5,
             "sessions": [self.session1.id]
         }
         response = self.client.put(self.url, data, format='json')
@@ -116,7 +117,7 @@ class CourseUpdateTests(APITestCase):
         Course.objects.create(name="Another Course", code="COURSE2", capacity=20)
         data = {
             "name": "Duplicate Code Course",
-            "code": "COURSE2",  
+            "code": "COURSE2",
             "capacity": 30,
             "sessions": [self.session1.id]
         }

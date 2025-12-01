@@ -198,11 +198,10 @@ class CourseFunctionalityTest(APITestCase):
 from rest_framework.test import APITestCase, APIClient
 from rest_framework import status
 from django.urls import reverse
-from course.models import Course, ClassSession
 from users.models import User
 from datetime import time
-
-
+from course.models.Course import Course
+from course.models.ClassSession import ClassSession
 class CourseUpdateTests(APITestCase):
     def setUp(self):
         self.client = APIClient()

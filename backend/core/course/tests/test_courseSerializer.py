@@ -1,6 +1,7 @@
 from rest_framework.test import APITestCase
 from course.serializers.CourseSerializer import CourseSerializer
-from course.models import Course, ClassSession
+from course.models.Course import Course
+from course.models.ClassSession import ClassSession
 from datetime import time
 
 

@@ -70,7 +70,7 @@ from django.urls import reverse
 from users.models import User
 from course.models.Course import Course
 
-
+'''
 class CourseRetrieveTest(APITestCase):
 
     def setUp(self):
@@ -123,4 +123,71 @@ class CourseRetrieveTest(APITestCase):
         response = self.client.get(invalid_url)
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+'''
+##########################################################################################
+#test for course/serializers/CourseSerializer.py
+from rest_framework.test import APITestCase, APIClient
+from rest_framework import status
+from django.urls import reverse
+from users.models import User
+from course.models import Course, ClassSession
 
+
+class CourseFunctionalityTest(APITestCase):
+    def setUp(self):
+        self.client = APIClient()
+
+        self.user = User.objects.create_user(
+            username='admin_tester',
+            password='123',
+            role=User.Roles.ADMIN,
+            email='admin@test.com'
+        )
+        self.client.force_authenticate(user=self.user)
+
+        self.session1 = ClassSession.objects.create(day="sat", start_time="08:00", end_time="10:00", room="101")
+        self.session2 = ClassSession.objects.create(day="sun", start_time="10:00", end_time="12:00", room="102")
+
+    def test_can_create_course_automatically(self):
+
+        data = {
+            "name": "New Auto Course",
+            "code": "AUTO_101",
+            "capacity": 20,
+            "units": 3,
+            # ما فقط آیدی می‌فرستیم، DRF باید خودش وصلش کند
+            "sessions": [self.session1.id, self.session2.id]
+        }
+
+
+        url = reverse('course-list')
+        response = self.client.post(url, data, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        course = Course.objects.get(code="AUTO_101")
+        self.assertEqual(course.name, "New Auto Course")
+
+        self.assertEqual(course.sessions.count(), 2)
+        print("\n✅ CREATE Test Passed: Course created and sessions linked automatically.")
+
+    def test_can_update_course_automatically(self):
+
+        course = Course.objects.create(name="Old Name", code="OLD_1", capacity=10)
+        course.sessions.add(self.session1)
+
+        data = {
+            "name": "Updated Name",
+            "sessions": [self.session1.id, self.session2.id]
+        }
+
+        url = reverse('course-detail', kwargs={'pk': course.pk})
+        response = self.client.patch(url, data, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        course.refresh_from_db()
+        self.assertEqual(course.name, "Updated Name")
+
+        self.assertEqual(course.sessions.count(), 2)
+        print("\n✅ UPDATE Test Passed: Course updated and M2M relations handled automatically.")

@@ -138,3 +138,13 @@ console.log("\n=== TEST 5: Logout ===");
       console.log("✅ PASS: Logout redirect successful");
     else
       console.log("❌ FAIL: Logout redirect NOT detected");
+
+     } catch (err) {
+    console.error("❌ TEST ERROR:", err);
+
+  } finally {
+    await driver.quit();
+  }
+}
+
+run();

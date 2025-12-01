@@ -6,14 +6,12 @@ from users.models import User
 
 
 class CourseSerializer(serializers.ModelSerializer):
-    # 1. اصلاح فیلد sessions: استفاده از PrimaryKeyRelatedField برای دریافت آیدی
     sessions = serializers.PrimaryKeyRelatedField(
         many=True,
         queryset=ClassSession.objects.all(),
         required=False
     )
 
-    # 2. حذف تعریف تکراری prerequisites
     prerequisites = serializers.PrimaryKeyRelatedField(
         many=True,
         queryset=Course.objects.all(),
@@ -24,9 +22,7 @@ class CourseSerializer(serializers.ModelSerializer):
         model = Course
         fields = '__all__'
 
-    # --- Validations (کدهای شما صحیح بودند و حفظ شدند) ---
     def validate_professor(self, value):
-        # اضافه کردن شرط value برای جلوگیری از ارور در صورتی که فیلد خالی باشد
         if value and not value.role == User.Roles.PROFESSOR:
             raise serializers.ValidationError("The professor must have the role of 'Professor'.")
         return value
@@ -44,9 +40,7 @@ class CourseSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Capacity must be greater than 0")
         return value
 
-    # 3. حذف متدهای create و update دستی (DRF خودکار انجام می‌دهد)
 
-    # 4. اضافه کردن to_representation برای نمایش اطلاعات کامل سشن‌ها در خروجی
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         # نمایش جزئیات کامل سشن به جای فقط آیدی

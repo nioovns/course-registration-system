@@ -25,3 +25,37 @@ async function getLessonsCount(driver) {
         }
     `);
 }
+async function clickAndType(driver, selector, text) {
+    const el = await driver.findElement(By.css(selector));
+
+    
+    await el.click();
+    await driver.sleep(100);
+
+   
+    await driver.executeScript("arguments[0].innerText = '';", el);
+    await driver.sleep(80);
+
+    
+    await el.sendKeys(text);
+    await driver.sleep(120);
+}
+async function readText(driver, selector) {
+  const el = await driver.wait(until.elementLocated(By.css(selector)), 6000);
+  return await el.getText();
+}
+
+async function setDivText(driver, selector, value) {
+  const el = await driver.wait(until.elementLocated(By.css(selector)), 6000);
+  await driver.executeScript("arguments[0].innerText = arguments[1];", el, value);
+  await driver.sleep(150);
+}
+
+async function toastShown(driver) {
+  try {
+    await driver.wait(until.elementLocated(By.css(".toast-message")), 1500);
+    return true;
+  } catch {
+    return false;
+  }
+}

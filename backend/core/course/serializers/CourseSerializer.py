@@ -1,9 +1,8 @@
 from rest_framework import serializers
-from course.models.Course import Course
-from course.models.ClassSession import ClassSession
 from .ClassSessionSerializer import ClassSessionSerializer
 from users.models import User
-
+from course.models.Course import Course
+from course.models.ClassSession import ClassSession
 
 class CourseSerializer(serializers.ModelSerializer):
     sessions = serializers.PrimaryKeyRelatedField(

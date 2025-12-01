@@ -6,6 +6,7 @@ from course.services.AdminServices import AdminService
 from course.models.Course import Course
 from users.permissions import IsAdmin
 from course.services.CourseFilters import CourseFilter
+from course.models.Course import Course
 
 
 class CourseViewSet(viewsets.ViewSet):

@@ -10,3 +10,18 @@ async function forceClick(driver, selector) {
   await driver.executeScript("arguments[0].click();", el);
   return el;
 }
+async function getLessonsCount(driver) {
+    return await driver.executeScript(`
+        try {
+            const raw = localStorage.getItem("sabau-lessons");
+            if (!raw) return 0;
+
+            const parsed = JSON.parse(raw);
+            if (!Array.isArray(parsed)) return 0;
+
+            return parsed.length;
+        } catch (e) {
+            return 0;
+        }
+    `);
+}

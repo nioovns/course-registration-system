@@ -835,7 +835,6 @@ function getText(el) {
       showNotificationMessage();
     });
   }
-
 });
 
 (function () {

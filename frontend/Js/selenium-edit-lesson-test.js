@@ -122,3 +122,19 @@ async function run() {
     else
       console.log("❌ FAIL: Cancel did NOT redirect");
 
+console.log("\n=== TEST 5: Logout ===");
+
+    await forceClick(driver, ".solar-logout-outline");
+    await driver.sleep(300);
+
+    try {
+      await driver.switchTo().alert().accept();
+      await driver.sleep(600);
+    } catch {}
+
+    const finalUrl = await driver.getCurrentUrl();
+
+    if (finalUrl.includes("login"))
+      console.log("✅ PASS: Logout redirect successful");
+    else
+      console.log("❌ FAIL: Logout redirect NOT detected");

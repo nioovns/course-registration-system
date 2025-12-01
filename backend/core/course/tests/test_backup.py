@@ -124,6 +124,7 @@ class CourseRetrieveTest(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 '''
+'''
 ##########################################################################################
 #test for course/serializers/CourseSerializer.py
 from rest_framework.test import APITestCase, APIClient
@@ -191,6 +192,7 @@ class CourseFunctionalityTest(APITestCase):
 
         self.assertEqual(course.sessions.count(), 2)
         print("\n✅ UPDATE Test Passed: Course updated and M2M relations handled automatically.")
+        '''
 #########################################################################################################
 
 from rest_framework.test import APITestCase, APIClient

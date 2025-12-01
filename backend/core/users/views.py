@@ -3,25 +3,22 @@ from rest_framework.response import Response
 from rest_framework import status, permissions
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework import viewsets
 from .serializers import CustomTokenObtainPairSerializer, UserSerializer
 from .permissions import IsStudent, IsProfessor, IsAdmin
-from course.models import Course
-from course.serializers import CourseSerializer
 
-from rest_framework import viewsets, permissions
-from course.models import Course
+from course.models.Course import Course
 from course.serializers import CourseSerializer
+# -----------------------
 
 
 class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
-
-    # فقط لاگین بدون در نظر گرفتن رول -F
     permission_classes = [permissions.IsAuthenticated]
 
 
-# 1. Login View (
+# 1. Login View
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
 

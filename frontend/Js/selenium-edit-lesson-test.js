@@ -59,3 +59,23 @@ async function toastShown(driver) {
     return false;
   }
 }
+async function run() {
+  const driver = await new Builder()
+    .forBrowser("chrome")
+    .setChromeOptions(new chrome.Options().addArguments("--start-maximized"))
+    .build();
+
+  try {
+    // ---------------------------------------
+    console.log("\n=== TEST 1: Load page & read initial data ===");
+
+    await driver.get("http://127.0.0.1:5500/Pages/edit-lesson.html");
+    await driver.sleep(800);
+
+    const nameBefore = await readText(driver, "._1");
+    const codeBefore = await readText(driver, "._493284");
+
+    if (nameBefore && codeBefore)
+      console.log("✅ PASS: Page loaded & initial text found");
+    else
+      console.log("❌ FAIL: Missing prefill text");

@@ -5,12 +5,7 @@ from course.models.Course import Course
 from course.models.ClassSession import ClassSession
 
 class CourseSerializer(serializers.ModelSerializer):
-    sessions = serializers.PrimaryKeyRelatedField(
-        many=True,
-        queryset=ClassSession.objects.all(),
-        required=False
-    )
-
+    sessions = ClassSessionSerializer(many=True, required=False)
     prerequisites = serializers.PrimaryKeyRelatedField(
         many=True,
         queryset=Course.objects.all(),
@@ -40,9 +35,60 @@ class CourseSerializer(serializers.ModelSerializer):
         return value
 
 
+    def create(self, validated_data):
+        sessions_data = validated_data.pop('sessions', [])
+        course = Course.objects.create(**validated_data)
+
+        for session_data in sessions_data:
+            exists = ClassSession.objects.filter(
+                day=session_data['day'],
+                start_time=session_data['start_time'],
+                end_time=session_data['end_time'],
+                faculty=session_data['faculty'],
+                room=session_data['room']
+            ).exists()
+
+            if exists:
+                raise serializers.ValidationError(
+                    f"A session with the same time, day, faculty and room already exists."
+                )
+                
+            obj = ClassSession.objects.create(**session_data)
+            course.sessions.add(obj)
+
+        return course
+
+    def update(self, instance, validated_data):
+        sessions_data = validated_data.pop('sessions', None)
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        if sessions_data is not None:
+            for session_data in sessions_data:
+                exists = ClassSession.objects.filter(
+                    day=session_data['day'],
+                    start_time=session_data['start_time'],
+                    end_time=session_data['end_time'],
+                    faculty=session_data['faculty'],
+                    room=session_data['room']
+                ).exclude(courses=instance).exists()  
+                if exists:
+                    raise serializers.ValidationError(
+                        f"A session with the same time, day, faculty and room already exists."
+                    )
+
+            instance.sessions.clear()
+            for session_data in sessions_data:
+                obj = ClassSession.objects.create(**session_data)
+                instance.sessions.add(obj)
+
+        return instance
+
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        # نمایش جزئیات کامل سشن به جای فقط آیدی
-        if instance.sessions.exists():
-            representation['sessions'] = ClassSessionSerializer(instance.sessions.all(), many=True).data
+        representation['sessions'] = ClassSessionSerializer(
+            instance.sessions.all(), many=True
+        ).data
         return representation

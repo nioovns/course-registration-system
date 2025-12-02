@@ -11,13 +11,18 @@ class CourseSerializer(serializers.ModelSerializer):
         queryset=Course.objects.all(),
         required=False
     )
+    professor = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all(),  
+        required=False,
+        allow_null=True
+    )
 
     class Meta:
         model = Course
         fields = '__all__'
 
     def validate_professor(self, value):
-        if value and not value.role == User.Roles.PROFESSOR:
+        if value and value.role != User.Roles.PROFESSOR:
             raise serializers.ValidationError("The professor must have the role of 'Professor'.")
         return value
 
@@ -31,14 +36,11 @@ class CourseSerializer(serializers.ModelSerializer):
 
     def validate_capacity(self, value):
         if value < 0:
-            raise serializers.ValidationError("Capacity must be greater than 0")
+            raise serializers.ValidationError("Ensure this value is greater than or equal to 0.")
         return value
 
-
-    def create(self, validated_data):
-        sessions_data = validated_data.pop('sessions', [])
-        course = Course.objects.create(**validated_data)
-
+    def validate(self, attrs):
+        sessions_data = attrs.get('sessions', [])
         for session_data in sessions_data:
             exists = ClassSession.objects.filter(
                 day=session_data['day'],
@@ -46,13 +48,20 @@ class CourseSerializer(serializers.ModelSerializer):
                 end_time=session_data['end_time'],
                 faculty=session_data['faculty'],
                 room=session_data['room']
-            ).exists()
-
-            if exists:
+            )
+            if self.instance:
+                exists = exists.exclude(courses=self.instance)
+            if exists.exists():
                 raise serializers.ValidationError(
                     f"A session with the same time, day, faculty and room already exists."
                 )
-                
+        return attrs
+
+    def create(self, validated_data):
+        sessions_data = validated_data.pop('sessions', [])
+        course = Course.objects.create(**validated_data)
+
+        for session_data in sessions_data:
             obj = ClassSession.objects.create(**session_data)
             course.sessions.add(obj)
 
@@ -66,19 +75,6 @@ class CourseSerializer(serializers.ModelSerializer):
         instance.save()
 
         if sessions_data is not None:
-            for session_data in sessions_data:
-                exists = ClassSession.objects.filter(
-                    day=session_data['day'],
-                    start_time=session_data['start_time'],
-                    end_time=session_data['end_time'],
-                    faculty=session_data['faculty'],
-                    room=session_data['room']
-                ).exclude(courses=instance).exists()  
-                if exists:
-                    raise serializers.ValidationError(
-                        f"A session with the same time, day, faculty and room already exists."
-                    )
-
             instance.sessions.clear()
             for session_data in sessions_data:
                 obj = ClassSession.objects.create(**session_data)

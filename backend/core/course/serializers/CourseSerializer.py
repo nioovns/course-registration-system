@@ -41,6 +41,9 @@ class CourseSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         sessions_data = attrs.get('sessions', [])
+        units = attrs.get('units', 0)
+        self.validate_units_vs_sessions(units, sessions_data)
+        
         for session_data in sessions_data:
             exists = ClassSession.objects.filter(
                 day=session_data['day'],
@@ -88,3 +91,13 @@ class CourseSerializer(serializers.ModelSerializer):
             instance.sessions.all(), many=True
         ).data
         return representation
+    
+    def validate_units_vs_sessions(self, units, sessions_data):
+        if units >= 3 and len(sessions_data) != 2:
+            raise serializers.ValidationError(
+                "Courses with 3 or more units must have exactly 2 sessions."
+            )
+        elif units < 3 and len(sessions_data) != 1:
+            raise serializers.ValidationError(
+                "Courses with 2 or fewer units must have exactly 1 session."
+            )

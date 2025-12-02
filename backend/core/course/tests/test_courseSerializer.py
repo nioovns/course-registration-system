@@ -15,8 +15,8 @@ class CourseSerializerTests(TestCase):
 
         self.session_data = {
             "day": "mon",
-            "start_time": time(9, 0),
-            "end_time": time(11, 0),
+            "start_time": time(8, 0),
+            "end_time": time(10, 0),
             "faculty": "sci",
             "room": "501"
         }
@@ -88,3 +88,67 @@ class CourseSerializerTests(TestCase):
         self.assertTrue(serializer.is_valid(), serializer.errors)
         course = serializer.save()
         self.assertEqual(course.sessions.count(), 1)
+        
+    def test_units_more_than_3_requires_two_sessions(self):
+        data = {
+            "name": "Advanced Math",
+            "code": "MATH301",
+            "capacity": 30,
+            "units": 3,  
+            "professor": self.professor.id,
+            "sessions": [self.session_data]  
+        }
+        serializer = CourseSerializer(data=data)
+        self.assertFalse(serializer.is_valid())
+        self.assertIn("Courses with 3 or more units must have exactly 2 sessions.", str(serializer.errors))
+
+    def test_units_more_than_3_two_sessions_valid(self):
+        session2 = {
+            "day": "tue",
+            "start_time": time(10, 0),
+            "end_time": time(12, 0),
+            "faculty": "sci",
+            "room": "502"
+        }
+        data = {
+            "name": "Advanced Math",
+            "code": "MATH301",
+            "capacity": 30,
+            "units": 3,
+            "professor": self.professor.id,
+            "sessions": [self.session_data, session2] 
+        }
+        serializer = CourseSerializer(data=data)
+        self.assertTrue(serializer.is_valid())
+
+    def test_units_less_or_equal_2_requires_one_session(self):
+        session2 = {
+            "day": "tue",
+            "start_time": time(10, 0),
+            "end_time": time(12, 0),
+            "faculty": "sci",
+            "room": "502"
+        }
+        data = {
+            "name": "Intro Math",
+            "code": "MATH101",
+            "capacity": 30,
+            "units": 2,  
+            "professor": self.professor.id,
+            "sessions": [self.session_data, session2]  
+        }
+        serializer = CourseSerializer(data=data)
+        self.assertFalse(serializer.is_valid())
+        self.assertIn("Courses with 2 or fewer units must have exactly 1 session", str(serializer.errors))
+
+    def test_units_less_or_equal_2_one_session_valid(self):
+        data = {
+            "name": "Intro Math",
+            "code": "MATH101",
+            "capacity": 30,
+            "units": 2,
+            "professor": self.professor.id,
+            "sessions": [self.session_data] 
+        }
+        serializer = CourseSerializer(data=data)
+        self.assertTrue(serializer.is_valid())

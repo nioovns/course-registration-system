@@ -9,9 +9,9 @@ from rest_framework import serializers
 class CourseSerializerTests(TestCase):
 
     def setUp(self):
-        self.professor = User.objects.create(username="prof1", role=User.Roles.PROFESSOR, professor_code="P001")
-        self.student = User.objects.create(username="student1", role=User.Roles.STUDENT, student_id="S001")
-        self.fake_professor = User.objects.create(username="fakeprof", role=User.Roles.STUDENT, student_id="S002")
+        self.professor = User.objects.create(username = "علی محمدی", role=User.Roles.PROFESSOR, professor_code="P001")
+        self.student = User.objects.create(username = "نیکو نواصری" , role=User.Roles.STUDENT, student_id="S001")
+        self.fake_professor = User.objects.create(username = "امید مهربان", role=User.Roles.STUDENT, student_id="S002")
 
         self.session_data = {
             "day": "mon",
@@ -26,7 +26,7 @@ class CourseSerializerTests(TestCase):
             "name": "Math 101",
             "code": "MATH101",
             "capacity": 30,
-            "professor": self.professor.id,
+            "professor": self.professor.username,
             "sessions": [self.session_data]
         }
         print("professot id is + ", self.professor.id)
@@ -43,10 +43,13 @@ class CourseSerializerTests(TestCase):
 
     def test_professor_role_validation(self):
         print(self.professor.id)
+        print(self.professor.username)
         print(self.student.id)
         print(self.fake_professor.id)
         print(self.fake_professor.role)
-        data = {"name": "Math 101", "code": "MATH101", "capacity": 10, "professor": self.fake_professor.id}
+        print(self.fake_professor.username)
+
+        data = {"name": "Math 101", "code": "MATH101", "capacity": 10, "professor": self.fake_professor.username}
         serializer = CourseSerializer(data=data)
         self.assertFalse(serializer.is_valid())
         self.assertIn("The professor must have the role of 'Professor'", str(serializer.errors))
@@ -57,7 +60,8 @@ class CourseSerializerTests(TestCase):
             "name": "Physics 101",
             "code": "PHYS101",
             "capacity": 20,
-            "sessions": [self.session_data]
+            "sessions": [self.session_data],
+            "professor": self.professor.username
         }
         serializer = CourseSerializer(data=data)
         self.assertFalse(serializer.is_valid())
@@ -87,15 +91,14 @@ class CourseSerializerTests(TestCase):
         serializer = CourseSerializer(course, data=data, partial=True)
         self.assertTrue(serializer.is_valid(), serializer.errors)
         course = serializer.save()
-        self.assertEqual(course.sessions.count(), 1)
-        
+        self.assertEqual(course.sessions.count(), 1)     
     def test_units_more_than_3_requires_two_sessions(self):
         data = {
             "name": "Advanced Math",
             "code": "MATH301",
             "capacity": 30,
             "units": 3,  
-            "professor": self.professor.id,
+            "professor": self.professor.username,
             "sessions": [self.session_data]  
         }
         serializer = CourseSerializer(data=data)
@@ -115,7 +118,7 @@ class CourseSerializerTests(TestCase):
             "code": "MATH301",
             "capacity": 30,
             "units": 3,
-            "professor": self.professor.id,
+            "professor": self.professor.username,
             "sessions": [self.session_data, session2] 
         }
         serializer = CourseSerializer(data=data)
@@ -134,7 +137,7 @@ class CourseSerializerTests(TestCase):
             "code": "MATH101",
             "capacity": 30,
             "units": 2,  
-            "professor": self.professor.id,
+            "professor": self.professor.username,
             "sessions": [self.session_data, session2]  
         }
         serializer = CourseSerializer(data=data)
@@ -147,7 +150,7 @@ class CourseSerializerTests(TestCase):
             "code": "MATH101",
             "capacity": 30,
             "units": 2,
-            "professor": self.professor.id,
+            "professor": self.professor.username,
             "sessions": [self.session_data] 
         }
         serializer = CourseSerializer(data=data)

@@ -11,21 +11,25 @@ class CourseSerializer(serializers.ModelSerializer):
         queryset=Course.objects.all(),
         required=False
     )
-    professor = serializers.PrimaryKeyRelatedField(
-        queryset=User.objects.all(),  
-        required=False,
-        allow_null=True
-    )
+    professor = serializers.CharField(required=True)
 
     class Meta:
         model = Course
         fields = '__all__'
 
     def validate_professor(self, value):
-        if value and value.role != User.Roles.PROFESSOR:
-            raise serializers.ValidationError("The professor must have the role of 'Professor'.")
-        return value
+        name = value.strip()
 
+        try:
+            user = User.objects.get(username=name)
+        except User.DoesNotExist:
+            raise serializers.ValidationError("No professor found with this name.")
+
+        if user.role != User.Roles.PROFESSOR:
+            raise serializers.ValidationError("The professor must have the role of 'Professor'.")
+
+        return user
+    
     def validate_code(self, value):
         qs = Course.objects.all()
         if self.instance:

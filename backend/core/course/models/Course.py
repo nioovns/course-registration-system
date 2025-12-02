@@ -35,3 +35,7 @@ class Course(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.code})"
+    
+    def delete(self, *args, **kwargs):
+        self.sessions.all().delete()
+        super().delete(*args, **kwargs)

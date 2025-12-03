@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const tableEl = document.querySelector(".datatable .table");
   const newLessonBtn = document.querySelector(".frame-28");
 
-  const pageIndicatorEl = document.querySelector(".table-footer .one"); // عدد وسط select
+  const pageIndicatorEl = document.querySelector(".table-footer .one"); 
   const pageInfoEl = document.querySelector(".table-footer ._1-10-of-14");
   const pageSelectContainer = document.querySelector(".table-footer .select");
   const prevBtn = document.querySelector(".table-footer .frame-2");
@@ -788,10 +788,9 @@ function showConfirmDialog({ title, message, confirmText, cancelText, onConfirm 
           console.error("Logout error:", err);
         }
 
-        // پاک کردن توکن
+      
         localStorage.removeItem("sabau-token");
 
-        // ریدایرکت به لاگین
         window.location.href = "login.html";
       }
     });

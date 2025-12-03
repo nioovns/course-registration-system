@@ -123,35 +123,74 @@ document.addEventListener("DOMContentLoaded", () => {
     successBox.className = "success-box";
     successBox.textContent = "✔ با موفقیت وارد شدید";
 
-    // نمایش زیر دکمه login
+   
     loginBtn.insertAdjacentElement("afterend", successBox);
   }
 
+async function handleLogin() {
+  hideErrors();
 
-  function handleLogin() {
-    hideErrors();
+  const u = usernameInput.value.trim();
+  const p = passwordInput.value.trim();
+  const c = captchaInput.value.trim().toUpperCase();
 
-    const u = usernameInput.value.trim();
-    const p = passwordInput.value.trim();
-    const c = captchaInput.value.trim().toUpperCase();
+  if (!u) return showInlineError(userError, "نام کاربری را وارد کنید");
+  if (!p) return showInlineError(passError, "کلمه عبور را وارد کنید");
+  if (!c) return showInlineError(captchaError, "کد امنیتی را وارد کنید");
 
-    if (!u) return showInlineError(userError, "نام کاربری را وارد کنید");
-    if (!p) return showInlineError(passError, "کلمه عبور را وارد کنید");
-    if (!c) return showInlineError(captchaError, "کد امنیتی را وارد کنید");
-    if (c !== currentCaptcha) {
-      generateCaptcha();
-      captchaInput.value = "";
-      return showInlineError(captchaError, "کد امنیتی اشتباه است");
-    }
-
-
-
-    if (!(u === "admin" && p === "1234")) {
-      return showInlineError(passError, "نام کاربری یا کلمه عبور اشتباه است");
-    }
-
-    showSuccessBox();
+  if (c !== currentCaptcha) {
+    generateCaptcha();
+    captchaInput.value = "";
+    return showInlineError(captchaError, "کد امنیتی اشتباه است");
   }
+
+  
+  let res;
+  try {
+    res = await fetch("http://127.0.0.1:8000/api/auth/login/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: u,
+        password: p,
+      }),
+    });
+  } catch (error) {
+    return showInlineError(passError, "عدم ارتباط با سرور");
+  }
+
+  let data;
+  try {
+    data = await res.json();
+  } catch {
+    return showInlineError(passError, "پاسخ سرور معتبر نیست");
+  }
+
+ 
+  if (!res.ok) {
+    const msg =
+      data.message ||
+      data.detail ||
+      data.error ||
+      "نام کاربری یا کلمه عبور نادرست است";
+    return showInlineError(passError, msg);
+  }
+
+ 
+  const token = data.access || data.accessToken || data.token;
+  if (token) {
+    localStorage.setItem("sabau-token", token);
+  }
+
+  showSuccessBox();
+
+  setTimeout(() => {
+    window.location.href = "admin-dashboard-list.html";
+  }, 800);
+}
+
 
   loginBtn.addEventListener("click", handleLogin);
 

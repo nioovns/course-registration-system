@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const tableEl = document.querySelector(".datatable .table");
   const newLessonBtn = document.querySelector(".frame-28");
 
-  const pageIndicatorEl = document.querySelector(".table-footer .one"); // عدد وسط select
+  const pageIndicatorEl = document.querySelector(".table-footer .one"); 
   const pageInfoEl = document.querySelector(".table-footer ._1-10-of-14");
   const pageSelectContainer = document.querySelector(".table-footer .select");
   const prevBtn = document.querySelector(".table-footer .frame-2");
@@ -21,6 +21,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const PAGE_SIZE = 5;
   let currentPage = 1;
   let pageDropdown = null; 
+
+   const token = localStorage.getItem("sabau-token");
+    if (!token) {
+    window.location.href = "login.html";
+    return;
+  }
 
   let globalOverlay = null;
 
@@ -282,6 +288,57 @@ function showConfirmDialog({ title, message, confirmText, cancelText, onConfirm 
     overlay.style.display = "flex";
   }
 
+
+  async function fetchLessonsFromApi() {
+  try {
+    const res = await fetch("http://127.0.0.1:8000/api/course/", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`, 
+      },
+    });
+
+    if (!res.ok) {
+      console.error("LESSONS LIST ERROR STATUS:", res.status);
+      showGlobalError("خطا در دریافت لیست دروس از سرور.");
+      
+      lessons = [...defaultLessons];
+      filteredLessons = [...lessons];
+      renderTable();
+      return;
+    }
+
+    const data = await res.json();
+    console.log("LESSONS FROM API:", data);
+
+    
+    let items = Array.isArray(data) ? data : data.results || [];
+
+    lessons = items.map((item, index) => ({
+      id: item.id ?? index + 1,
+      name: item.name || item.title || "",
+      code: item.code || "",
+      capacity: item.capacity ?? item.capacity_count ?? "",
+      units: item.units ?? item.unit ?? "",
+      teacher: item.teacher_name || item.teacher || "",
+      location: item.location || item.classroom || "",
+      schedule: item.schedule || "",
+    }));
+
+    filteredLessons = [...lessons];
+    currentPage = 1;
+    renderTable();
+  } catch (err) {
+    console.error("LESSONS FETCH ERROR:", err);
+    showGlobalError("ارتباط با سرور برای دریافت لیست دروس برقرار نشد.");
+    lessons = [...defaultLessons];
+    filteredLessons = [...lessons];
+    renderTable();
+  }
+}
+
+
   
   const defaultLessons = [
     {
@@ -364,8 +421,8 @@ function showConfirmDialog({ title, message, confirmText, cancelText, onConfirm 
     localStorage.setItem("sabau-lessons", JSON.stringify(lessons));
   }
 
-  let lessons = loadLessons();
-  let filteredLessons = [...lessons];
+  let lessons = [];
+  let filteredLessons = [];
 
  
   function getTotalPages() {
@@ -760,16 +817,39 @@ function showConfirmDialog({ title, message, confirmText, cancelText, onConfirm 
   
   if (logoutIcon) {
   logoutIcon.style.cursor = "pointer";
+
   logoutIcon.addEventListener("click", () => {
     showConfirmDialog({
       title: "خروج از حساب",
       message: "آیا مطمئن هستید که می‌خواهید از حساب کاربری خود خارج شوید؟",
       confirmText: "خروج",
       cancelText: "انصراف",
-      onConfirm: () => {
-        
+
+      onConfirm: async () => {
+
+        const token = localStorage.getItem("sabau-token");
+
+        try {
+          const res = await fetch("http://127.0.0.1:8000/api/auth/logout/", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify({})
+          });
+
+          console.log("Logout response:", res.status);
+
+        } catch (err) {
+          console.error("Logout error:", err);
+        }
+
+      
+        localStorage.removeItem("sabau-token");
+
         window.location.href = "login.html";
-      },
+      }
     });
   });
 }
@@ -795,7 +875,7 @@ if (newLessonBtn) {
   }
 
   initSearchBox();
-  renderTable();
+  fetchLessonsFromApi();
 });
 
 

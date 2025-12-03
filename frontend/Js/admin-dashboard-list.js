@@ -760,16 +760,40 @@ function showConfirmDialog({ title, message, confirmText, cancelText, onConfirm 
   
   if (logoutIcon) {
   logoutIcon.style.cursor = "pointer";
+
   logoutIcon.addEventListener("click", () => {
     showConfirmDialog({
       title: "خروج از حساب",
       message: "آیا مطمئن هستید که می‌خواهید از حساب کاربری خود خارج شوید؟",
       confirmText: "خروج",
       cancelText: "انصراف",
-      onConfirm: () => {
-        
+
+      onConfirm: async () => {
+
+        const token = localStorage.getItem("sabau-token");
+
+        try {
+          const res = await fetch("http://127.0.0.1:8000/api/auth/logout/", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify({})
+          });
+
+          console.log("Logout response:", res.status);
+
+        } catch (err) {
+          console.error("Logout error:", err);
+        }
+
+        // پاک کردن توکن
+        localStorage.removeItem("sabau-token");
+
+        // ریدایرکت به لاگین
         window.location.href = "login.html";
-      },
+      }
     });
   });
 }

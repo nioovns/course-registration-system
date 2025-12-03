@@ -65,8 +65,6 @@ class CourseUpdateTests(APITestCase):
         self.course.refresh_from_db()
         self.assertEqual(self.course.name, "Updated Course")
         self.assertEqual(self.course.capacity, 35)
-
-        # بررسی sessionها بر اساس محتوای واقعی آنها
         expected_sessions = {
             ("mon", time(9,0), time(10,30), "101"),
             ("tue", time(11,0), time(12,30), "500")

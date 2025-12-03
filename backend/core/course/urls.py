@@ -4,7 +4,7 @@ from .views import CourseViewSet
 from .services.AllChoices import AllChoices   
 
 router = DefaultRouter()
-router.register(r'courses', CourseViewSet, basename='course')
+router.register(r'', CourseViewSet, basename='course')
 
 urlpatterns = [
     path('', include(router.urls)),

@@ -68,10 +68,15 @@ class CourseSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         sessions_data = validated_data.pop('sessions', [])
+        prerequisites_data = validated_data.pop('prerequisites', [])  
         course = Course.objects.create(**validated_data)
         for session_data in sessions_data:
             obj = ClassSession.objects.create(**session_data)
             course.sessions.add(obj)
+
+        if prerequisites_data:
+            course.prerequisites.set(prerequisites_data)
+
         return course
 
     def update(self, instance, validated_data):

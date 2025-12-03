@@ -291,7 +291,7 @@ function showConfirmDialog({ title, message, confirmText, cancelText, onConfirm 
 
   async function fetchLessonsFromApi() {
   try {
-    const res = await fetch("http://127.0.0.1:8000/api/course/", {
+    const res = await fetch("http://127.0.0.1:8000/api/courses/", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

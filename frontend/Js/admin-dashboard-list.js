@@ -22,6 +22,12 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentPage = 1;
   let pageDropdown = null; 
 
+   const token = localStorage.getItem("sabau-token");
+    if (!token) {
+    window.location.href = "login.html";
+    return;
+  }
+
   let globalOverlay = null;
 
   function createGlobalOverlay() {
@@ -282,6 +288,57 @@ function showConfirmDialog({ title, message, confirmText, cancelText, onConfirm 
     overlay.style.display = "flex";
   }
 
+
+  async function fetchLessonsFromApi() {
+  try {
+    const res = await fetch("http://127.0.0.1:8000/api/course/", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`, 
+      },
+    });
+
+    if (!res.ok) {
+      console.error("LESSONS LIST ERROR STATUS:", res.status);
+      showGlobalError("خطا در دریافت لیست دروس از سرور.");
+      
+      lessons = [...defaultLessons];
+      filteredLessons = [...lessons];
+      renderTable();
+      return;
+    }
+
+    const data = await res.json();
+    console.log("LESSONS FROM API:", data);
+
+    
+    let items = Array.isArray(data) ? data : data.results || [];
+
+    lessons = items.map((item, index) => ({
+      id: item.id ?? index + 1,
+      name: item.name || item.title || "",
+      code: item.code || "",
+      capacity: item.capacity ?? item.capacity_count ?? "",
+      units: item.units ?? item.unit ?? "",
+      teacher: item.teacher_name || item.teacher || "",
+      location: item.location || item.classroom || "",
+      schedule: item.schedule || "",
+    }));
+
+    filteredLessons = [...lessons];
+    currentPage = 1;
+    renderTable();
+  } catch (err) {
+    console.error("LESSONS FETCH ERROR:", err);
+    showGlobalError("ارتباط با سرور برای دریافت لیست دروس برقرار نشد.");
+    lessons = [...defaultLessons];
+    filteredLessons = [...lessons];
+    renderTable();
+  }
+}
+
+
   
   const defaultLessons = [
     {
@@ -364,8 +421,8 @@ function showConfirmDialog({ title, message, confirmText, cancelText, onConfirm 
     localStorage.setItem("sabau-lessons", JSON.stringify(lessons));
   }
 
-  let lessons = loadLessons();
-  let filteredLessons = [...lessons];
+  let lessons = [];
+  let filteredLessons = [];
 
  
   function getTotalPages() {
@@ -818,7 +875,7 @@ if (newLessonBtn) {
   }
 
   initSearchBox();
-  renderTable();
+  fetchLessonsFromApi();
 });
 
 

@@ -64,11 +64,11 @@ class CourseViewSetTest(APITestCase):
 '''
 
 # test for retrieve def ---> in views
-from rest_framework.test import APITestCase, APIClient
-from rest_framework import status
-from django.urls import reverse
-from users.models import User
-from course.models.Course import Course
+# from rest_framework.test import APITestCase, APIClient
+# from rest_framework import status
+# from django.urls import reverse
+# from users.models import User
+# from course.models.Course import Course
 
 '''
 class CourseRetrieveTest(APITestCase):
@@ -215,9 +215,9 @@ class CourseUpdateTests(APITestCase):
         )
         self.client.force_authenticate(user=self.user)
 
-        self.session1 = ClassSession.objects.create(day="mon", start_time=time(9, 0), end_time=time(10, 0), room="A101")
-        self.session2 = ClassSession.objects.create(day="tue", start_time=time(11, 0), end_time=time(12, 0),
-                                                    room="B202")
+        self.session1 = ClassSession.objects.create(day="mon", start_time=time(9, 0), end_time=time(10, 0),faculty="eng", room="101")
+        self.session2 = ClassSession.objects.create(day="tue", start_time=time(11, 0), end_time=time(12, 0),faculty="sci",
+                                                    room="500")
 
         self.course = Course.objects.create(name="Test Course", code="COURSE188", capacity=30)
         self.course.sessions.set([self.session1, self.session2])
@@ -228,11 +228,14 @@ class CourseUpdateTests(APITestCase):
             "name": "Updated Course",
             "code": "COURSE_NEW",
             "capacity": 35,
-            # ارسال آیدی‌ها (چون سریالایزر اصلاح شد)
-            "sessions": [self.session1.id, self.session2.id]
+            "units": 3,  
+            "sessions": [
+                {"day": "tue", "start_time": "11:00", "end_time": "12:30", "faculty": "sci", "room": "500"},
+                {"day": "mon", "start_time": "09:00", "end_time": "10:30", "faculty": "eng", "room": "101"}
+            ]
         }
 
-        # استفاده از patch برای آپدیت تمیز
+
         response = self.client.patch(self.url, data, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)

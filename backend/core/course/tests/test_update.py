@@ -4,14 +4,17 @@ from django.urls import reverse
 from course.models.Course import Course
 from course.models.ClassSession import ClassSession
 from datetime import time
-from users.models import User  # ایمپورت مدل یوزر
+from users.models import User  
 
 class CourseUpdateTests(APITestCase):
     def setUp(self):
-        #
         self.client = APIClient()
-
-        # 1. ساخت یوزر ادمین و لاگین (حل مشکل 401)
+        self.professor = User.objects.create_user(
+            username="نیکو ورناصری", 
+            password="pass123", 
+            role=User.Roles.PROFESSOR, 
+            professor_code="P001")
+        
         self.user = User.objects.create_user(
             username='admin_tester',
             password='password123',
@@ -19,7 +22,7 @@ class CourseUpdateTests(APITestCase):
             email='admin@test.com'
         )
         self.client.force_authenticate(user=self.user)
-        #
+        
         self.session1 = ClassSession.objects.create(
             day="mon",
             start_time=time(9,0),
@@ -36,27 +39,44 @@ class CourseUpdateTests(APITestCase):
         self.course = Course.objects.create(
             name="Testt Course",
             code="COURSE188",
-            capacity=30
+            capacity=30,
+            units=3,
+            professor=self.professor
         )
         self.course.sessions.set([self.session1, self.session2])
         self.url = reverse('course-detail', kwargs={'pk': self.course.id})
+
 
     def test_successful_update(self):
         data = {
             "name": "Updated Course",
             "code": "COURSE17777777777",
             "capacity": 35,
-            "sessions": [self.session1.id, self.session2.id] #
+            "sessions": [
+                {"day": "tue", "start_time": "11:00", "end_time": "12:30", "faculty": "sci", "room": "500"},
+                {"day": "mon", "start_time": "09:00", "end_time": "10:30", "faculty": "eng", "room": "101"}
+            ] 
         }
         response = self.client.put(self.url, data, format='json')
-        if response.status_code == 400: #
-            print("\n>>> ERROR DATA:", response.data) #
+        if response.status_code == 400:
+            print("\n>>> ERROR DATA:", response.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
         self.course.refresh_from_db()
         self.assertEqual(self.course.name, "Updated Course")
         self.assertEqual(self.course.capacity, 35)
-        self.assertEqual(list(self.course.sessions.all()), [self.session1, self.session2])
-    '''
+
+        # بررسی sessionها بر اساس محتوای واقعی آنها
+        expected_sessions = {
+            ("mon", time(9,0), time(10,30), "101"),
+            ("tue", time(11,0), time(12,30), "500")
+        }
+        actual_sessions = {
+            (s.day, s.start_time, s.end_time, s.room) for s in self.course.sessions.all()
+        }
+        self.assertEqual(actual_sessions, expected_sessions)
+
+    
     def test_start_time_after_end_time(self):
         course = Course.objects.create(name="X", code="X1", capacity=20)
         bad_session_data = {
@@ -100,7 +120,6 @@ class CourseUpdateTests(APITestCase):
         )
 
         self.assertEqual(response.status_code, 400)
-        '''
 
     def test_capacity_validation(self):
         data = {

@@ -1,13 +1,10 @@
-from django.test import TestCase
 from rest_framework.exceptions import ValidationError
 from course.services.AdminServices import AdminService
 from course.models.Course import Course
 from course.models.ClassSession import ClassSession
 from users.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
-from datetime import time
 from rest_framework.test import APITestCase
-from django.urls import reverse
 
 class AdminCreate(APITestCase): 
     def setUp(self):
@@ -17,7 +14,6 @@ class AdminCreate(APITestCase):
         refresh = RefreshToken.for_user(self.admin)
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {refresh.access_token}')
 
-        # کلاس‌ها آماده برای ارسال
         self.session_data1 = {"day": "mon", "start_time": "09:00", "end_time": "10:30", "faculty": "eng", "room": "101"}
         self.session_data2 = {"day": "tue", "start_time": "11:00", "end_time": "12:30", "faculty": "sci", "room": "500"}
 

@@ -26,7 +26,7 @@ class CourseAPIDeleteTests(TestCase):
         self.course1.sessions.add(self.session1)
 
     def test_delete_course_should_delete_related_sessions(self):
-        url = f"/api/course/{self.course1.id}/"
+        url = f"/api/courses/{self.course1.id}/"
         response = self.client.delete(url)
         self.assertEqual(response.status_code, 204)
 

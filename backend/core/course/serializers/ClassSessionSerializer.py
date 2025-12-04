@@ -4,9 +4,21 @@ from course.models.ClassSession import ClassSession
 from course.validators import validate_time_range
 
 class ClassSessionSerializer(serializers.ModelSerializer):
+    faculty_display = serializers.CharField(source='get_faculty_display', read_only=True)
+    day_display = serializers.CharField(source='get_day_display', read_only=True)
+    
     class Meta:
         model = ClassSession
-        fields = '__all__'
+        fields = [
+            "id",
+            "day",
+            "day_display",
+            "start_time",
+            "end_time",
+            "faculty",
+            "faculty_display",
+            "room"
+        ]
         
     def validate(self, data):
         try:

@@ -15,8 +15,17 @@ class CourseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Course
-        fields = '__all__'
-
+        fields = [
+            "id",
+            "name",
+            "code",
+            "units",
+            "capacity",
+            "professor",
+            "sessions",
+            "prerequisites",
+        ]
+    
     def validate_professor(self, value):
         if not value:
             return getattr(self.instance, 'professor', None)

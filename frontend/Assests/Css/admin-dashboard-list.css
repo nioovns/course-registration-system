@@ -123,11 +123,11 @@ body {
 }
 .div2 {
   color: var(--datatable-text-color, #212529);
-  text-align: right;
+  text-align: center;
   font-size: 14.399999618530273px;
   line-height: 160%;
   font-weight: 500;
-  right:-50px;
+  right:-47px;
   position: relative;
 }
 .Capacity{
@@ -258,7 +258,7 @@ body {
     "Roboto-Light",
     sans-serif
   );
-  font-size: var(--datatable-body-font-font-size, 14.399999618530273px);
+  font-size: var(--datatable-body-font-font-size, 13.399999618530273px);
   line-height: var(--datatable-body-font-line-height, 160%);
   font-weight: var(--datatable-body-font-font-weight, 300);
   position: relative;
@@ -271,14 +271,14 @@ body {
     "Roboto-Light",
     sans-serif
   );
-  font-size: var(--datatable-body-font-font-size, 14.399999618530273px);
+  font-size: var(--datatable-body-font-font-size, 12.399999618530273px);
   line-height: var(--datatable-body-font-line-height, 160%);
   font-weight: var(--datatable-body-font-font-weight, 300);
   position: relative;
 }
 .div3 {
   color: var(--datatable-text-color, #212529);
-  text-align: left;
+  text-align: center;
   font-family: var(
     --datatable-body-font-font-family,
     "Roboto-Light",
@@ -288,6 +288,7 @@ body {
   line-height: var(--datatable-body-font-line-height, 160%);
   font-weight: var(--datatable-body-font-font-weight, 300);
   position: relative;
+  right: -22px;
 }
 ._30 {
   color: #212529;
@@ -1018,4 +1019,15 @@ body {
   white-space: nowrap; 
 }
 
+._200 {
+  display: block;
+  width: 100%;
+  text-align: left; 
+  margin: 0;
+  line-height: 1.7;
+}
 
+.tr2 {
+  display: flex;
+  align-items: stretch; 
+}

@@ -289,55 +289,163 @@ function showConfirmDialog({ title, message, confirmText, cancelText, onConfirm 
   }
 
 
-  async function fetchLessonsFromApi() {
+ function buildScheduleText(sessions) {
+  if (!Array.isArray(sessions) || sessions.length === 0) return "—";
+
+  const dayMap = {
+    sat: "شنبه",
+    sun: "یکشنبه",
+    mon: "دوشنبه",
+    tue: "سه‌شنبه",
+    wed: "چهارشنبه",
+    thu: "پنجشنبه",
+    fri: "جمعه",
+  };
+
+  return sessions
+    .map((s) => {
+      if (!s) return "";
+
+      const dayFa = dayMap[s.day] || s.day || "";
+
+      const start = s.start_time ? s.start_time.slice(0, 5) : "";
+      const end = s.end_time ? s.end_time.slice(0, 5) : "";
+
+      // 👈 برعکس کردن نمایش ساعت
+      if (dayFa && start && end)
+        return `${dayFa} ${end} - ${start}`;
+
+      if (dayFa && start)
+        return `${dayFa} ${start}`;
+
+      return dayFa;
+    })
+    .filter(Boolean)
+    .join("\n");
+}
+
+
+function buildLocationText(sessions) {
+  if (!Array.isArray(sessions) || sessions.length === 0) return "—";
+
+  const facultyMap = {
+    eng: "مهندسی",
+    sci: "علوم",
+    // اگر دانشکده‌های دیگری داری اینجا اضافه کن
+  };
+
+  const lines = [];
+
+  sessions.forEach((s) => {
+    if (!s) return;
+
+    // کد دانشکده → نام فارسی
+    const facultyCode =
+      typeof s.faculty === "string"
+        ? s.faculty
+        : (s.faculty && s.faculty.name) || "";
+
+    const facultyName = facultyMap[facultyCode] || facultyCode || "";
+
+    // شماره کلاس
+    const classNumber =
+      s.eng ||
+      s.classroom ||
+      s.room ||
+      s.classroom_name ||
+      "";
+
+    if (!facultyName && !classNumber) return;
+
+    const line = classNumber
+      ? `${facultyName}_${classNumber}`
+      : facultyName;
+
+    lines.push(line);
+  });
+
+  // حذف تکراری‌ها (مثلاً اگه دو جلسه تو یه کلاس باشه فقط یک‌بار نشون بده)
+  const unique = [...new Set(lines)];
+  return unique.length ? unique.join("\n") : "—";
+}
+
+
+
+ async function fetchLessonsFromApi() {
+  const token = localStorage.getItem("sabau-token");
+
+  if (!token) {
+    console.warn("No token found, redirecting to login");
+    window.location.href = "login.html";
+    return;
+  }
+
   try {
-    const res = await fetch("http://127.0.0.1:8000/api/courses/", {
+    console.log("FETCHING LESSONS FROM API ...");
+
+    const res = await fetch("http://127.0.0.1:8000/api/courses/", { // 👈 این URL را با آدرس لیست دروس در Swagger خودت عوض کن
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`, 
+        "Authorization": `Bearer ${token}`,
       },
     });
 
+    console.log("LESSONS RESPONSE STATUS:", res.status);
+
     if (!res.ok) {
-      console.error("LESSONS LIST ERROR STATUS:", res.status);
+      const txt = await res.text();
+      console.error("LESSONS ERROR BODY:", txt);
       showGlobalError("خطا در دریافت لیست دروس از سرور.");
-      
-      lessons = [...defaultLessons];
-      filteredLessons = [...lessons];
-      renderTable();
       return;
     }
 
     const data = await res.json();
-    console.log("LESSONS FROM API:", data);
+    console.log("RAW LESSONS FROM API:", data);
 
-    
-    let items = Array.isArray(data) ? data : data.results || [];
+    const items = Array.isArray(data) ? data : data.results || [];
+    console.log("ITEMS LENGTH:", items.length);
 
-    lessons = items.map((item, index) => ({
-      id: item.id ?? index + 1,
-      name: item.name || item.title || "",
-      code: item.code || "",
-      capacity: item.capacity ?? item.capacity_count ?? "",
-      units: item.units ?? item.unit ?? "",
-      teacher: item.teacher_name || item.teacher || "",
-      location: item.location || item.classroom || "",
-      schedule: item.schedule || "",
-    }));
+    // 🔥 map نهایی
+    lessons = items.map((item, index) => {
+      const sessions = Array.isArray(item.sessions) ? item.sessions : [];
+
+      // استاد: هم professor (رشته) را چک می‌کنیم هم professors[0].name
+      let teacherRaw = "";
+      if (typeof item.professor === "string") {
+        teacherRaw = item.professor;
+      } else if (Array.isArray(item.professors) && item.professors.length > 0) {
+        teacherRaw = item.professors[0].name || "";
+      }
+
+      const teacher = teacherRaw.replace(/\s*\(Professor\)\s*$/i, "").trim();
+
+      const schedule = buildScheduleText(sessions);
+      const location = buildLocationText(sessions);
+
+      console.log("SESSIONS OF ITEM:", item.sessions);
+
+      return {
+        id: item.id ?? index + 1,
+        name: item.name || "",
+        code: item.code || "",
+        capacity: item.capacity ?? "",
+        units: item.units ?? "",
+        teacher,
+        schedule,
+        location,
+      };
+    });
 
     filteredLessons = [...lessons];
     currentPage = 1;
     renderTable();
+
   } catch (err) {
     console.error("LESSONS FETCH ERROR:", err);
     showGlobalError("ارتباط با سرور برای دریافت لیست دروس برقرار نشد.");
-    lessons = [...defaultLessons];
-    filteredLessons = [...lessons];
-    renderTable();
   }
 }
-
 
   
   const defaultLessons = [

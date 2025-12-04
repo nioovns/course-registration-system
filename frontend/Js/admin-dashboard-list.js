@@ -369,59 +369,52 @@ function buildLocationText(sessions) {
 
 
 
- async function fetchLessonsFromApi() {
+ async function fetchLessonsFromApi(searchTerm = "") {
   const token = localStorage.getItem("sabau-token");
-
   if (!token) {
-    console.warn("No token found, redirecting to login");
     window.location.href = "login.html";
     return;
   }
 
-  try {
-    console.log("FETCHING LESSONS FROM API ...");
+  let url = "http://127.0.0.1:8000/api/courses/";
 
-    const res = await fetch("http://127.0.0.1:8000/api/courses/", { 
+  // 👈 اگر بک‌اندت از ?search= استفاده می‌کند
+  if (searchTerm) {
+    const qs = encodeURIComponent(searchTerm.trim());
+    url += `?search=${qs}`;
+  }
+
+  try {
+    const res = await fetch(url, {
       method: "GET",
       headers: {
-        "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
     });
 
-    console.log("LESSONS RESPONSE STATUS:", res.status);
-
     if (!res.ok) {
-      const txt = await res.text();
-      console.error("LESSONS ERROR BODY:", txt);
+      console.log("LESSONS STATUS:", res.status);
       showGlobalError("خطا در دریافت لیست دروس از سرور.");
       return;
     }
 
     const data = await res.json();
-    console.log("RAW LESSONS FROM API:", data);
-
     const items = Array.isArray(data) ? data : data.results || [];
-    console.log("ITEMS LENGTH:", items.length);
 
-    
     lessons = items.map((item, index) => {
       const sessions = Array.isArray(item.sessions) ? item.sessions : [];
 
-     
       let teacherRaw = "";
       if (typeof item.professor === "string") {
         teacherRaw = item.professor;
-      } else if (Array.isArray(item.professors) && item.professors.length > 0) {
-        teacherRaw = item.professors[0].name || "";
+      } else if (item.professor?.name) {
+        teacherRaw = item.professor.name;
       }
-
       const teacher = teacherRaw.replace(/\s*\(Professor\)\s*$/i, "").trim();
 
       const schedule = buildScheduleText(sessions);
       const location = buildLocationText(sessions);
-
-      console.log("SESSIONS OF ITEM:", item.sessions);
 
       return {
         id: item.id ?? index + 1,
@@ -441,9 +434,10 @@ function buildLocationText(sessions) {
 
   } catch (err) {
     console.error("LESSONS FETCH ERROR:", err);
-    showGlobalError("ارتباط با سرور برای دریافت لیست دروس برقرار نشد.");
+    showGlobalError("عدم ارتباط با سرور.");
   }
 }
+
 
   
   const defaultLessons = [
@@ -880,7 +874,13 @@ function buildLocationText(sessions) {
     }
   }
 
-  
+  function debounce(fn, delay) {
+  let timeout;
+  return function (...args) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => fn.apply(this, args), delay);
+  };
+}
 
   function initSearchBox() {
   if (!searchContainer) return;

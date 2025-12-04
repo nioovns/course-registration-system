@@ -258,7 +258,7 @@ function showConfirmDialog({ title, message, confirmText, cancelText, onConfirm 
   if (confirmYesBtn && confirmText) confirmYesBtn.textContent = confirmText;
   if (confirmNoBtn && cancelText) confirmNoBtn.textContent = cancelText;
 
-  // پاک کردن لیسنر قبلی دکمه‌ها
+  
   const newYesBtn = confirmYesBtn.cloneNode(true);
   const newNoBtn = confirmNoBtn.cloneNode(true);
 
@@ -311,7 +311,7 @@ function showConfirmDialog({ title, message, confirmText, cancelText, onConfirm 
       const start = s.start_time ? s.start_time.slice(0, 5) : "";
       const end = s.end_time ? s.end_time.slice(0, 5) : "";
 
-      // 👈 برعکس کردن نمایش ساعت
+     
       if (dayFa && start && end)
         return `${dayFa} ${end} - ${start}`;
 
@@ -331,7 +331,7 @@ function buildLocationText(sessions) {
   const facultyMap = {
     eng: "مهندسی",
     sci: "علوم",
-    // اگر دانشکده‌های دیگری داری اینجا اضافه کن
+  
   };
 
   const lines = [];
@@ -339,7 +339,6 @@ function buildLocationText(sessions) {
   sessions.forEach((s) => {
     if (!s) return;
 
-    // کد دانشکده → نام فارسی
     const facultyCode =
       typeof s.faculty === "string"
         ? s.faculty
@@ -347,7 +346,6 @@ function buildLocationText(sessions) {
 
     const facultyName = facultyMap[facultyCode] || facultyCode || "";
 
-    // شماره کلاس
     const classNumber =
       s.eng ||
       s.classroom ||
@@ -364,7 +362,7 @@ function buildLocationText(sessions) {
     lines.push(line);
   });
 
-  // حذف تکراری‌ها (مثلاً اگه دو جلسه تو یه کلاس باشه فقط یک‌بار نشون بده)
+  
   const unique = [...new Set(lines)];
   return unique.length ? unique.join("\n") : "—";
 }
@@ -383,7 +381,7 @@ function buildLocationText(sessions) {
   try {
     console.log("FETCHING LESSONS FROM API ...");
 
-    const res = await fetch("http://127.0.0.1:8000/api/courses/", { // 👈 این URL را با آدرس لیست دروس در Swagger خودت عوض کن
+    const res = await fetch("http://127.0.0.1:8000/api/courses/", { 
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -406,11 +404,11 @@ function buildLocationText(sessions) {
     const items = Array.isArray(data) ? data : data.results || [];
     console.log("ITEMS LENGTH:", items.length);
 
-    // 🔥 map نهایی
+    
     lessons = items.map((item, index) => {
       const sessions = Array.isArray(item.sessions) ? item.sessions : [];
 
-      // استاد: هم professor (رشته) را چک می‌کنیم هم professors[0].name
+     
       let teacherRaw = "";
       if (typeof item.professor === "string") {
         teacherRaw = item.professor;

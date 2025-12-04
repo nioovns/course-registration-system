@@ -794,29 +794,58 @@ function buildLocationText(sessions) {
   }
 
   
- function handleDeleteLesson(id) {
-  const lesson = lessons.find((l) => l.id === id);
-  const name = lesson ? lesson.name : "این درس";
-
+ async function handleDeleteLesson(id) {
   showConfirmDialog({
     title: "حذف درس",
-    message: `آیا از حذف درس «${name}» مطمئن هستید؟\nاین عملیات غیرقابل بازگشت است.`,
-    confirmText: "حذف درس",
+    message: "آیا از حذف این درس مطمئن هستید؟",
+    confirmText: "حذف",
     cancelText: "انصراف",
-    onConfirm: () => {
-      
-      lessons = lessons.filter((l) => l.id !== id);
-      filteredLessons = filteredLessons.filter((l) => l.id !== id);
-      saveLessons();
 
-      if (!filteredLessons.length) {
-        currentPage = 1;
+    onConfirm: async () => {
+      const token = localStorage.getItem("sabau-token"); 
+
+      if (!token) {
+        showGlobalError("دوباره وارد حساب شوید.");
+        window.location.href = "login.html";
+        return;
       }
 
-      renderTable();
+      try {
+        const res = await fetch(`http://127.0.0.1:8000/api/courses/${id}/`, {
+          method: "DELETE",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+          },
+        });
+
+        if (res.status === 204) {
+          
+          lessons = lessons.filter((l) => l.id !== id);
+          filteredLessons = filteredLessons.filter((l) => l.id !== id);
+          renderTable();
+          return;
+        }
+
+        if (res.status === 401) {
+          showGlobalError("جلسه شما منقضی شده است. دوباره وارد شوید.");
+          localStorage.removeItem("sabau-token");
+          window.location.href = "login.html";
+          return;
+        }
+
+        const text = await res.text();
+        console.error("DELETE ERROR BODY:", text);
+        showGlobalError("خطا در حذف درس از سرور.");
+
+      } catch (err) {
+        console.error("Delete error:", err);
+        showGlobalError("عدم ارتباط با سرور هنگام حذف درس.");
+      }
     },
   });
 }
+
+
 
   function handleEditLesson(lesson) {
     localStorage.setItem("sabau-current-lesson-id", String(lesson.id));

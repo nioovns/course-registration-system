@@ -1531,7 +1531,7 @@ body {
     "Roboto-Regular",
     sans-serif
   );
-  font-size: var(--paragraph-standard-font-size, 16px);
+  font-size: var(--paragraph-standard-font-size, 13px);
   line-height: var(--paragraph-standard-line-height, 160%);
   font-weight: var(--paragraph-standard-font-weight, 400);
   position: relative;

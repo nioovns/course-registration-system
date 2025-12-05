@@ -378,7 +378,6 @@ function buildLocationText(sessions) {
 
   let url = "http://127.0.0.1:8000/api/courses/";
 
-  // 👈 اگر بک‌اندت از ?search= استفاده می‌کند
   if (searchTerm) {
     const qs = encodeURIComponent(searchTerm.trim());
     url += `?search=${qs}`;

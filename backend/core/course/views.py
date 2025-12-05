@@ -20,7 +20,6 @@ class CourseViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
-        #  404
         course = get_object_or_404(Course, pk=pk)
         serializer = CourseSerializer(course)
         return Response(serializer.data)
@@ -29,23 +28,21 @@ class CourseViewSet(viewsets.ViewSet):
         course = self.service.create_course(request.data)
         serializer = CourseSerializer(course)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-
+    
+    #PUT
     def update(self, request, pk=None):
-        #
         get_object_or_404(Course, pk=pk)
         course = self.service.update_course(pk, request.data)
         serializer = CourseSerializer(course)
         return Response(serializer.data)
 
-    #  PATCH (تست‌های آپدیت)
+    #PATCH
     def partial_update(self, request, pk=None):
         get_object_or_404(Course, pk=pk)
-        # استفاده از همان سرویس آپدیت (چون سریالایزر partial=True را هندل می‌کند)
         course = self.service.update_course(pk, request.data, partial=True)
         serializer = CourseSerializer(course)
         return Response(serializer.data)
 
-    # -----------------------------------------------------
     def destroy(self, request, pk=None):
         get_object_or_404(Course, pk=pk)
         self.service.delete_course(pk)

@@ -25,11 +25,16 @@ class CourseSerializer(serializers.ModelSerializer):
             "sessions",
             "prerequisites",
         ]
-    
+        extra_kwargs = {
+            "name": {"required": False},
+            "code": {"required": False},
+            "units": {"required": False},
+            "capacity": {"required": False},
+        }
+
     def validate_professor(self, value):
         if not value:
             return getattr(self.instance, 'professor', None)
-        
         name = value.strip()
         try:
             user = User.objects.get(username=name)
@@ -38,7 +43,7 @@ class CourseSerializer(serializers.ModelSerializer):
         if user.role != User.Roles.PROFESSOR:
             raise serializers.ValidationError("The professor must have the role of 'Professor'.")
         return user
-    
+
     def validate_code(self, value):
         qs = Course.objects.all()
         if self.instance:
@@ -82,10 +87,8 @@ class CourseSerializer(serializers.ModelSerializer):
         for session_data in sessions_data:
             obj = ClassSession.objects.create(**session_data)
             course.sessions.add(obj)
-
         if prerequisites_data:
             course.prerequisites.set(prerequisites_data)
-
         return course
 
     def update(self, instance, validated_data):
@@ -98,9 +101,14 @@ class CourseSerializer(serializers.ModelSerializer):
 
         if sessions_data is not None:
             instance.sessions.clear()
-            for session_data in sessions_data:
-                obj = ClassSession.objects.create(**session_data)
-                instance.sessions.add(obj)
+            new_sessions = []
+            for s in sessions_data:
+                if 'id' in s and s['id']:
+                    obj = ClassSession.objects.get(id=s['id'])
+                else:
+                    obj = ClassSession.objects.create(**s)
+                new_sessions.append(obj)
+            instance.sessions.set(new_sessions)
 
         if prerequisites_data is not None:
             instance.prerequisites.set(prerequisites_data)
@@ -113,7 +121,7 @@ class CourseSerializer(serializers.ModelSerializer):
             instance.sessions.all(), many=True
         ).data
         return representation
-    
+
     def validate_units_vs_sessions(self, units, sessions_data):
         if units >= 3 and len(sessions_data) != 2:
             raise serializers.ValidationError(

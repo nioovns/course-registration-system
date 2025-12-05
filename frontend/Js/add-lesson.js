@@ -1,40 +1,41 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const API_BASE = "http://127.0.0.1:8000/api";
+
   const $ = (s) => document.querySelector(s);
 
-  const saveBtn = document.querySelector(".group-98 .login-submit");
-  const cancelBtn = document.querySelector(".group-98 .login-submit2");
+ 
+  const saveBtn = $(".group-98 .login-submit");
+  const cancelBtn = $(".group-98 .login-submit2");
 
-  const nameEl = document.querySelector(".group-65 ._1"); 
-  const codeEl = document.querySelector(".group-66 ._493284"); 
-  const capacityEl = document.querySelector(".group-67 ._30"); 
-  const teacherEl = document.querySelector(".group-652 .p-name"); 
-  const searchEl = document.querySelector(".th4 .search"); 
+  const nameEl = $(".group-65 ._1");
+  const codeEl = $(".group-66 ._493284");
+  const capacityEl = $(".group-67 ._30");
+  const teacherEl = $(".group-652 .p-name");
+  const searchEl = $(".th4 .search");
 
-  const unitsWrapper = document.querySelector(".group-68 .frame-34");
-  const unitsTextEl = document.querySelector(".group-68 ._3");
+
+  const unitsWrapper = $(".group-68 .frame-34");
+  const unitsTextEl = $(".group-68 ._3");
 
   
-  const logoutIcon = document.querySelector(".solar-logout-outline");
-  const bellWrapper = document.querySelector(".badge-with-notification");
-  const bellBadge = document.querySelector(".badge-with-notification ._12");
-
-  const dayWrapper1 = document.querySelector(".group-102 .select");
-  const timeWrapper1 = document.querySelector(".group-102 .select2");
+  const dayWrapper1 = $(".group-102 .select");
+  const timeWrapper1 = $(".group-102 .select2");
   const dayTextEl1 = dayWrapper1 ? dayWrapper1.querySelector(".one") : null;
   const timeTextEl1 = timeWrapper1 ? timeWrapper1.querySelector(".one") : null;
 
-  const gp1Wrapper = document.querySelector(".group-102 .gp1"); 
-  const gp2Wrapper = document.querySelector(".group-102 .gp2"); 
-  const gp1TextEl = gp1Wrapper ? gp1Wrapper.querySelector(".one") : null;
-  const gp2TextEl = gp2Wrapper ? gp2Wrapper.querySelector(".one") : null;
-
-  const roomWrapper1 = document.querySelector(".group-101 .select3");
-  const facultyWrapper1 = document.querySelector(".group-101 .select4");
+  const roomWrapper1 = $(".group-101 .select3");
+  const facultyWrapper1 = $(".group-101 .select4");
   const roomTextEl1 = roomWrapper1 ? roomWrapper1.querySelector(".one2") : null;
   const facultyTextEl1 = facultyWrapper1 ? facultyWrapper1.querySelector(".one") : null;
 
-  const gp3Wrapper = document.querySelector(".group-101 .gp3");
-  const gp4Wrapper = document.querySelector(".group-101 .gp4");
+  
+  const gp1Wrapper = $(".group-102 .gp1"); 
+  const gp2Wrapper = $(".group-102 .gp2"); 
+  const gp1TextEl = gp1Wrapper ? gp1Wrapper.querySelector(".one") : null;
+  const gp2TextEl = gp2Wrapper ? gp2Wrapper.querySelector(".one") : null;
+
+  const gp3Wrapper = $(".group-101 .gp3"); 
+  const gp4Wrapper = $(".group-101 .gp4"); 
   const gp3TextEl = gp3Wrapper ? gp3Wrapper.querySelector(".one2") : null;
   const gp4TextEl = gp4Wrapper ? gp4Wrapper.querySelector(".my-gp") : null;
 
@@ -42,6 +43,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const gp2InitialDisplay = gp2Wrapper ? getComputedStyle(gp2Wrapper).display : null;
   const gp3InitialDisplay = gp3Wrapper ? getComputedStyle(gp3Wrapper).display : null;
   const gp4InitialDisplay = gp4Wrapper ? getComputedStyle(gp4Wrapper).display : null;
+
+  const logoutIcon = $(".solar-logout-outline");
+  const bellWrapper = $(".badge-with-notification");
+  const bellBadge = $(".badge-with-notification ._12");
+
 
   let globalOverlay = null;
 
@@ -74,7 +80,6 @@ document.addEventListener("DOMContentLoaded", () => {
       textAlign: "right",
     });
 
-   
     const titleEl = document.createElement("div");
     titleEl.className = "global-message-title";
     Object.assign(titleEl.style, {
@@ -87,7 +92,6 @@ document.addEventListener("DOMContentLoaded", () => {
       gap: "6px",
     });
 
-    
     const dot = document.createElement("span");
     dot.textContent = "!";
     Object.assign(dot.style, {
@@ -105,11 +109,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const titleTextNode = document.createElement("span");
     titleTextNode.textContent = "خطا در ثبت درس";
-
     titleEl.appendChild(dot);
     titleEl.appendChild(titleTextNode);
 
-    
     const msgEl = document.createElement("div");
     msgEl.className = "global-message-text";
     Object.assign(msgEl.style, {
@@ -120,7 +122,6 @@ document.addEventListener("DOMContentLoaded", () => {
       whiteSpace: "pre-line",
     });
 
-    
     const btnRow = document.createElement("div");
     Object.assign(btnRow.style, {
       display: "flex",
@@ -144,29 +145,78 @@ document.addEventListener("DOMContentLoaded", () => {
     btn.addEventListener("click", () => {
       overlay.style.display = "none";
     });
-
     btnRow.appendChild(btn);
+
     box.appendChild(titleEl);
     box.appendChild(msgEl);
     box.appendChild(btnRow);
     overlay.appendChild(box);
     document.body.appendChild(overlay);
-
     globalOverlay = overlay;
     return overlay;
   }
 
-  function showGlobalErrorList(errorItems) {
+  function showGlobalErrorList(items) {
     const overlay = createGlobalOverlay();
     const msgEl = overlay.querySelector(".global-message-text");
 
-    
     let text = "لطفاً خطاهای زیر را بررسی کنید:\n\n";
-    text += errorItems.map((e) => `• ${e.field}: ${e.message}`).join("\n");
+    text += items
+      .map((e) => `• ${e.field ? e.field + ": " : ""}${e.message}`)
+      .join("\n");
 
     if (msgEl) msgEl.textContent = text;
+    const titleEl = overlay.querySelector(".global-message-title span:last-child");
+    if (titleEl) titleEl.textContent = "خطا در ثبت درس";
+
     overlay.style.display = "flex";
   }
+
+  function showGlobalSuccess(message, onClose) {
+    const overlay = createGlobalOverlay();
+    const msgEl = overlay.querySelector(".global-message-text");
+    const titleEl = overlay.querySelector(".global-message-title span:last-child");
+    const dot = overlay.querySelector(".global-message-title span:first-child");
+
+    if (titleEl) {
+      titleEl.textContent = "ثبت موفق";
+      titleEl.style.color = "#16a34a";
+    }
+    if (dot) {
+      dot.textContent = "✓";
+      dot.style.background = "#dcfce7";
+      dot.style.color = "#16a34a";
+    }
+    if (msgEl) msgEl.textContent = message;
+
+    overlay.style.display = "flex";
+
+    const btn = overlay.querySelector(".global-message-box button");
+    if (btn) {
+      const oldHandler = btn._onclick;
+      if (oldHandler) btn.removeEventListener("click", oldHandler);
+      const handler = () => {
+        overlay.style.display = "none";
+        if (typeof onClose === "function") onClose();
+      };
+      btn._onclick = handler;
+      btn.addEventListener("click", handler);
+    }
+  }
+
+  function highlightField(el) {
+    if (!el) return;
+    const prevOutline = el.style.outline;
+    const prevBoxShadow = el.style.boxShadow;
+    el.scrollIntoView({ behavior: "smooth", block: "center" });
+    el.style.outline = "2px solid #dc2626";
+    el.style.boxShadow = "0 0 0 2px rgba(220,38,38,0.3)";
+    setTimeout(() => {
+      el.style.outline = prevOutline || "none";
+      el.style.boxShadow = prevBoxShadow || "none";
+    }, 1800);
+  }
+
   let confirmOverlay = null;
   let confirmTitleEl = null;
   let confirmMsgEl = null;
@@ -175,7 +225,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function createConfirmOverlay() {
     if (confirmOverlay) return confirmOverlay;
-
     const overlay = document.createElement("div");
     Object.assign(overlay.style, {
       position: "fixed",
@@ -211,7 +260,6 @@ document.addEventListener("DOMContentLoaded", () => {
       justifyContent: "center",
       marginBottom: "10px",
     });
-
     const iconInner = document.createElement("div");
     Object.assign(iconInner.style, {
       width: "24px",
@@ -292,9 +340,7 @@ document.addEventListener("DOMContentLoaded", () => {
     confirmNoBtn = noBtn;
 
     overlay.addEventListener("click", (e) => {
-      if (e.target === overlay) {
-        overlay.style.display = "none";
-      }
+      if (e.target === overlay) overlay.style.display = "none";
     });
 
     return overlay;
@@ -302,7 +348,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function showConfirmDialog({ title, message, confirmText, cancelText, onConfirm }) {
     const overlay = createConfirmOverlay();
-
     if (confirmTitleEl) confirmTitleEl.textContent = title || "تأیید عملیات";
     if (confirmMsgEl) confirmMsgEl.textContent = message || "";
     if (confirmYesBtn) confirmYesBtn.textContent = confirmText || "تأیید";
@@ -319,7 +364,6 @@ document.addEventListener("DOMContentLoaded", () => {
       overlay.style.display = "none";
       if (typeof onConfirm === "function") onConfirm();
     });
-
     confirmNoBtn.addEventListener("click", () => {
       overlay.style.display = "none";
     });
@@ -327,22 +371,8 @@ document.addEventListener("DOMContentLoaded", () => {
     overlay.style.display = "flex";
   }
 
-  function highlightField(el) {
-    if (!el) return;
-    const prevOutline = el.style.outline;
-    const prevBoxShadow = el.style.boxShadow;
-
-    el.scrollIntoView({ behavior: "smooth", block: "center" });
-
-    el.style.outline = "2px solid #dc2626";
-    el.style.boxShadow = "0 0 0 2px rgba(220,38,38,0.3)";
-
-    setTimeout(() => {
-      el.style.outline = prevOutline || "none";
-      el.style.boxShadow = prevBoxShadow || "none";
-    }, 1800);
-  }
- function initTextPlaceholder(el) {
+ 
+  function initTextPlaceholder(el) {
     if (!el) return;
     const placeholder = (el.textContent || "").trim();
     el.dataset.placeholder = placeholder;
@@ -358,7 +388,6 @@ document.addEventListener("DOMContentLoaded", () => {
         el.style.opacity = "1";
       }
     };
-
     el.addEventListener("focus", clearHandler);
     el.addEventListener("click", clearHandler);
   }
@@ -372,7 +401,9 @@ document.addEventListener("DOMContentLoaded", () => {
     searchEl.style.userSelect = "none";
   }
 
+  
   let openDropdown = null;
+
   function closeDropdown() {
     if (openDropdown) {
       openDropdown.style.display = "none";
@@ -448,12 +479,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function initDropdownField({ wrapper, labelEl }) {
     if (!wrapper || !labelEl) return null;
-
     const placeholder = (labelEl.textContent || "").trim();
     labelEl.dataset.placeholder = placeholder;
     labelEl.dataset.filled = "false";
     labelEl.style.opacity = "0.5";
-
     wrapper.style.cursor = "pointer";
 
     wrapper.addEventListener("click", () => {
@@ -482,55 +511,50 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  const dayOptions = ["شنبه","یکشنبه","دوشنبه","سه‌شنبه","چهارشنبه"]
-    .map(d => ({ value: d, label: d }));
-  const timeOptions = ["8-10","10-12","14-16","16-18"]
-    .map(t => ({ value: t, label: t }));
-  const facultyOptions = ["مهندسی","علوم","فنی","ادبیات","الهیات"]
-    .map(f => ({ value: f, label: f }));
-  const roomOptions = ["100","120","150","200","203","210","220","305"]
-    .map(r => ({ value: r, label: r }));
-  const unitOptions = [1,2,3,4]
-    .map(u => ({ value: u, label: String(u) }));
+  
+  let unitChoices = [];
+  let dayChoices = []; 
+  let timeChoices = []; 
+  let facultyChoices = []; 
+  let classroomChoicesByFaculty = {}; 
 
-    const unitsField = initDropdownField({ wrapper: unitsWrapper, labelEl: unitsTextEl });
-  if (unitsWrapper && unitsField) {
-    createDropdown(unitsWrapper, unitOptions, (opt) => {
-      unitsField.setValue(opt.label);
-      const val = parseInt(opt.value, 10);
-      updateExtraGroups(val);
-    });
-  }
-
+  
+  const unitsField = initDropdownField({ wrapper: unitsWrapper, labelEl: unitsTextEl });
   const dayField1 = initDropdownField({ wrapper: dayWrapper1, labelEl: dayTextEl1 });
   const timeField1 = initDropdownField({ wrapper: timeWrapper1, labelEl: timeTextEl1 });
-  if (dayWrapper1 && dayField1) createDropdown(dayWrapper1, dayOptions, (opt) => dayField1.setValue(opt.label));
-  if (timeWrapper1 && timeField1) createDropdown(timeWrapper1, timeOptions, (opt) => timeField1.setValue(opt.label));
-
   const dayField2 = initDropdownField({ wrapper: gp1Wrapper, labelEl: gp1TextEl });
   const timeField2 = initDropdownField({ wrapper: gp2Wrapper, labelEl: gp2TextEl });
-  if (gp1Wrapper && dayField2) createDropdown(gp1Wrapper, dayOptions, (opt) => dayField2.setValue(opt.label));
-  if (gp2Wrapper && timeField2) createDropdown(gp2Wrapper, timeOptions, (opt) => timeField2.setValue(opt.label));
-
   const roomField1 = initDropdownField({ wrapper: roomWrapper1, labelEl: roomTextEl1 });
   const facultyField1 = initDropdownField({ wrapper: facultyWrapper1, labelEl: facultyTextEl1 });
-  if (roomWrapper1 && roomField1) createDropdown(roomWrapper1, roomOptions, (opt) => roomField1.setValue(opt.label));
-  if (facultyWrapper1 && facultyField1) createDropdown(facultyWrapper1, facultyOptions, (opt) => facultyField1.setValue(opt.label));
-
   const roomField2 = initDropdownField({ wrapper: gp3Wrapper, labelEl: gp3TextEl });
   const facultyField2 = initDropdownField({ wrapper: gp4Wrapper, labelEl: gp4TextEl });
-  if (gp3Wrapper && roomField2) createDropdown(gp3Wrapper, roomOptions, (opt) => roomField2.setValue(opt.label));
-  if (gp4Wrapper && facultyField2) createDropdown(gp4Wrapper, facultyOptions, (opt) => facultyField2.setValue(opt.label));
+
+  function facultyLabelToCode(label) {
+    const f = facultyChoices.find((x) => x.label === label);
+    return f ? f.value : null;
+  }
+
+  function timeLabelToRange(label) {
+    return timeChoices.find((t) => t.label === label) || null;
+  }
+
+  function dayLabelToValue(label) {
+    const d = dayChoices.find((x) => x.label === label);
+    return d ? d.value : null;
+  }
+
+  function makeClassroomOptions(facultyCode) {
+    const list = classroomChoicesByFaculty[facultyCode] || [];
+    return list.map((r) => ({ value: String(r), label: String(r) }));
+  }
 
   function updateExtraGroups(units) {
     if (!gp1Wrapper || !gp2Wrapper) return;
-
     if (units <= 2) {
       gp1Wrapper.style.display = "none";
       gp2Wrapper.style.display = "none";
       if (gp3Wrapper) gp3Wrapper.style.display = "none";
       if (gp4Wrapper) gp4Wrapper.style.display = "none";
-
       if (dayField2) dayField2.reset();
       if (timeField2) timeField2.reset();
       if (roomField2) roomField2.reset();
@@ -543,206 +567,423 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  if (unitsTextEl) {
-    const initialUnits = parseInt((unitsTextEl.textContent || "").trim(), 10);
-    if (!isNaN(initialUnits)) {
-      updateExtraGroups(initialUnits);
-    }
-  }
 
-  function loadLessons() {
+  async function loadChoicesFromServer() {
     try {
-      const raw = localStorage.getItem("sabau-lessons");
-      if (!raw) return [];
-      const parsed = JSON.parse(raw);
-      return Array.isArray(parsed) ? parsed : [];
-    } catch {
-      return [];
+      const res = await fetch(`${API_BASE}/courses/admin/choices/`);
+      if (!res.ok) throw new Error("choices request failed");
+      const data = await res.json();
+
+      unitChoices = (data.unit_choices || []).map((u) => ({
+        value: u.value,
+        label: String(u.label),
+      }));
+      dayChoices = data.day_choices || [];
+      timeChoices = data.time_choices || [];
+      facultyChoices = data.faculty_choices || [];
+      classroomChoicesByFaculty = data.classroom_choices || {};
+
+      
+      if (unitsWrapper && unitsField) {
+        createDropdown(unitsWrapper, unitChoices, (opt) => {
+          unitsField.setValue(opt.label);
+          const val = parseInt(opt.value, 10);
+          updateExtraGroups(val);
+        });
+      }
+
+      
+      if (dayWrapper1 && dayField1) {
+        createDropdown(
+          dayWrapper1,
+          dayChoices.map((d) => ({ value: d.value, label: d.label })),
+          (opt) => dayField1.setValue(opt.label)
+        );
+      }
+      if (gp1Wrapper && dayField2) {
+        createDropdown(
+          gp1Wrapper,
+          dayChoices.map((d) => ({ value: d.value, label: d.label })),
+          (opt) => dayField2.setValue(opt.label)
+        );
+      }
+
+     
+      const timeOpts = timeChoices.map((t) => ({ value: t.label, label: t.label }));
+      if (timeWrapper1 && timeField1) {
+        createDropdown(timeWrapper1, timeOpts, (opt) => timeField1.setValue(opt.label));
+      }
+      if (gp2Wrapper && timeField2) {
+        createDropdown(gp2Wrapper, timeOpts, (opt) => timeField2.setValue(opt.label));
+      }
+
+   
+      const facultyOpts = facultyChoices.map((f) => ({
+        value: f.value,
+        label: f.label,
+      }));
+      if (facultyWrapper1 && facultyField1) {
+        createDropdown(facultyWrapper1, facultyOpts, (opt) => {
+          facultyField1.setValue(opt.label);
+          
+          const code = opt.value;
+          const roomOpts = makeClassroomOptions(code);
+          if (roomWrapper1 && roomField1) {
+            createDropdown(roomWrapper1, roomOpts, (o) => roomField1.setValue(o.label));
+          }
+        });
+      }
+      if (gp4Wrapper && facultyField2) {
+        createDropdown(gp4Wrapper, facultyOpts, (opt) => {
+          facultyField2.setValue(opt.label);
+          const code = opt.value;
+          const roomOpts = makeClassroomOptions(code);
+          if (gp3Wrapper && roomField2) {
+            createDropdown(gp3Wrapper, roomOpts, (o) => roomField2.setValue(o.label));
+          }
+        });
+      }
+
+      if (unitsTextEl) {
+        const initUnits = parseInt(unitsTextEl.textContent.trim(), 10);
+        if (!isNaN(initUnits)) updateExtraGroups(initUnits);
+      }
+    } catch (err) {
+      console.error("Error loading choices:", err);
+      
+      updateExtraGroups(2);
     }
   }
 
-  function saveLessons(list) {
-    localStorage.setItem("sabau-lessons", JSON.stringify(list));
+  loadChoicesFromServer();
+
+
+  const MSG_MAP = {
+    "Course code must be unique": "کد درسی نباید تکراری باشد.",
+    "No professor found with this name.": "استادی با این نام یافت نشد.",
+    "This field is required.": "این فیلد الزامی است.",
+    "This field may not be null.": "این فیلد نمی‌تواند خالی باشد.",
+    "Ensure this value is greater than or equal to 0.": "مقدار باید بزرگ‌تر یا مساوی صفر باشد.",
+    "end_time must be later than start_time.": "ساعت پایان باید بعد از ساعت شروع باشد.",
+    "A session with the same time, day, faculty and room already exists.":
+      "جلسه‌ای با همین روز، ساعت، دانشکده و کلاس قبلاً ثبت شده است.",
+  };
+
+  function translateMessage(msg) {
+    if (MSG_MAP[msg]) return MSG_MAP[msg];
+  
+    return msg;
   }
 
-  function getNextId(list) {
-    if (!list.length) return 1;
-    return Math.max(...list.map((l) => Number(l.id) || 0)) + 1;
-  }
-
-   function validate(data) {
-    
+  function buildErrorsFromBackend(data) {
     const errors = [];
 
-    
+    if (!data || typeof data !== "object") {
+      return errors;
+    }
+
+    if (Array.isArray(data.non_field_errors)) {
+      data.non_field_errors.forEach((m) => {
+        errors.push({ field: "", message: translateMessage(m) });
+      });
+    }
+
+    if (Array.isArray(data.code)) {
+      data.code.forEach((m) =>
+        errors.push({ field: "کد درس", message: translateMessage(m) })
+      );
+    }
+
+    if (Array.isArray(data.name)) {
+      data.name.forEach((m) =>
+        errors.push({ field: "نام درس", message: translateMessage(m) })
+      );
+    }
+
+    if (Array.isArray(data.professor)) {
+      data.professor.forEach((m) =>
+        errors.push({ field: "نام استاد", message: translateMessage(m) })
+      );
+    }
+
+    if (Array.isArray(data.units)) {
+      data.units.forEach((m) =>
+        errors.push({ field: "تعداد واحد", message: translateMessage(m) })
+      );
+    }
+
+    if (Array.isArray(data.capacity)) {
+      data.capacity.forEach((m) =>
+        errors.push({ field: "ظرفیت", message: translateMessage(m) })
+      );
+    }
+
+    if (Array.isArray(data.sessions)) {
+      data.sessions.forEach((sErr, idx) => {
+        const label = idx === 0 ? "جلسه اول" : "جلسه دوم";
+        if (!sErr || typeof sErr !== "object") return;
+
+        if (Array.isArray(sErr.day)) {
+          sErr.day.forEach((m) =>
+            errors.push({
+              field: `روز ${label}`,
+              message: translateMessage(m),
+            })
+          );
+        }
+        if (Array.isArray(sErr.start_time)) {
+          sErr.start_time.forEach((m) =>
+            errors.push({
+              field: `ساعت شروع ${label}`,
+              message: translateMessage(m),
+            })
+          );
+        }
+        if (Array.isArray(sErr.end_time)) {
+          sErr.end_time.forEach((m) =>
+            errors.push({
+              field: `ساعت پایان ${label}`,
+              message: translateMessage(m),
+            })
+          );
+        }
+        if (Array.isArray(sErr.room)) {
+          sErr.room.forEach((m) =>
+            errors.push({
+              field: `کلاس ${label}`,
+              message: translateMessage(m),
+            })
+          );
+        }
+        if (Array.isArray(sErr.faculty)) {
+          sErr.faculty.forEach((m) =>
+            errors.push({
+              field: `دانشکده ${label}`,
+              message: translateMessage(m),
+            })
+          );
+        }
+        if (Array.isArray(sErr.time_range)) {
+          sErr.time_range.forEach((m) =>
+            errors.push({
+              field: `زمان ${label}`,
+              message: translateMessage(m),
+            })
+          );
+        }
+      });
+    }
+
+    return errors;
+  }
+
+ 
+  function validateFront(data) {
+    const errors = [];
+
     if (!data.name) {
-      errors.push({
-        field: "نام درس",
-        message: "نام درس را وارد کنید.",
-        el: nameEl,
-      });
+      errors.push({ field: "نام درس", message: "نام درس را وارد کنید." });
     }
-
-    
     if (!data.code) {
-      errors.push({
-        field: "کد درس",
-        message: "کد درس را وارد کنید.",
-        el: codeEl,
-      });
-    } else if (!/^\d+$/.test(data.code)) {
-      errors.push({
-        field: "کد درس",
-        message: "کد درس باید فقط شامل عدد باشد.",
-        el: codeEl,
-      });
+      errors.push({ field: "کد درس", message: "کد درس را وارد کنید." });
     }
-
-    
-    if (!data.capacity || isNaN(data.capacity) || data.capacity <= 0) {
+    if (!data.teacher) {
+      errors.push({ field: "نام استاد", message: "نام استاد را وارد کنید." });
+    }
+    if (!data.units || isNaN(data.units) || data.units <= 0) {
+      errors.push({ field: "تعداد واحد", message: "تعداد واحد را به درستی وارد کنید." });
+    }
+    if (!data.capacity || isNaN(data.capacity) || data.capacity < 0) {
       errors.push({
         field: "ظرفیت",
-        message: "ظرفیت را به صورت یک عدد مثبت وارد کنید.",
-        el: capacityEl,
+        message: "ظرفیت باید یک عدد بزرگ‌تر یا مساوی صفر باشد.",
       });
     }
 
-    
-    if (!data.units || isNaN(data.units) || data.units <= 0) {
+    const s1 = data.sessions[0] || {};
+    if (!s1.day || !s1.start_time || !s1.end_time) {
       errors.push({
-        field: "واحد",
-        message: "تعداد واحد درس را انتخاب کنید.",
-        el: unitsTextEl,
+        field: "زمان جلسه اول",
+        message: "روز و ساعت جلسه اول را کامل وارد کنید.",
       });
     }
-
-    
-    if (!data.teacher) {
+    if (!s1.faculty || !s1.classroom) {
       errors.push({
-        field: "نام استاد",
-        message: "نام استاد را وارد کنید.",
-        el: teacherEl,
-      });
-    }
-
-    
-    if (!data.schedule1) {
-      errors.push({
-        field: "زمان برگزاری",
-        message: "حداقل یک بازه‌ی زمانی برای برگزاری درس انتخاب کنید.",
-        el: dayTextEl1 || timeTextEl1,
-      });
-    }
-
-    if (!data.location1) {
-      errors.push({
-        field: "مکان برگزاری",
-        message: "حداقل یک مکان برگزاری برای درس انتخاب کنید.",
-        el: roomTextEl1 || facultyTextEl1,
+        field: "کلاس جلسه اول",
+        message: "دانشکده و کلاس جلسه اول را وارد کنید.",
       });
     }
 
     if (data.units > 2) {
-      const hasSecondSchedule = !!data.schedule2;
-      const hasSecondLocation = !!data.location2;
-
-      if (!hasSecondSchedule) {
+      const s2 = data.sessions[1] || {};
+      if (!s2.day || !s2.start_time || !s2.end_time) {
         errors.push({
-          field: "زمان دوم",
-          message: "برای درس‌های بیش از ۲ واحد، باید زمان دوم را نیز وارد کنید.",
-          el: gp1TextEl || gp2TextEl || dayTextEl1,
+          field: "زمان جلسه دوم",
+          message: "برای دروس بیشتر از ۲ واحد، زمان جلسه دوم الزامی است.",
         });
       }
-
-      if (!hasSecondLocation) {
+      if (!s2.faculty || !s2.classroom) {
         errors.push({
-          field: "مکان دوم",
-          message: "برای درس‌های بیش از ۲ واحد، باید مکان دوم را نیز وارد کنید.",
-          el: gp3TextEl || gp4TextEl || roomTextEl1,
+          field: "کلاس جلسه دوم",
+          message: "برای دروس بیشتر از ۲ واحد، کلاس جلسه دوم الزامی است.",
         });
       }
     }
 
-    
-    if (errors.length > 0) {
-      showGlobalErrorList(errors);
-      if (errors[0].el) {
-        highlightField(errors[0].el);
-      }
-      return false;
-    }
-
-    return true;
+    return errors;
   }
 
-  function handleSave() {
+  
+  async function handleSave() {
+    const token = localStorage.getItem("sabau-token");
+    if (!token) {
+      showGlobalErrorList([
+        {
+          field: "",
+          message: "برای ثبت درس، ابتدا باید وارد حساب کاربری خود شوید.",
+        },
+      ]);
+      return;
+    }
+
     const name = (nameEl?.textContent || "").trim();
     const code = (codeEl?.textContent || "").trim();
     const capStr = (capacityEl?.textContent || "").trim();
     const teacher = (teacherEl?.textContent || "").trim();
 
-    const unitsStr = unitsField ? unitsField.getValue() : (unitsTextEl?.textContent || "").trim();
+    const unitsStr =
+      (unitsField && unitsField.getValue()) ||
+      (unitsTextEl?.textContent || "").trim();
     const units = unitsStr ? parseInt(unitsStr, 10) : 0;
     const capacity = capStr ? parseInt(capStr, 10) : 0;
 
-    const d1 = dayField1?.getValue() || "";
-    const t1 = timeField1?.getValue() || "";
-    const d2 = dayField2?.getValue() || "";
-    const t2 = timeField2?.getValue() || "";
+    // جلسه اول
+    const dayLabel1 = dayField1?.getValue() || "";
+    const timeLabel1 = timeField1?.getValue() || "";
+    const facultyLabel1 = facultyField1?.getValue() || "";
+    const room1 = roomField1?.getValue() || "";
 
-    const f1 = facultyField1?.getValue() || "";
-    const r1 = roomField1?.getValue() || "";
-    const f2 = facultyField2?.getValue() || "";
-    const r2 = roomField2?.getValue() || "";
+    const dayCode1 = dayLabelToValue(dayLabel1);
+    const timeRange1 = timeLabelToRange(timeLabel1);
+    const facultyCode1 = facultyLabelToCode(facultyLabel1);
 
-    const schedule1 = d1 && t1 ? `${d1} ${t1}` : "";
-    const schedule2 = d2 && t2 ? `${d2} ${t2}` : "";
-    const location1 = f1 && r1 ? `${f1} - کلاس ${r1}` : "";
-    const location2 = f2 && r2 ? `${f2} - کلاس ${r2}` : "";
+    const startTime1 = timeRange1 ? timeRange1.start : "";
+    const endTime1 = timeRange1 ? timeRange1.end : "";
 
-    const data = {
+    // جلسه دوم
+    const dayLabel2 = dayField2?.getValue() || "";
+    const timeLabel2 = timeField2?.getValue() || "";
+    const facultyLabel2 = facultyField2?.getValue() || "";
+    const room2 = roomField2?.getValue() || "";
+
+    const dayCode2 = dayLabelToValue(dayLabel2);
+    const timeRange2 = timeLabelToRange(timeLabel2);
+    const facultyCode2 = facultyLabelToCode(facultyLabel2);
+
+    const startTime2 = timeRange2 ? timeRange2.start : "";
+    const endTime2 = timeRange2 ? timeRange2.end : "";
+
+    const sessions = [];
+
+  
+    sessions.push({
+      day: dayCode1 || null,
+      start_time: startTime1 || null,
+      end_time: endTime1 || null,
+      faculty: facultyCode1 || null,
+      room: room1 || null,
+    });
+
+    
+    const anySecondFilled =
+      dayCode2 || startTime2 || endTime2 || facultyCode2 || room2;
+    if (anySecondFilled || units > 2) {
+      sessions.push({
+        day: dayCode2 || null,
+        start_time: startTime2 || null,
+        end_time: endTime2 || null,
+        faculty: facultyCode2 || null,
+        room: room2 || null,
+      });
+    }
+
+    const payload = {
       name,
       code,
-      capacity,
       units,
-      teacher,
-      schedule1,
-      schedule2,
-      location1,
-      location2,
+      capacity,
+      professor: teacher,
+      sessions,
     };
 
-    if (!validate(data)) return;
+    console.log("payload being sent:", JSON.stringify(payload, null, 2));
 
-    let finalSchedule = schedule1;
-    let finalLocation = location1;
-    if (schedule2) finalSchedule += "\n" + schedule2;
-    if (location2) finalLocation += "\n" + location2;
+    let res;
+    let data = null;
 
-    const lessons = loadLessons();
-    lessons.push({
-      id: getNextId(lessons),
-      name,
-      code,
-      capacity,
-      units,
-      teacher,
-      schedule: finalSchedule,
-      location: finalLocation,
-    });
-    saveLessons(lessons);
+    try {
+      res = await fetch(`${API_BASE}/courses/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
 
-     const overlay = createGlobalOverlay();
-    const titleEl = overlay.querySelector(".global-message-title");
-    const msgEl = overlay.querySelector(".global-message-text");
-    if (titleEl) titleEl.querySelector("span:last-child").textContent = "ثبت موفق";
-    if (msgEl) msgEl.textContent = "درس با موفقیت ثبت شد.\nدر حال بازگشت به لیست دروس...";
-    overlay.style.display = "flex";
+      try {
+        data = await res.json();
+      } catch {
+        data = null;
+      }
+    } catch (err) {
+      console.error("Network error:", err);
+      showGlobalErrorList([
+        {
+          field: "",
+          message: "ارتباط با سرور برقرار نشد. لطفاً دوباره تلاش کنید.",
+        },
+      ]);
+      return;
+    }
 
-    setTimeout(() => {
-      window.location.href = "admin-dashboard-list.html";
-    }, 1200);
+    if (res.ok) {
+      showGlobalSuccess("درس با موفقیت ثبت شد.\nدر حال بازگشت به لیست دروس...", () => {
+        window.location.href = "admin-dashboard-list.html";
+      });
+      return;
+    }
+
+    
+    let backendErrors = buildErrorsFromBackend(data);
+
+    
+    if (!backendErrors || backendErrors.length === 0) {
+      backendErrors = validateFront({ name, code, teacher, units, capacity, sessions });
+    }
+
+    if (!backendErrors || backendErrors.length === 0) {
+      backendErrors = [
+        {
+          field: "",
+          message: "خطای نامشخصی رخ داد. لطفاً ورودی‌ها را دوباره بررسی کنید.",
+        },
+      ];
+    }
+
+    showGlobalErrorList(backendErrors);
+    if (backendErrors[0].field) {
+     
+      const first = backendErrors[0].field;
+      if (first.includes("کد درس")) highlightField(codeEl);
+      else if (first.includes("نام درس")) highlightField(nameEl);
+      else if (first.includes("ظرفیت")) highlightField(capacityEl);
+      else if (first.includes("استاد")) highlightField(teacherEl);
+      else if (first.includes("جلسه اول")) highlightField(dayTextEl1 || roomTextEl1);
+      else if (first.includes("جلسه دوم")) highlightField(gp1TextEl || gp3TextEl);
+    }
   }
+
 
   if (saveBtn) {
     saveBtn.style.cursor = "pointer";
@@ -764,10 +1005,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-   if (bellWrapper) {
+  if (bellWrapper) {
     bellWrapper.style.cursor = "pointer";
     bellWrapper.addEventListener("click", () => {
-      if (bellBadge) {
+      if (bellBadge && bellBadge.parentElement) {
         bellBadge.textContent = "";
         bellBadge.parentElement.style.display = "none";
       }
@@ -795,46 +1036,34 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-
-
   
   (function () {
     function updateDateTime() {
-  const now = new Date();
-
-  const dateFormatter = new Intl.DateTimeFormat("fa-IR-u-ca-persian", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-
-  const timeFormatter = new Intl.DateTimeFormat("fa-IR", {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-  });
-
-  const parts = dateFormatter.formatToParts(now);
-  const weekday = parts.find(p => p.type === "weekday")?.value ?? "";
-  const day = parts.find(p => p.type === "day")?.value ?? "";
-  const month = parts.find(p => p.type === "month")?.value ?? "";
-  const year = parts.find(p => p.type === "year")?.value ?? "";
-
-  const persianTime = timeFormatter.format(now);
-  const persianDate = `${weekday} ${day} ${month} ${year}`;
-
-  const dateTarget = document.querySelector("._1-1404");
-  if (dateTarget) {
-    dateTarget.textContent = `${persianTime} | ${persianDate}`;
-  }
-}
-
+      const now = new Date();
+      const dateFormatter = new Intl.DateTimeFormat("fa-IR-u-ca-persian", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
+      const timeFormatter = new Intl.DateTimeFormat("fa-IR", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      });
+      const parts = dateFormatter.formatToParts(now);
+      const weekday = parts.find((p) => p.type === "weekday")?.value ?? "";
+      const day = parts.find((p) => p.type === "day")?.value ?? "";
+      const month = parts.find((p) => p.type === "month")?.value ?? "";
+      const year = parts.find((p) => p.type === "year")?.value ?? "";
+      const persianTime = timeFormatter.format(now);
+      const persianDate = `${weekday} ${day} ${month} ${year}`;
+      const dateTarget = document.querySelector("._1-1404");
+      if (dateTarget) {
+        dateTarget.textContent = `${persianTime} | ${persianDate}`;
+      }
+    }
     updateDateTime();
     setInterval(updateDateTime, 60000);
   })();
 });
-
-
-
-

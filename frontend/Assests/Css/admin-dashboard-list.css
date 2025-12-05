@@ -262,6 +262,7 @@ body {
   line-height: var(--datatable-body-font-line-height, 160%);
   font-weight: var(--datatable-body-font-font-weight, 300);
   position: relative;
+  white-space: pre-line;
 }
 ._16-14-16-14 {
   color: var(--datatable-text-color, #212529);

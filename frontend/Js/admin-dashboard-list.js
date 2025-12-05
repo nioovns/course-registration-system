@@ -331,6 +331,9 @@ function buildLocationText(sessions) {
   const facultyMap = {
     eng: "مهندسی",
     sci: "علوم",
+    art: "هنر",
+    psy:"روانشناسی",
+    lit:"ادبیات"
   
   };
 

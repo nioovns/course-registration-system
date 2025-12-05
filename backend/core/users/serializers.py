@@ -26,7 +26,9 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         data.update({
             'role': self.user.role,
             'username': self.user.username,
-            'user_id': self.user.id
+            'user_id': self.user.id ,
+            'first_name': self.user.first_name,
+            'last_name': self.user.last_name,
         })
         return data
 

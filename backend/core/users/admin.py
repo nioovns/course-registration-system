@@ -1,7 +1,4 @@
 from django.contrib import admin
-
-# Register your models here.
-from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import User
 
@@ -14,12 +11,13 @@ class CustomUserAdmin(UserAdmin):
 
     fieldsets = UserAdmin.fieldsets + (
         ('اطلاعات تکمیلی دانشگاه', {
-            'fields': ('role', 'student_id', 'professor_code', 'first_name', 'last_name'),
+            'fields': ('role', 'student_id', 'professor_code'),
         }),
     )
+    # ------------------------------------------------------------------
 
     add_fieldsets = UserAdmin.add_fieldsets + (
         ('اطلاعات تکمیلی دانشگاه', {
-            'fields': ('role', 'student_id', 'professor_code','first_name', 'last_name'),
+            'fields': ('role', 'student_id', 'professor_code', 'first_name', 'last_name'),
         }),
     )

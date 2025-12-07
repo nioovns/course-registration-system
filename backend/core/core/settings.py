@@ -151,3 +151,12 @@ SIMPLE_JWT = {
 
 # settings.py
 AUTH_USER_MODEL = 'users.User'
+CORS_ALLOWED_ORIGINS = [
+    "http://127.0.0.1:5500",
+    "http://localhost:5500",
+
+    "http://localhost:63342",
+    "http://127.0.0.1:63342",
+]
+
+CORS_ALLOW_ALL_ORIGINS = True

@@ -2,14 +2,10 @@ from django.test import TestCase
 from rest_framework.exceptions import ValidationError
 from course.services.AdminServices import AdminService
 from course.models.Course import Course
-from course.models.ClassSession import ClassSession
-
 
 class AdminCreate(TestCase):
     def setUp(self):
         self.service = AdminService()
-        self.session1 = ClassSession.objects.create(day="mon", start_time="09:00", end_time="10:30", room="A101")
-        self.session2 = ClassSession.objects.create(day="tue", start_time="11:00", end_time="12:30", room="B202")
 
     def test_create_course_service(self):
         prereq1 = Course.objects.create(name="Intro to CS", code="CS100", capacity=30)
@@ -19,9 +15,13 @@ class AdminCreate(TestCase):
             "name": "Advanced CS",
             "code": "CS200",
             "capacity": 25,
-            "sessions": [self.session1.id, self.session2.id],
+            "sessions": [
+                {"day": "mon", "start_time": "09:00", "end_time": "10:30", "room": "A101"},
+                {"day": "tue", "start_time": "11:00", "end_time": "12:30", "room": "B202"},
+            ],
             "prerequisites": [prereq1.id, prereq2.id],
         }
+
 
         course = self.service.create_course(data)
 
@@ -37,8 +37,10 @@ class AdminCreate(TestCase):
             "name": "Advanced CS",
             "code": "CS200",
             "capacity": 25,
-            # ارسال آیدی
-            "sessions": [self.session1.id, self.session2.id],
+            "sessions": [
+                {"day": "mon", "start_time": "09:00", "end_time": "10:30", "room": "A101"},
+                {"day": "tue", "start_time": "11:00", "end_time": "12:30", "room": "B202"},
+            ],
             "prerequisites": [prereq1.id],
         }
 
@@ -47,29 +49,31 @@ class AdminCreate(TestCase):
 
         data2 = {
             "name": "Math",
-            "code": "CS200",  # کد تکراری
+            "code": "CS200",  
             "capacity": 30,
-            "sessions": [self.session1.id],
+            "sessions": [
+                {"day": "mon", "start_time": "09:00", "end_time": "10:30", "room": "A101"},
+            ],
             "prerequisites": [],
         }
 
         with self.assertRaises(ValidationError) as context:
             self.service.create_course(data2)
 
-        self.assertIn("unique", str(context.exception))
-
+        self.assertIn("Course code must be unique", str(context.exception))
+        
     def test_create_course_negative_capacity_raises_validation_error(self):
         data = {
             "name": "Physics",
             "code": "PH101",
-            "capacity": -5,
-            # ارسال آیدی
-            "sessions": [self.session1.id],
+            "capacity": -5,  
+            "sessions": [
+                {"day": "mon", "start_time": "09:00", "end_time": "10:30", "room": "A101"}
+            ],
             "prerequisites": []
         }
 
         with self.assertRaises(ValidationError) as context:
             self.service.create_course(data)
 
-        self.assertTrue(
-            "greater than" in str(context.exception) or "Capacity must be greater than 0" in str(context.exception))
+        self.assertIn("Ensure this value is greater than or equal to 0", str(context.exception))

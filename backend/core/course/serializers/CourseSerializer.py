@@ -1,16 +1,11 @@
 from rest_framework import serializers
-from .ClassSessionSerializer import ClassSessionSerializer
-from users.models import User
 from course.models.Course import Course
 from course.models.ClassSession import ClassSession
+from .ClassSessionSerializer import ClassSessionSerializer
+from users.models import User
 
 class CourseSerializer(serializers.ModelSerializer):
-    sessions = serializers.PrimaryKeyRelatedField(
-        many=True,
-        queryset=ClassSession.objects.all(),
-        required=False
-    )
-
+    sessions = ClassSessionSerializer(many=True)
     prerequisites = serializers.PrimaryKeyRelatedField(
         many=True,
         queryset=Course.objects.all(),
@@ -20,29 +15,50 @@ class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = '__all__'
-
+        
     def validate_professor(self, value):
-        if value and not value.role == User.Roles.PROFESSOR:
-            raise serializers.ValidationError("The professor must have the role of 'Professor'.")
+        if not value.role == User.Roles.PROFESSOR:
+            raise ValidationError("The professor must have the role of 'Professor'.")
         return value
-
+    
     def validate_code(self, value):
-        qs = Course.objects.all()
-        if self.instance:
-            qs = qs.exclude(id=self.instance.id)
+        qs = Course.objects.exclude(id=self.instance.id) if self.instance else Course.objects.all()
         if qs.filter(code=value).exists():
             raise serializers.ValidationError("Course code must be unique")
         return value
-
+    
     def validate_capacity(self, value):
         if value < 0:
             raise serializers.ValidationError("Capacity must be greater than 0")
         return value
+    
+    def create(self, validated_data): 
+        sessions_data = validated_data.pop('sessions', [])
+        prerequisites_data = validated_data.pop('prerequisites', [])
+        course = Course.objects.create(**validated_data)
 
+        for session_data in sessions_data:
+            session = ClassSession.objects.create(**session_data)
+            course.sessions.add(session)
+        course.prerequisites.set(prerequisites_data)
 
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        # نمایش جزئیات کامل سشن به جای فقط آیدی
-        if instance.sessions.exists():
-            representation['sessions'] = ClassSessionSerializer(instance.sessions.all(), many=True).data
-        return representation
+        return course
+    
+    def update(self, instance, validated_data):
+        for attr, value in validated_data.items():
+            if attr not in ['sessions', 'prerequisites']:
+                setattr(instance, attr, value)
+        
+        instance.save()
+
+        if 'prerequisites' in validated_data:
+            instance.prerequisites.set(validated_data['prerequisites'])
+
+        if 'sessions' in validated_data:
+            sessions_data = validated_data['sessions']
+            instance.sessions.all().delete()
+            for session_data in sessions_data:
+                session = ClassSession.objects.create(**session_data)
+                instance.sessions.add(session)
+
+        return instance

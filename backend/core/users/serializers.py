@@ -10,7 +10,6 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def get_token(cls, user):
         token = super().get_token(user)
 
-        # اضافه کردن اطلاعات به توکن
         token['role'] = user.role
         token['username'] = user.username
 

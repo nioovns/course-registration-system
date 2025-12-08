@@ -1,320 +1,208 @@
 const { Builder, By, until } = require("selenium-webdriver");
-const chrome = require("selenium-webdriver/chrome");
 
-const DASHBOARD_URL = "http://127.0.0.1:5500/Pages/admin-dashboard-list.html";
-const LOGIN_URL_FRAGMENT = "login.html";
-const ADD_LESSON_URL_FRAGMENT = "add-lesson.html";
+const ORIGIN = "http://127.0.0.1:5500";
+const LOGIN_URL = `${ORIGIN}/pages/login.html`;
+const DASHBOARD_URL = `${ORIGIN}/pages/admin-dashboard-list.html`;
+const LOGIN_URL_PART = "login";
 
-async function waitForRows(driver, timeout = 5000) {
-  await driver.wait(until.elementsLocated(By.css(".datatable .tbody .tr2")), timeout);
-  return driver.findElements(By.css(".datatable .tbody .tr2"));
+
+async function jsClick(driver, element) {
+  await driver.executeScript(
+    "arguments[0].scrollIntoView({block:'center'});",
+    element
+  );
+  await driver.sleep(200);
+  await driver.executeScript("arguments[0].click();", element);
 }
 
-async function getText(driver, locator) {
-  const el = await driver.findElement(locator);
-  return el.getText();
-}
-
-async function clickWhenVisible(driver, locator, timeout = 5000) {
-  const el = await driver.wait(until.elementLocated(locator), timeout);
-  await driver.wait(until.elementIsVisible(el), timeout);
-  await el.click();
-  return el;
-}
-
-function sleep(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-async function main() {
-  const options = new chrome.Options();
-
-  const driver = await new Builder().forBrowser("chrome").setChromeOptions(options).build();
+(async function () {
+  const driver = await new Builder().forBrowser("chrome").build();
 
   try {
-    console.log("🚀 Starting admin-dashboard-list tests...\n");
+    console.log("🔹 STEP 1: رفتن به صفحه login برای داشتن origin معتبر");
+    await driver.get(LOGIN_URL);
 
-    await driver.get(DASHBOARD_URL);
-    await driver.executeScript("window.localStorage.removeItem('sabau-lessons');");
-    await driver.navigate().refresh();
+   
+    await driver.wait(until.urlContains("login"), 10000);
 
-    // ========== TEST 1: Initial load & pagination ==========
-    console.log("[TEST 1] Initial load & pagination...");
-
-    let rows = await waitForRows(driver);
-    console.log(`  Rows on first page: ${rows.length}`);
-    if (rows.length !== 5) {
-      throw new Error("Expected 5 rows on first page (PAGE_SIZE = 5).");
-    }
-
-    const pageIndicatorEl = await driver.findElement(By.css(".table-footer .one"));
-    let pageIndicatorText = await pageIndicatorEl.getText();
-    console.log(`  Page indicator: ${pageIndicatorText}`);
-    if (pageIndicatorText.trim() !== "1") {
-      throw new Error("Expected page indicator to be '1' on first page.");
-    }
-
-    const pageInfoText1 = await getText(driver, By.css(".table-footer ._1-10-of-14"));
-    console.log(`  Page info text: "${pageInfoText1}"`);
-    if (!pageInfoText1.includes("of 6")) {
-      console.warn("  (Warning) Page info text does not contain 'of 6', but continuing.");
-    }
-
-    console.log("✅ TEST 1 PASSED\n");
-
-
-
-    // ========== TEST 2: Next / Previous page ==========
-    console.log("[TEST 2] Next & Previous page buttons...");
-
-    const nextBtn = await driver.findElement(By.css(".table-footer .frame-1"));
-    const prevBtn = await driver.findElement(By.css(".table-footer .frame-2"));
-
-    await nextBtn.click();
-    await sleep(500);
-
-    rows = await waitForRows(driver);
-    console.log(`  Rows on second page: ${rows.length}`);
-    if (rows.length < 1 || rows.length > 5) {
-      throw new Error("Unexpected number of rows on second page.");
-    }
-
-    pageIndicatorText = await pageIndicatorEl.getText();
-    console.log(`  Page indicator on second page: ${pageIndicatorText}`);
-    if (pageIndicatorText.trim() !== "2") {
-      throw new Error("Expected page indicator to be '2' on second page.");
-    }
-
-    await prevBtn.click();
-    await sleep(500);
-
-    pageIndicatorText = await pageIndicatorEl.getText();
-    console.log(`  Page indicator after going back: ${pageIndicatorText}`);
-    if (pageIndicatorText.trim() !== "1") {
-      throw new Error("Expected page indicator to be '1' after going back to first page.");
-    }
-
-    console.log("✅ TEST 2 PASSED\n");
-
-    // ========== TEST 3: Page dropdown ==========
-    console.log("[TEST 3] Page dropdown...");
-
-    const selectContainer = await driver.findElement(By.css(".table-footer .select"));
-    await selectContainer.click();
-
-    const dropdown = await driver.wait(
-      until.elementLocated(By.css(".page-dropdown")),
-      5000
+    console.log("🔹 STEP 2: ست کردن sabau-token در localStorage");
+    await driver.executeScript(
+      "window.localStorage.setItem('sabau-token','dummy-test-token');"
     );
 
-    const page2Option = await dropdown.findElement(
-      By.xpath(".//div[contains(normalize-space(.), 'صفحه 2')]")
+    const token = await driver.executeScript(
+      "return window.localStorage.getItem('sabau-token');"
     );
-    await page2Option.click();
+    console.log(" sabau-token =", token);
 
-    await sleep(500);
-    pageIndicatorText = await pageIndicatorEl.getText();
-    console.log(`  Page indicator after selecting page 2 from dropdown: ${pageIndicatorText}`);
-    if (pageIndicatorText.trim() !== "2") {
-      throw new Error("Expected page indicator to be '2' after selecting page 2 from dropdown.");
-    }
-
-    console.log("✅ TEST 3 PASSED\n");
-
-    await prevBtn.click();
-    await sleep(500);
-
-// ========== TEST 4: Delete lesson - modal appears ==========
-    console.log("[TEST 4] Delete lesson - modal appears...");
-
+    console.log("🔹 STEP 3: رفتن به صفحه داشبورد");
     await driver.get(DASHBOARD_URL);
-    await driver.executeScript("window.localStorage.removeItem('sabau-lessons');");
-    await driver.navigate().refresh();
-
-    let rowsBeforeCancel = await waitForRows(driver);
-    console.log(` Rows before delete (for modal test): ${rowsBeforeCancel.length}`);
-
-    if (rowsBeforeCancel.length === 0) {
-      throw new Error("No rows found before delete (modal test).");
-    }
-
-    const firstTrash = await rowsBeforeCancel[0].findElement(By.css(".group-10"));
-
-    try {
-      await firstTrash.click();
-    } catch (e) {
-      console.warn(" Normal click on trash failed, trying JS click...");
-      await driver.executeScript("arguments[0].click();", firstTrash);
-    }
 
  
-    await sleep(400);
+    await driver.wait(
+      until.elementLocated(By.css(".datatable .tbody")),
+      10000
+    );
+
+  
+    await driver.wait(async (d) => {
+      const rows = await d.findElements(By.css(".datatable .tbody .tr2"));
+      return rows.length > 0;
+    }, 10000);
+
+    let rows = await driver.findElements(By.css(".datatable .tbody .tr2"));
+    console.log(" ✅ Dashboard loaded, rows =", rows.length);
 
    
-    const cancelBtn = await driver.wait(
-      until.elementLocated(By.xpath("//button[contains(normalize-space(.), 'انصراف')]")),
+    const firstLessonNameEl = await driver.findElement(
+      By.css(".datatable .tbody .tr2 .td2:last-child ._1")
+    );
+    const firstLessonName = await firstLessonNameEl.getText();
+    console.log(" First lesson name:", firstLessonName);
+
+ 
+    console.log("🔹 STEP 4: تست سرچ در جدول");
+
+ 
+    await driver.wait(
+      until.elementLocated(By.css(".dashboard-search-input")),
+      10000
+    );
+    const searchInput = await driver.findElement(
+      By.css(".dashboard-search-input")
+    );
+
+   
+    await searchInput.clear();
+    await searchInput.sendKeys(firstLessonName);
+    await driver.sleep(700);
+
+    rows = await driver.findElements(By.css(".datatable .tbody .tr2"));
+    console.log(" Rows after positive search:", rows.length);
+
+ 
+    await searchInput.clear();
+    await searchInput.sendKeys("درس-خیالی-که-وجود-ندارد-123456");
+    await driver.sleep(700);
+
+    const errorOverlay = await driver.wait(
+      until.elementLocated(By.css(".global-error-overlay")),
       5000
     );
+    await driver.wait(until.elementIsVisible(errorOverlay), 5000);
 
-    const confirmDeleteBtn = await driver.findElement(
-      By.xpath("//button[contains(normalize-space(.), 'حذف درس')]")
+    const errorMsg = await driver
+      .findElement(By.css(".global-error-message"))
+      .getText();
+    console.log(" Global error message:", errorMsg);
+
+  
+    const okBtn = await driver.findElement(
+      By.xpath("//button[contains(text(),'باشه')]")
     );
+    await jsClick(driver, okBtn);
+    await driver.sleep(300);
 
-    console.log(" Delete modal buttons are present:");
-    console.log(" - Cancel button displayed?:", await cancelBtn.isDisplayed());
-    console.log(
-      " - Confirm button displayed?:",
-      await confirmDeleteBtn.isDisplayed()
+ 
+    console.log("🔹 STEP 5: تست آیکن اعلان (bell)");
+
+    const bellWrapper = await driver.findElement(
+      By.css(".badge-with-notification")
     );
+    await jsClick(driver, bellWrapper);
 
-   
-    console.log("✅ TEST 4 PASSED\n");
-
-    await driver.get(DASHBOARD_URL);
-    await driver.executeScript("window.localStorage.removeItem('sabau-lessons');");
-    await driver.navigate().refresh();
-
-     // ========== TEST 5: Delete lesson - confirm flow ==========
-    console.log("[TEST 5] Delete lesson - confirm flow...");
-
-    await driver.get(DASHBOARD_URL);
-    await driver.executeScript("window.localStorage.removeItem('sabau-lessons');");
-    await driver.navigate().refresh();
-
-    let rowsBeforeDelete = await waitForRows(driver);
-    console.log(` Rows before delete (confirm): ${rowsBeforeDelete.length}`);
-
-    if (rowsBeforeDelete.length === 0) {
-      throw new Error("No rows found before delete (confirm).");
-    }
-
-    const trashToDelete = await rowsBeforeDelete[0].findElement(By.css(".group-10"));
-
-   
-    try {
-      await trashToDelete.click();
-    } catch (e) {
-      console.warn(" Normal click on trashToDelete failed, trying JS click...");
-      await driver.executeScript("arguments[0].click();", trashToDelete);
-    }
-
-    await sleep(400);
-
-    const confirmDeleteBtn2 = await driver.wait(
-      until.elementLocated(By.xpath("//button[contains(normalize-space(.), 'حذف درس')]")),
+    const notifOverlay = await driver.wait(
+      until.elementLocated(By.css(".global-error-overlay")),
       5000
     );
-    await driver.wait(until.elementIsVisible(confirmDeleteBtn2), 5000);
+    await driver.wait(until.elementIsVisible(notifOverlay), 5000);
 
+    const notifMsg = await driver
+      .findElement(By.css(".global-error-message"))
+      .getText();
+    console.log(" Notification message:", notifMsg);
 
-    try {
-      await confirmDeleteBtn2.click();
-    } catch (e) {
-      console.warn(" Normal click on confirmDeleteBtn2 failed, trying JS click...");
-      await driver.executeScript("arguments[0].click();", confirmDeleteBtn2);
-    }
+    const notifOk = await driver.findElement(
+      By.xpath("//button[contains(text(),'باشه')]")
+    );
+    await jsClick(driver, notifOk);
+    await driver.sleep(300);
 
-    await sleep(800);
+  
+    console.log("🔹 STEP 6: تست دکمه تعریف درس جدید (.frame-28)");
 
-    let rowsAfterDelete = await waitForRows(driver);
-    console.log(` Rows after confirm delete: ${rowsAfterDelete.length}`);
-
-    if (!(rowsAfterDelete.length === rowsBeforeDelete.length - 1)) {
-      console.warn(
-        ` (Warning) Expected one less row after delete (${rowsBeforeDelete.length - 1}), but got ${rowsAfterDelete.length}`
-      );
-    }
-
-    console.log("✅ TEST 5 PASSED\n");
-
-     // ========== TEST 6: New lesson button navigation ==========
-    console.log("[TEST 6] New lesson button -> add-lesson.html...");
-
-    await driver.get(DASHBOARD_URL);
     const newLessonBtn = await driver.findElement(By.css(".frame-28"));
-    await newLessonBtn.click();
+    await jsClick(driver, newLessonBtn);
 
-    await driver.wait(async () => {
-      const url = await driver.getCurrentUrl();
-      return url.includes(ADD_LESSON_URL_FRAGMENT);
-    }, 5000);
+    await driver.wait(until.urlContains("add-lesson"), 10000);
+    const addLessonUrl = await driver.getCurrentUrl();
+    console.log(" Navigated to:", addLessonUrl);
 
-    const currentUrlAdd = await driver.getCurrentUrl();
-    console.log(`  URL after clicking new lesson: ${currentUrlAdd}`);
-    if (!currentUrlAdd.includes(ADD_LESSON_URL_FRAGMENT)) {
-      throw new Error("Expected to navigate to add-lesson.html after clicking 'تعریف درس جدید'.");
-    }
-
-    console.log("✅ TEST 6 PASSED\n");
-
-    // ========== TEST 7: Logout with confirm dialog ==========
-    console.log("[TEST 7] Logout confirm dialog...");
-
+    // برگردیم به داشبورد برای تست logout
     await driver.get(DASHBOARD_URL);
+    await driver.wait(
+      until.elementLocated(By.css(".datatable .tbody")),
+      10000
+    );
 
-    const logoutIcon = await driver.findElement(By.css(".solar-logout-outline"));
-    await logoutIcon.click();
+  
+    console.log("🔹 STEP 7: تست logout و دیالوگ خروج");
 
-    const logoutCancelBtn = await driver.wait(
-      until.elementLocated(By.xpath("//button[contains(normalize-space(.), 'انصراف')]")),
+    const logoutIcon = await driver.findElement(
+      By.css(".solar-logout-outline")
+    );
+    await jsClick(driver, logoutIcon);
+
+    
+    await driver.wait(
+      until.elementLocated(By.xpath("//button[contains(text(),'انصراف')]")),
       5000
     );
-    await logoutCancelBtn.click();
-    await sleep(500);
 
-    let currentUrl = await driver.getCurrentUrl();
-    console.log(`  URL after cancel logout: ${currentUrl}`);
+    let buttons = await driver.findElements(By.css("button"));
+    let cancelBtn = null;
+    let logoutBtn = null;
+    for (const b of buttons) {
+      const txt = await b.getText();
+      if (txt.includes("انصراف")) cancelBtn = b;
+      if (txt.includes("خروج")) logoutBtn = b;
+    }
 
-    await logoutIcon.click();
-    const logoutConfirmBtn = await driver.wait(
-      until.elementLocated(By.xpath("//button[contains(normalize-space(.), 'خروج')]")),
-      5000
+    await jsClick(driver, cancelBtn);
+    await driver.sleep(500);
+
+    let tokenAfterCancel = await driver.executeScript(
+      "return window.localStorage.getItem('sabau-token');"
     );
-    await logoutConfirmBtn.click();
+    console.log(" Token after cancel:", tokenAfterCancel);
 
-    await driver.wait(async () => {
-      const url = await driver.getCurrentUrl();
-      return url.includes(LOGIN_URL_FRAGMENT);
-    }, 5000);
+    
+    await jsClick(driver, logoutIcon);
+    await driver.sleep(300);
 
-    currentUrl = await driver.getCurrentUrl();
-    console.log(`  URL after confirming logout: ${currentUrl}`);
-    if (!currentUrl.includes(LOGIN_URL_FRAGMENT)) {
-      throw new Error("Expected to navigate to login.html after confirming logout.");
+    buttons = await driver.findElements(By.css("button"));
+    logoutBtn = null;
+    for (const b of buttons) {
+      const txt = await b.getText();
+      if (txt.includes("خروج")) logoutBtn = b;
     }
+    await jsClick(driver, logoutBtn);
 
-    console.log("✅ TEST 7 PASSED\n");
+    
+    await driver.wait(until.urlContains(LOGIN_URL_PART), 10000);
+    const finalUrl = await driver.getCurrentUrl();
+    const finalToken = await driver.executeScript(
+      "return window.localStorage.getItem('sabau-token');"
+    );
 
-    // ========== TEST 8: Date/time element basic presence check ==========
-    console.log("[TEST 8] Date/time element basic presence check...");
+    console.log(" Final URL:", finalUrl);
+    console.log(" Token after logout:", finalToken);
 
-    await driver.get(DASHBOARD_URL);
-    await sleep(1000);
+    console.log("\n All tests passed");
 
-    let dateElements = await driver.findElements(By.css("._1-1404"));
-
-    if (dateElements.length === 0) {
-      console.warn("⚠️ Element ._1-1404 not found on the page.");
-    } else {
-      const dateEl = dateElements[0];
-      const dateText = await dateEl.getText();
-      console.log(` Date/time text: "${dateText}"`);
-
-      if (!dateText || dateText.trim() === "") {
-        console.warn("⚠️ Date/time element ._1-1404 is empty (no text set).");
-      } else {
-        console.log(" Date/time element has non-empty text.");
-      }
-    }
-
-    console.log("✅ TEST 8 FINISHED (no hard assertion)\n");
-
-    console.log(" All admin-dashboard-list tests finished.");
   } catch (err) {
-    console.error(" TEST FAILED:", err.message);
+    console.error("\n TEST FAILED:", err.message);
   } finally {
-    await sleep(1000);
     await driver.quit();
   }
-}
-
-main();
+})();

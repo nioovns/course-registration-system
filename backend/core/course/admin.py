@@ -5,9 +5,9 @@ from course.models.ClassSession import ClassSession
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
     # تغییر unit به units
-    list_display = ('name', 'code', 'units', 'capacity', 'professor')
+    list_display = ('name', 'code', 'unit', 'capacity', 'professor')
     search_fields = ('name', 'code')
-    list_filter = ('units',) #
+    list_filter = ('unit',) #
 
 @admin.register(ClassSession)
 class ClassSessionAdmin(admin.ModelAdmin):

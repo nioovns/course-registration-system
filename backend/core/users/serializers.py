@@ -10,7 +10,6 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def get_token(cls, user):
         token = super().get_token(user)
 
-        # اضافه کردن اطلاعات به توکن
         token['role'] = user.role
         token['username'] = user.username
 
@@ -26,7 +25,9 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         data.update({
             'role': self.user.role,
             'username': self.user.username,
-            'user_id': self.user.id
+            'user_id': self.user.id ,
+            'first_name': self.user.first_name,
+            'last_name': self.user.last_name,
         })
         return data
 

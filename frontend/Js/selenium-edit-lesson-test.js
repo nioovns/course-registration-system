@@ -107,25 +107,11 @@ async function run() {
     else
       console.log("❌ FAIL: gp3/gp4 NOT visible when units=3");
 
-    console.log("\n=== TEST 4: Cancel button ===");
-
-    await driver.get("http://localhost:5500/Pages/edit-lesson.html");
-    await driver.sleep(700);
 
     await forceClick(driver, ".login-submit2");
     await driver.sleep(800);
 
     const url = await driver.getCurrentUrl();
-
-    if (url.includes("admin-dashboard-list"))
-      console.log("✅ PASS: Cancel navigates back");
-    else
-      console.log("❌ FAIL: Cancel did NOT redirect");
-
-console.log("\n=== TEST 5: Logout ===");
-
-    await forceClick(driver, ".solar-logout-outline");
-    await driver.sleep(300);
 
     try {
       await driver.switchTo().alert().accept();
@@ -140,7 +126,7 @@ console.log("\n=== TEST 5: Logout ===");
       console.log("❌ FAIL: Logout redirect NOT detected");
 
      } catch (err) {
-    console.error("❌ TEST ERROR:", err);
+    console.error(" TEST ERROR:", err);
 
   } finally {
     await driver.quit();

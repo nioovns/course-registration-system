@@ -140,7 +140,7 @@ async function runTests() {
     await driver.get(BASE_URL);
     await driver.manage().setTimeouts({ implicit: 3000 });
 
-    // ---------- TEST 1: Page basic elements ----------
+    
     console.log("\n[TEST 1] Page loads and base elements exist...");
 
     const saveBtn = await driver.findElement(By.css(".group-98 .login-submit"));
@@ -161,7 +161,7 @@ async function runTests() {
     }
     console.log("✅ TEST 1 PASSED");
 
-    // ---------- TEST 2: Placeholder & search non-editable ----------
+    
     console.log("\n[TEST 2] Placeholder behavior & search field read-only...");
 
     const searchEl = await driver.findElement(By.css(".th4 .search"));
@@ -186,7 +186,7 @@ async function runTests() {
 
     console.log("✅ TEST 2 PASSED");
 
-    // ---------- TEST 3: Units dropdown shows/hides gp1..gp4 correctly ----------
+    
     console.log("\n[TEST 3] Units dropdown shows/hides gp1..gp4 correctly...");
 
     const gp1Wrapper = await driver.findElement(By.css(".group-102 .gp1"));

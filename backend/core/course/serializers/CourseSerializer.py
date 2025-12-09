@@ -35,14 +35,21 @@ class CourseSerializer(serializers.ModelSerializer):
     def validate_professor(self, value):
         if not value:
             return getattr(self.instance, 'professor', None)
-        name = value.strip()
-        try:
-            user = User.objects.get(username=name)
-        except User.DoesNotExist:
-            raise serializers.ValidationError("No professor found with this name.")
-        if user.role != User.Roles.PROFESSOR:
-            raise serializers.ValidationError("The professor must have the role of 'Professor'.")
-        return user
+
+        normalized_input = self.normalize_name(value)
+
+        professors = User.objects.filter(role=User.Roles.PROFESSOR)
+
+        for professor in professors:
+            full_name = f"{professor.first_name}{professor.last_name}"
+            if self.normalize_name(full_name) == normalized_input:
+                return professor
+
+        raise serializers.ValidationError("No professor found with this name.")
+    
+    @staticmethod
+    def normalize_name(value: str) -> str:
+        return value.replace(" ", "").strip()
 
     def validate_code(self, value):
         qs = Course.objects.all()
@@ -63,6 +70,11 @@ class CourseSerializer(serializers.ModelSerializer):
 
         if sessions_data is not None:
             self.validate_units_vs_sessions(units, sessions_data)
+            
+            current_session_ids = set()
+            if self.instance:
+                current_session_ids = set(self.instance.sessions.values_list('id', flat=True))
+            
             for session_data in sessions_data:
                 exists = ClassSession.objects.filter(
                     day=session_data['day'],
@@ -72,7 +84,7 @@ class CourseSerializer(serializers.ModelSerializer):
                     room=session_data['room']
                 )
                 if self.instance:
-                    exists = exists.exclude(courses=self.instance)
+                    exists = exists.exclude(id__in=current_session_ids)
                 if exists.exists():
                     raise serializers.ValidationError(
                         f"A session with the same time, day, faculty and room already exists."
@@ -100,13 +112,11 @@ class CourseSerializer(serializers.ModelSerializer):
         instance.save()
 
         if sessions_data is not None:
-            instance.sessions.clear()
+            instance.sessions.all().delete() 
+
             new_sessions = []
             for s in sessions_data:
-                if 'id' in s and s['id']:
-                    obj = ClassSession.objects.get(id=s['id'])
-                else:
-                    obj = ClassSession.objects.create(**s)
+                obj = ClassSession.objects.create(**s)
                 new_sessions.append(obj)
             instance.sessions.set(new_sessions)
 
@@ -120,6 +130,13 @@ class CourseSerializer(serializers.ModelSerializer):
         representation['sessions'] = ClassSessionSerializer(
             instance.sessions.all(), many=True
         ).data
+
+        if instance.professor:
+            professor = instance.professor
+            representation['professor'] = f"{professor.first_name} {professor.last_name} (Professor)"
+        else:
+            representation['professor'] = None
+
         return representation
 
     def validate_units_vs_sessions(self, units, sessions_data):
@@ -131,3 +148,4 @@ class CourseSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 "Courses with 2 or fewer units must have exactly 1 session."
             )
+            

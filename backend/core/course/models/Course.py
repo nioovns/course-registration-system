@@ -27,9 +27,8 @@ class Course(models.Model):
         related_name="required_for"
     )
 
-    #  برای حل ارور RuntimeError
     class Meta:
-        app_label = 'course'  # نام اپلیکیشن
+        app_label = 'course' 
         verbose_name = 'Course'
         verbose_name_plural = 'Courses'
 

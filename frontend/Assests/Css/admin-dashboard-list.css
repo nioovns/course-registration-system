@@ -933,16 +933,16 @@ body {
   overflow: visible;
 }
 .sidenav-link {
+ border-radius: 5px;
+  padding:  6.4px 24px;
   display: flex;
   flex-direction: row;
-  align-items: center;
   gap: 16px;
-  border-radius: 5px;
-  padding: 6.4px 24px;
+  align-items: center;
+  justify-content: flex-start;
+  flex-shrink: 0;
   width: 262px;
-  cursor: pointer;
-  position: absolute;
-  background-color: transparent;
+  position: relative;
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 .sidenav-link.active {
@@ -1017,7 +1017,7 @@ body {
 .sidenav-link2 {
   border-radius: 5px;
   padding:  6.4px 24px;
-  margin-top: 55px;
+  margin-top: 3px;
   display: flex;
   flex-direction: row;
   gap: 16px;

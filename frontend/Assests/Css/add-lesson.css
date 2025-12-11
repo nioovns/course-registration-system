@@ -820,6 +820,7 @@ body {
   line-height: 160%;
   font-weight: 500;
   position: relative;
+  cursor: pointer;
   flex: 1;
 }
 .p-name{

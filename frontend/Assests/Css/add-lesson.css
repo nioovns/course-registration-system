@@ -529,7 +529,7 @@ body {
   top: 0.89%;
   cursor: pointer;
 }
-.frame-28.active{
+.frame-28:active{
   background: #E6CD00;
   border-radius: 10px;
   width: 24%;

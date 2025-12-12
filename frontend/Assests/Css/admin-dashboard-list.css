@@ -138,6 +138,7 @@ body {
   font-weight: 500;
   left:10px;
   position: relative;
+  
 }
 .unit{
   color: var(--datatable-text-color, #212529);
@@ -165,6 +166,18 @@ body {
   font-weight: 500;
   left:25px;
   position: relative;
+  white-space: nowrap;
+}
+.place-pre{
+  color: var(--datatable-text-color, #212529);
+  text-align: right;
+  font-size: 14.399999618530273px;
+  line-height: 160%;
+  font-weight: 500;
+  left:25px;
+  position: relative;
+  white-space: nowrap;
+  left:55px;
 }
 .operation{
   color: var(--datatable-text-color, #212529);
@@ -183,6 +196,7 @@ body {
   font-weight: 500;
   left:10px;
   position: relative;
+  white-space: nowrap;
 }
 .Lesson-name{
   color: var(--datatable-text-color, #212529);
@@ -190,8 +204,9 @@ body {
   font-size: 14.399999618530273px;
   line-height: 160%;
   font-weight: 500;
-  left:5px;
+  left:-3px;
   position: relative;
+  white-space: nowrap;
 }
 
 .tbody {
@@ -249,6 +264,7 @@ body {
   flex: 1;
   height: 55px;
   position: relative;
+  
 }
 ._200 {
   color: var(--datatable-text-color, #212529);
@@ -263,6 +279,7 @@ body {
   font-weight: var(--datatable-body-font-font-weight, 300);
   position: relative;
   white-space: pre-line;
+  left:140px;
 }
 ._16-14-16-14 {
   color: var(--datatable-text-color, #212529);
@@ -276,6 +293,7 @@ body {
   line-height: var(--datatable-body-font-line-height, 160%);
   font-weight: var(--datatable-body-font-font-weight, 300);
   position: relative;
+  left:95px;
 }
 .div3 {
   color: var(--datatable-text-color, #212529);
@@ -303,6 +321,7 @@ body {
   line-height: var(--datatable-body-font-line-height, 160%);
   font-weight: var(--datatable-body-font-font-weight, 300);
   position: relative;
+  left:35px;
 }
 ._45789 {
   color: #212529;
@@ -316,6 +335,7 @@ body {
   line-height: var(--datatable-body-font-line-height, 160%);
   font-weight: var(--datatable-body-font-font-weight, 300);
   position: relative;
+  left:25px;
 }
 ._1 {
   color: var(--datatable-text-color, #212529);
@@ -987,6 +1007,7 @@ body {
   line-height: 160%;
   font-weight: 300 !important;
   position: relative;
+  left:60px;
 }
 
 ._1 {

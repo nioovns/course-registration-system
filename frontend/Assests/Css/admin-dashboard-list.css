@@ -777,6 +777,7 @@ body {
   font-weight: 500;
   position: relative;
   flex: 1;
+  cursor: pointer;
 }
 .group-16 {
   position: absolute;
@@ -1130,5 +1131,6 @@ body {
   font-weight: 500;
   position: relative;
   flex: 1;
+  cursor: pointer;
 }
 

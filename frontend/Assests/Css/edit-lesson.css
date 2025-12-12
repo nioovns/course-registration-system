@@ -1918,3 +1918,23 @@ body {
   top: 41.18%;
   overflow: visible;
 }
+.hugeicons-multiplication-sign {
+  width: 22%;
+  height: 22px;
+  position: absolute;
+  right: 64.89%;
+  left: 9.57%;
+  top: 14px;
+  overflow: hidden;
+  aspect-ratio: 1;
+}
+.bitcoin-icons-minus-filled {
+  width: 15px;
+  height: 15px;
+  position: absolute;
+  left: 3px;
+  top: 5px;
+  overflow: visible;
+  aspect-ratio: 1;
+  cursor: pointer;
+}

@@ -1095,6 +1095,9 @@ body {
   align-items: flex-end;
   justify-content: center;
 }
+.div:hover{
+  color: var(--backgrounds-primary, #ffffff);
+}
 .login-submit2 {
   background: #fbfbfb;
   border-radius: 20px;

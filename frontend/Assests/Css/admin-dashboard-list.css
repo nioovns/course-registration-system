@@ -727,15 +727,16 @@ body {
   line-height: 160%;
   font-weight: 500;
   position: absolute;
-  left: 39px;
-  top: 140px;
+  left: 45px;
+  top: 165px;
   width: 200px;
 }
 .group-97 {
-  height: auto;
+  height: 150px;
+  width: 150px;
   position: absolute;
-  left: 89px;
-  top: 41px;
+  left:65px;
+  top: 20px;
   overflow: visible;
 }
 .sidenav-menu {

@@ -17,6 +17,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
             if self.user.is_student and hasattr(self.user, 'student'):
                 data['profile_id'] = self.user.student.id
                 data['student_id'] = self.user.student.student_id
+                data['entry_year'] = self.user.student.entry_year
                 data['full_name'] = f"{self.user.student.first_name} {self.user.student.last_name}"
 
             elif self.user.is_professor and hasattr(self.user, 'professor'):

@@ -33,7 +33,7 @@ class CustomUserAdmin(BaseUserAdmin):
 
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
-    list_display = ('student_id', 'first_name', 'last_name', 'user')
+    list_display = ('student_id', 'first_name', 'last_name', 'entry_year', 'user')
 
 
 @admin.register(Professor)

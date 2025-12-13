@@ -38,6 +38,7 @@ class Student(models.Model):
         unique=True,
         verbose_name=_("Student ID")
     )
+    entry_year = models.IntegerField(verbose_name=_("Entry Year"), null=True, blank=True)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     entry_year = models.IntegerField(null=True, blank=True)

@@ -56,12 +56,19 @@ class CourseSerializer(serializers.ModelSerializer):
         if self.instance:
             qs = qs.exclude(id=self.instance.id)
         if qs.filter(code=value).exists():
-            raise serializers.ValidationError("Course code must be unique")
+            raise serializers.ValidationError("کد درس نباید تکراری باشد")
+        
+        if not value.isdigit():
+            raise serializers.ValidationError("کد درس باید فقط شامل اعداد باشد")
+
+        if len(value) != 6:
+            raise serializers.ValidationError("کد درس باید دقیقا 6 رقم داشته باشد.")
+        
         return value
 
     def validate_capacity(self, value):
-        if value < 0:
-            raise serializers.ValidationError("Ensure this value is greater than or equal to 0.")
+        if value < 0 or value > 60:
+            raise serializers.ValidationError("ظرفیت درس باید بزرگتر یا مساوی صفر و کمتر از 60 باشد")
         return value
 
     def validate(self, attrs):

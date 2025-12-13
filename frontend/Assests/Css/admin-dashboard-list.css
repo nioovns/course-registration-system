@@ -138,6 +138,7 @@ body {
   font-weight: 500;
   left:10px;
   position: relative;
+  
 }
 .unit{
   color: var(--datatable-text-color, #212529);
@@ -165,6 +166,18 @@ body {
   font-weight: 500;
   left:25px;
   position: relative;
+  white-space: nowrap;
+}
+.place-pre{
+  color: var(--datatable-text-color, #212529);
+  text-align: right;
+  font-size: 14.399999618530273px;
+  line-height: 160%;
+  font-weight: 500;
+  left:25px;
+  position: relative;
+  white-space: nowrap;
+  left:55px;
 }
 .operation{
   color: var(--datatable-text-color, #212529);
@@ -183,6 +196,7 @@ body {
   font-weight: 500;
   left:10px;
   position: relative;
+  white-space: nowrap;
 }
 .Lesson-name{
   color: var(--datatable-text-color, #212529);
@@ -190,8 +204,9 @@ body {
   font-size: 14.399999618530273px;
   line-height: 160%;
   font-weight: 500;
-  left:5px;
+  left:-3px;
   position: relative;
+  white-space: nowrap;
 }
 
 .tbody {
@@ -249,6 +264,7 @@ body {
   flex: 1;
   height: 55px;
   position: relative;
+  
 }
 ._200 {
   color: var(--datatable-text-color, #212529);
@@ -263,6 +279,7 @@ body {
   font-weight: var(--datatable-body-font-font-weight, 300);
   position: relative;
   white-space: pre-line;
+  left:140px;
 }
 ._16-14-16-14 {
   color: var(--datatable-text-color, #212529);
@@ -276,6 +293,7 @@ body {
   line-height: var(--datatable-body-font-line-height, 160%);
   font-weight: var(--datatable-body-font-font-weight, 300);
   position: relative;
+  left:95px;
 }
 .div3 {
   color: var(--datatable-text-color, #212529);
@@ -303,6 +321,7 @@ body {
   line-height: var(--datatable-body-font-line-height, 160%);
   font-weight: var(--datatable-body-font-font-weight, 300);
   position: relative;
+  left:35px;
 }
 ._45789 {
   color: #212529;
@@ -316,6 +335,7 @@ body {
   line-height: var(--datatable-body-font-line-height, 160%);
   font-weight: var(--datatable-body-font-font-weight, 300);
   position: relative;
+  left:25px;
 }
 ._1 {
   color: var(--datatable-text-color, #212529);
@@ -707,15 +727,16 @@ body {
   line-height: 160%;
   font-weight: 500;
   position: absolute;
-  left: 39px;
-  top: 140px;
+  left: 45px;
+  top: 165px;
   width: 200px;
 }
 .group-97 {
-  height: auto;
+  height: 150px;
+  width: 150px;
   position: absolute;
-  left: 89px;
-  top: 41px;
+  left:65px;
+  top: 20px;
   overflow: visible;
 }
 .sidenav-menu {
@@ -738,20 +759,7 @@ body {
   position: static;
   
 }
-.sidenav-link {
-  border-radius: 5px;
-  padding: 6.4px 24px 6.4px 24px;
-  display: flex;
-  flex-direction: row;
-  gap: 16px;
-  align-items: center;
-  justify-content: flex-start;
-  width: 262px;
-  position: absolute;
-  left: 8px;
-  top: 0px;
-  cursor: pointer;
-}
+
 
 .material-symbols-folder-managed {
   flex-shrink: 0;
@@ -770,6 +778,7 @@ body {
   font-weight: 500;
   position: relative;
   flex: 1;
+  cursor: pointer;
 }
 .group-16 {
   position: absolute;
@@ -946,25 +955,18 @@ body {
   overflow: visible;
 }
 .sidenav-link {
+ border-radius: 5px;
+  padding:  6.4px 24px;
   display: flex;
   flex-direction: row;
-  align-items: center;
   gap: 16px;
-
-  border-radius: 5px;
-  padding: 6.4px 24px;
+  align-items: center;
+  justify-content: flex-start;
+  flex-shrink: 0;
   width: 262px;
-
-  cursor: pointer;
-  position: absolute;
-  right: 8px; 
-  top: 0.5px; 
-
-  background-color: transparent;
+  position: relative;
   transition: background-color 0.2s ease, color 0.2s ease;
 }
-
-
 .sidenav-link.active {
   background-color: #E6CD00;
   color: #000;
@@ -1007,6 +1009,7 @@ body {
   line-height: 160%;
   font-weight: 300 !important;
   position: relative;
+  left:60px;
 }
 
 ._1 {
@@ -1034,5 +1037,101 @@ body {
 }
 
 
+.sidenav-link2 {
+  border-radius: 5px;
+  padding:  6.4px 24px;
+  margin-top: 3px;
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: center;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  width: 262px;
+  position: relative;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
 
+.sidenav-link2:hover {
+  background-color: #E6CD00; 
+  color: #000;
+}
+
+
+.subway-book {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  position: relative;
+  overflow: visible;
+  cursor: pointer;
+  aspect-ratio: 1;
+  transition: transform 0.15s ease;
+}
+.div-prerequisite {
+  color: #4f4f4f;
+  text-align: right;
+  font-family: "Dana-Regular", sans-serif;
+  font-size: 20px;
+  line-height: 160%;
+  font-weight: 500;
+  
+  position: relative;
+  cursor: pointer;
+  flex: 1;
+}
+
+.sidenav-link2:hover {
+  background-color: #E6CD00;
+  color: #000;
+ 
+}
+
+.subway-book:hover {
+  transform: scale(1.05);
+}
+.sidenav-link.active,
+.sidenav-link2.active {
+  background-color: #E6CD00;
+  color: #000;
+}
+
+.sidenav-link3 {
+  border-radius: 5px;
+  padding:  6.4px 24px;
+  margin-top: 0.5px;
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: center;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  width: 262px;
+  position: relative;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.sidenav-link3:hover {
+  background-color: #E6CD00; 
+  color: #000;
+}
+.unit-management-img {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  position: relative;
+  overflow: visible;
+  aspect-ratio: 1;
+}
+.unit-management-div {
+  color: #4f4f4f;
+  text-align: right;
+  font-family: "Dana-Regular", sans-serif;
+  font-size: 20px;
+  line-height: 160%;
+  font-weight: 500;
+  position: relative;
+  flex: 1;
+  cursor: pointer;
+}
 

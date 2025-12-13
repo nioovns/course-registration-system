@@ -529,7 +529,7 @@ body {
   top: 0.89%;
   cursor: pointer;
 }
-.frame-28.active{
+.frame-28:active{
   background: #E6CD00;
   border-radius: 10px;
   width: 24%;
@@ -820,6 +820,7 @@ body {
   line-height: 160%;
   font-weight: 500;
   position: relative;
+  cursor: pointer;
   flex: 1;
 }
 .p-name{
@@ -1056,7 +1057,7 @@ body {
   right: 49.42%;
   left: 34.61%;
   bottom: 0.83%;
-  top: 75.37%;
+  top: 95.37%;
   box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.3);
   overflow: hidden;
 }
@@ -1077,7 +1078,7 @@ body {
   right: 49.42%;
   left: 34.61%;
   bottom: 0.83%;
-  top: 70.54%;
+  top: 95.37%;
   box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.3);
   overflow: hidden;
 }
@@ -1093,6 +1094,9 @@ body {
   display: flex;
   align-items: flex-end;
   justify-content: center;
+}
+.div:hover{
+  color: var(--backgrounds-primary, #ffffff);
 }
 .login-submit2 {
   background: #fbfbfb;
@@ -1111,7 +1115,7 @@ body {
   right: 27.97%;
   left: 51.07%;
   bottom: 0%;
-  top: 75.37%;
+  top: 95.37%;
   box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.3);
   overflow: hidden;
 }
@@ -1132,7 +1136,7 @@ body {
   right: 27.97%;
   left: 51.07%;
   bottom: 0%;
-  top: 71.37%;
+  top: 95.37%;
   box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.3);
   overflow: hidden;
 }
@@ -1869,4 +1873,161 @@ body {
     min-height: 49px !important;
     display: flex;
     align-items: center;
+}
+
+.group-69,
+.group-69 * {
+  box-sizing: border-box;
+}
+.group-69 {
+  width: 119px;
+  height: 88px;
+  position: relative;
+  left:105%;
+  bottom: 50%;
+}
+.div-pre {
+  text-align: right;
+  font-family: "Dana-Medium", sans-serif;
+  font-size: 14.399999618530273px;
+  line-height: 160%;
+  font-weight: 500;
+  position: absolute;
+  right: 1.68%;
+  left: 0%;
+  width: 98.32%;
+  bottom: 67.05%;
+  top: 0%;
+  height: 32.95%;
+}
+.div-span {
+  color: #4f4f4f;
+}
+.div-span2 {
+  color: #cc3333;
+}
+.frame-pre {
+  background: #fbfbfb;
+  border-radius: 8px;
+  border-style: solid;
+  border-color: #4f4f4f;
+  border-width: 1px;
+  padding: 13px 0px 13px 0px;
+  width: 78.99%;
+  height: 57.95%;
+  position: absolute;
+  right: 0%;
+  left: 21.01%;
+  bottom: 0%;
+  top: 42.05%;
+  overflow: hidden;
+}
+._3-pre {
+  color: #4f4f4f;
+  text-align: right;
+  font-family: "Dana-Medium", sans-serif;
+  font-size: 14.399999618530273px;
+  line-height: 160%;
+  font-weight: 500;
+  position: absolute;
+  right: 47.63%;
+  left: 9.09%;
+  width: 43.27%;
+  bottom: 15.05%;
+  top: 27.45%;
+  height: 57.5%;
+}
+.icon {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  width: 18.18%;
+  height: 19.61%;
+  position: absolute;
+  right: 11.04%;
+  left: 70.77%;
+  bottom: 39.22%;
+  top: 41.18%;
+  overflow: visible;
+}
+
+.group-70,
+.group-70 * {
+  box-sizing: border-box;
+}
+.group-70 {
+  width: 126px;
+  height: 88px;
+  position: relative;
+  left:89.5%;
+  bottom:  143%;
+}
+.div-my-pre {
+  text-align: right;
+  font-family: "Dana-Medium", sans-serif;
+  font-size: 14.399999618530273px;
+  line-height: 160%;
+  font-weight: 500;
+  position: absolute;
+  right: 1.59%;
+  left: 0%;
+  width: 98.41%;
+  bottom: 67.05%;
+  top: 0%;
+  height: 32.95%;
+}
+.div-span-pr {
+  color: #4f4f4f;
+}
+.div-span2-pr {
+  color: #cc3333;
+}
+.frame-3-pr {
+  background: #fbfbfb;
+  border-radius: 8px;
+  border-style: solid;
+  border-color: #4f4f4f;
+  border-width: 1px;
+  padding: 13px 0px 13px 0px;
+  width: 91.27%;
+  height: 57.95%;
+  position: absolute;
+  right: 0%;
+  left: 8.73%;
+  bottom: 0%;
+  top: 42.05%;
+  overflow: hidden;
+}
+._1-pr {
+  color: #6d747a;
+  text-align: center;
+  font-family: "Dana-Medium", sans-serif;
+  font-size: 14.399999618530273px;
+  line-height: 160%;
+  font-weight: 500;
+  position: absolute;
+  right: 32.85%;
+  left: 23.87%;
+  width: 43.27%;
+  bottom: 15.05%;
+  top: 27.45%;
+  height: 57.5%;
+  white-space: nowrap;
+}
+.icon {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  width: 18.18%;
+  height: 19.61%;
+  position: absolute;
+  right: 5.93%;
+  left: 75.89%;
+  bottom: 39.22%;
+  top: 41.18%;
+  overflow: visible;
 }

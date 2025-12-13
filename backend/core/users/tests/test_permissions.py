@@ -2,9 +2,8 @@ from django.contrib.auth import get_user_model
 from django.urls import reverse
 from rest_framework.test import APITestCase
 from rest_framework import status
-# ایمپورت کردن مدل‌های پروفایل
-from .models import Student, Professor
-
+from users.models import Student, Professor
+from ..models import Student, Professor
 User = get_user_model()
 
 class RolePermissionTests(APITestCase):

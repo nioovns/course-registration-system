@@ -62,7 +62,7 @@ class CourseSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("کد درس باید فقط شامل اعداد باشد")
 
         if len(value) != 6:
-            raise serializers.ValidationError("کد درس باید دقیقا 6 رقم داشته باشد")
+            raise serializers.ValidationError("کد درس باید دقیقا 6 رقم داشته باشد.")
         
         return value
 

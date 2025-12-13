@@ -44,7 +44,6 @@ class RolePermissionTests(APITestCase):
         self.client.force_authenticate(user=self.student_user)
         response = self.client.get(self.student_url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        # چک کنیم که واقعا پیام ولکام دانشجو رو میده
         self.assertIn("Welcome", response.data['message'])
 
     def test_professor_can_access_professor_dashboard(self):

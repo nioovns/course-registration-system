@@ -67,8 +67,8 @@ class CourseSerializer(serializers.ModelSerializer):
         return value
 
     def validate_capacity(self, value):
-        if value < 0:
-            raise serializers.ValidationError("Ensure this value is greater than or equal to 0.")
+        if value < 0 or value > 60:
+            raise serializers.ValidationError("ظرفیت درس باید بزرگتر یا مساوی صفر و کمتر از 60 باشد")
         return value
 
     def validate(self, attrs):

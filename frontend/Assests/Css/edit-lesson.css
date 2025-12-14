@@ -1979,11 +1979,11 @@ body {
   border-color: #4f4f4f;
   border-width: 1px;
   padding: 13px 0px 13px 0px;
-  width: 400.27%;
+  width: 386.27%;
   height: 59.95%;
   position: absolute;
   right: 0%;
-  left: -300.73%;
+  left: -283.73%;
   bottom: 0%;
   top: 40.9%;
   overflow: hidden;
@@ -2014,7 +2014,22 @@ body {
   height: 19.61%;
   position: absolute;
   right: 5.93%;
-  left: 75.89%;
+  left: 65.89%;
+  bottom: 39.22%;
+  top: 41.18%;
+  overflow: visible;
+}
+.icon-pre {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  width: 18.18%;
+  height: 19.61%;
+  position: absolute;
+  right: 5.93%;
+  left: 85.89%;
   bottom: 39.22%;
   top: 41.18%;
   overflow: visible;
@@ -2033,7 +2048,7 @@ body {
   width: 10px;
   height: 10px;
   position: absolute;
-  left: 0px;
+  left: -2px;
   top: 7.2px;
   overflow: visible;
   aspect-ratio: 1;

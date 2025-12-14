@@ -1,9 +1,9 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from .models import Student  # <--- مدل Student را حتما ایمپورت کنید
 
 User = get_user_model()
-
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
@@ -39,3 +39,12 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'email', 'role']
+
+
+class StudentListSerializer(serializers.ModelSerializer):
+    username = serializers.ReadOnlyField(source='user.username')
+    email = serializers.ReadOnlyField(source='user.email')
+
+    class Meta:
+        model = Student
+        fields = ['id', 'first_name', 'last_name', 'student_id', 'entry_year', 'username', 'email']

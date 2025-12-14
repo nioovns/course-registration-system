@@ -1950,9 +1950,9 @@ body {
   left:89.5%;
   bottom:  143%;
 }
-.div-my-pre {
+pre {
   text-align: right;
-  font-family: "Dana-Medium", sans-serif;
+  .div-my-font-family: "Dana-Medium", sans-serif;
   font-size: 14.399999618530273px;
   line-height: 160%;
   font-weight: 500;

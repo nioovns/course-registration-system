@@ -1969,10 +1969,10 @@ body {
   font-weight: 500;
   position: absolute;
   right: 1.59%;
-  left: 0%;
+  left: 110%;
   width: 98.41%;
   bottom: 67.05%;
-  top: 0%;
+  top: 85%;
   height: 32.95%;
 }
 .div-span-pr {
@@ -1988,13 +1988,13 @@ body {
   border-color: #4f4f4f;
   border-width: 1px;
   padding: 13px 0px 13px 0px;
-  width: 91.27%;
-  height: 57.95%;
+  width: 386.27%;
+  height: 59.95%;
   position: absolute;
   right: 0%;
-  left: 8.73%;
+  left: -176.73%;
   bottom: 0%;
-  top: 42.05%;
+  top: 120.9%;
   overflow: hidden;
 }
 ._1-pr {
@@ -2013,6 +2013,57 @@ body {
   height: 57.5%;
   white-space: nowrap;
 }
+.icon {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  width: 18.18%;
+  height: 19.61%;
+  position: absolute;
+  right: 5.93%;
+  left: 65.89%;
+  bottom: 39.22%;
+  top: 41.18%;
+  overflow: visible;
+}
+.icon-pre {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  width: 18.18%;
+  height: 19.61%;
+  position: absolute;
+  right: 5.93%;
+  left: 85.89%;
+  bottom: 39.22%;
+  top: 41.18%;
+  overflow: visible;
+}
+.hugeicons-multiplication-sign1 {
+  width: 22%;
+  height: 22px;
+  position: absolute;
+  right: 64.89%;
+  left: 9.57%;
+  top: 14px;
+  overflow: hidden;
+  aspect-ratio: 1;
+}
+.bitcoin-icons-minus-filled1 {
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  left: -2px;
+  top: 7.2px;
+  overflow: visible;
+  aspect-ratio: 1;
+  cursor: pointer;
+}
+
 .icon {
   display: flex;
   flex-direction: column;

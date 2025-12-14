@@ -740,10 +740,11 @@ body {
   width: 200px;
 }
 .group-97 {
-  height: auto;
+  height: 150px;
+  width: 150px;
   position: absolute;
-  left: 89px;
-  top: 41px;
+  left: 65px;
+  top: 20px;
   overflow: visible;
 }
 .sidenav-menu {
@@ -1431,18 +1432,15 @@ body {
   height: 12.24%;
 }
 .manager{
-  text-align: right;
-  font-family: "Dana-Regular", sans-serif;
-  font-size: 18.399999618530273px;
+  color: #505d73;
+  text-align: center;
+  font-size: 25px;
   line-height: 160%;
   font-weight: 500;
   position: absolute;
-  right: 40.47%;
-  left: 44.73%;
-  width: 9.81%;
-  bottom: 100%;
-  top: 100.66%;
-  height: 12.24%;
+  left: 45px;
+  top: 165px;
+  width: 200px;
 
 }
 .div-6-span {

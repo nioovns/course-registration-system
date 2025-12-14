@@ -2128,3 +2128,15 @@ body {
   flex: 1;
   cursor: pointer;
 }
+.pr-chip{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:4px 10px;
+  border-radius:14px;
+  background:#f2f2f2;
+  margin:2px 4px;
+  font-size:12px;
+}
+.pr-chip-x{ display:none; } 
+.pr-placeholder{ opacity:0.6; }

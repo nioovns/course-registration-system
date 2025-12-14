@@ -768,18 +768,17 @@ body {
   
 }
 .sidenav-link {
-  border-radius: 5px;
-  padding: 6.4px 24px 6.4px 24px;
+ border-radius: 5px;
+  padding:  6.4px 24px;
   display: flex;
   flex-direction: row;
   gap: 16px;
   align-items: center;
   justify-content: flex-start;
+  flex-shrink: 0;
   width: 262px;
-  position: absolute;
-  left: 8px;
-  top: 0px;
-  cursor: pointer;
+  position: relative;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .material-symbols-folder-managed {
@@ -1734,6 +1733,7 @@ body {
 .sidenav-link:hover {
   background-color: #E6CD00;
   color: #000;
+
 }
 
 .material-symbols-folder-managed {
@@ -2074,4 +2074,53 @@ body {
 
 .pr-placeholder {
   opacity: 0.6;
+}
+.sidenav-link3 {
+  border-radius: 5px;
+  padding:  6.4px 24px;
+  margin-top: 0.5px;
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: center;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  top:2px;
+  width: 262px;
+  position: relative;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.sidenav-link3:hover {
+  background-color: #E6CD00; 
+  color: #000;
+}
+.unit-management-img {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  position: relative;
+  overflow: visible;
+  aspect-ratio: 1;
+}
+.unit-management-div {
+  color: #4f4f4f;
+  text-align: right;
+  font-family: "Dana-Regular", sans-serif;
+  font-size: 20px;
+  line-height: 160%;
+  font-weight: 500;
+  position: relative;
+  flex: 1;
+  cursor: pointer;
+}
+.div7 {
+  color: #4f4f4f;
+  text-align: right;
+  font-size: 20px;
+  line-height: 160%;
+  font-weight: 500;
+  position: relative;
+  flex: 1;
+  cursor: pointer;
 }

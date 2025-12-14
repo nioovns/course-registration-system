@@ -848,6 +848,24 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
+  function bindPrereqClearAllButton() {
+  const clearBtn = document.querySelector(".frame-3-pr .bitcoin-icons-minus-filled1");
+  if (!clearBtn) return;
+
+  clearBtn.style.cursor = "pointer";
+  clearBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation(); 
+
+    selectedPrereqIds = [];
+    renderSelectedPrereqs();
+  });
+}
+
+
+
+
+
   
 
   let selectedPrereqIds = [];
@@ -879,6 +897,10 @@ function renderSelectedPrereqs() {
     });
   });
 }
+
+
+
+
 
 function addPrereq(id) {
   if (!selectedPrereqIds.includes(id)) {
@@ -1232,8 +1254,10 @@ function attachPrereqDropdown() {
 
    loadChoicesFromBackend();
    loadPrereqCourses();
-  attachPrereqDropdown();
+   attachPrereqDropdown();
    loadCourseFromServer();
+   bindPrereqClearAllButton();
+
 });
 
 

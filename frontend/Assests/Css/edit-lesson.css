@@ -1979,13 +1979,13 @@ body {
   border-color: #4f4f4f;
   border-width: 1px;
   padding: 13px 0px 13px 0px;
-  width: 91.27%;
-  height: 57.95%;
+  width: 400.27%;
+  height: 59.95%;
   position: absolute;
   right: 0%;
-  left: 8.73%;
+  left: -300.73%;
   bottom: 0%;
-  top: 42.05%;
+  top: 40.9%;
   overflow: hidden;
 }
 ._1-pr {
@@ -2038,4 +2038,27 @@ body {
   overflow: visible;
   aspect-ratio: 1;
   cursor: pointer;
+}
+
+.pr-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  background: #f2f2f2;
+  margin: 3px;
+  font-size: 12px;
+}
+
+.pr-chip-x {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.pr-placeholder {
+  opacity: 0.6;
 }

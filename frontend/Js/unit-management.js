@@ -1,31 +1,25 @@
 document.addEventListener("DOMContentLoaded", () => {
-  
-  const tbody = document.querySelector(".datatable .tbody");
-  const datatable = document.querySelector(".datatable");
-  const tableEl = document.querySelector(".datatable .table");
-  const newLessonBtn = document.querySelector(".frame-28");
-  const lessonManagementBtn = document.querySelector(".sidenav-link");
-  const unitManagementBtn = document.querySelector(".sidenav-link3");
-  
+  const API_URL = "http://127.0.0.1:8000/api/enrollment-settings/";
+  const TOKEN_KEY = "sabau-token";
 
-  const pageIndicatorEl = document.querySelector(".table-footer .one"); 
-  const pageInfoEl = document.querySelector(".table-footer ._1-10-of-14");
-  const pageSelectContainer = document.querySelector(".table-footer .select");
-  const prevBtn = document.querySelector(".table-footer .frame-2");
-  const nextBtn = document.querySelector(".table-footer .frame-1");
-  const footer = document.querySelector(".table-footer");
-
-  const logoutIcon = document.querySelector(".solar-logout-outline");
-  const searchContainer = document.querySelector(".th4");
+ 
+  const minEl = document.querySelector(".group-65 ._1");        
+  const maxEl = document.querySelector(".group-66 ._493284"); 
   const bellBadge = document.querySelector(".badge-with-notification ._12");
-  const bellWrapper = document.querySelector(".badge-with-notification");
+  const bellWrapper = document.querySelector(".badge-with-notification");  
+  const logoutIcon = document.querySelector(".solar-logout-outline");
 
-  const PAGE_SIZE = 5;
-  let currentPage = 1;
-  let pageDropdown = null; 
+  
+  const saveBtn = document.querySelector(".login-submit");      
+  const cancelBtn = document.querySelector(".login-submit2");   
 
-   const token = localStorage.getItem("sabau-token");
-    if (!token) {
+  
+  const lessonsLink = document.querySelector(".sidenav-link");
+  const unitsLink = document.querySelector(".sidenav-link3");
+
+  
+  const token = localStorage.getItem(TOKEN_KEY);
+  if (!token) {
     window.location.href = "login.html";
     return;
   }
@@ -290,665 +284,120 @@ function showConfirmDialog({ title, message, confirmText, cancelText, onConfirm 
     overlay.style.display = "flex";
   }
 
+  function makeNumberEditable(el) {
+    if (!el) return;
+    el.setAttribute("contenteditable", "true");
+    el.style.cursor = "text";
+    el.style.userSelect = "text";
+    el.style.pointerEvents = "auto";
+    el.tabIndex = 0;
 
- function buildScheduleText(sessions) {
-  if (!Array.isArray(sessions) || sessions.length === 0) return "—";
+    el.addEventListener("input", () => {
+      const cleaned = (el.textContent || "").replace(/[^\d]/g, "");
+      if (el.textContent !== cleaned) el.textContent = cleaned;
 
-  const dayMap = {
-    sat: "شنبه",
-    sun: "یکشنبه",
-    mon: "دوشنبه",
-    tue: "سه‌شنبه",
-    wed: "چهارشنبه",
-    thu: "پنجشنبه",
-    fri: "جمعه",
-  };
-
-  return sessions
-    .map((s) => {
-      if (!s) return "";
-
-      const dayFa = dayMap[s.day] || s.day || "";
-
-      const start = s.start_time ? s.start_time.slice(0, 5) : "";
-      const end = s.end_time ? s.end_time.slice(0, 5) : "";
-
-     
-      if (dayFa && start && end)
-        return `${dayFa} ${end} - ${start}`;
-
-      if (dayFa && start)
-        return `${dayFa} ${start}`;
-
-      return dayFa;
-    })
-    .filter(Boolean)
-    .join("\n");
-}
-
-
-function buildLocationText(sessions) {
-  if (!Array.isArray(sessions) || sessions.length === 0) return "—";
-
-  const facultyMap = {
-    eng: "مهندسی",
-    sci: "علوم",
-    art: "هنر",
-    psy:"روانشناسی",
-    lit:"ادبیات"
-  
-  };
-
-  const lines = [];
-
-  sessions.forEach((s) => {
-    if (!s) return;
-
-    const facultyCode =
-      typeof s.faculty === "string"
-        ? s.faculty
-        : (s.faculty && s.faculty.name) || "";
-
-    const facultyName = facultyMap[facultyCode] || facultyCode || "";
-
-    const classNumber =
-      s.eng ||
-      s.classroom ||
-      s.room ||
-      s.classroom_name ||
-      "";
-
-    if (!facultyName && !classNumber) return;
-
-    const line = classNumber
-      ? `${facultyName}_${classNumber}`
-      : facultyName;
-
-    lines.push(line);
-  });
-
-  
-  const unique = [...new Set(lines)];
-  return unique.length ? unique.join("\n") : "—";
-}
-
-
-
- async function fetchLessonsFromApi(searchTerm = "") {
-  const token = localStorage.getItem("sabau-token");
-  if (!token) {
-    window.location.href = "login.html";
-    return;
-  }
-
-  let url = "http://127.0.0.1:8000/api/courses/";
-
-  if (searchTerm) {
-    const qs = encodeURIComponent(searchTerm.trim());
-    url += `?search=${qs}`;
-  }
-
-  try {
-    const res = await fetch(url, {
-      method: "GET",
-      headers: {
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
+      const r = document.createRange();
+      r.selectNodeContents(el);
+      r.collapse(false);
+      const s = window.getSelection();
+      if (s) {
+        s.removeAllRanges();
+        s.addRange(r);
+      }
     });
+  }
 
-    if (!res.ok) {
-      console.log("LESSONS STATUS:", res.status);
-      showGlobalError("خطا در دریافت لیست دروس از سرور.");
+  makeNumberEditable(minEl);
+  makeNumberEditable(maxEl);
+
+  function toInt(el) {
+    const v = (el?.textContent || "").trim();
+    if (!v) return null;
+    const n = parseInt(v, 10);
+    return Number.isFinite(n) ? n : null;
+  }
+
+  async function saveSettings() {
+    const minUnits = toInt(minEl);
+    const maxUnits = toInt(maxEl);
+
+    if (minUnits === null || maxUnits === null) {
+      alert("حداقل و حداکثر واحد باید عدد باشند.");
+      return;
+    }
+    if (minUnits < 0 || maxUnits < 0) {
+      alert("مقادیر نمی‌توانند منفی باشند.");
+      return;
+    }
+    if (minUnits > maxUnits) {
+      alert("حداقل واحد نباید از حداکثر واحد بیشتر باشد.");
       return;
     }
 
-    const data = await res.json();
-    const items = Array.isArray(data) ? data : data.results || [];
+    const payload = {
+      is_active: true,
+      min_units: minUnits,
+      max_units: maxUnits,
+    };
 
-    lessons = items.map((item, index) => {
-      const sessions = Array.isArray(item.sessions) ? item.sessions : [];
-
-      let teacherRaw = "";
-      if (typeof item.professor === "string") {
-        teacherRaw = item.professor;
-      } else if (item.professor?.name) {
-        teacherRaw = item.professor.name;
-      }
-      const teacher = teacherRaw.replace(/\s*\(Professor\)\s*$/i, "").trim();
-
-      const schedule = buildScheduleText(sessions);
-      const location = buildLocationText(sessions);
-
-      return {
-        id: item.id ?? index + 1,
-        name: item.name || "",
-        code: item.code || "",
-        capacity: item.capacity ?? "",
-        units: item.units ?? "",
-        teacher,
-        schedule,
-        location,
-      };
-    });
-
-    filteredLessons = [...lessons];
-    currentPage = 1;
-    renderTable();
-
-  } catch (err) {
-    console.error("LESSONS FETCH ERROR:", err);
-    showGlobalError("عدم ارتباط با سرور.");
-  }
-}
-
-
-  
-  const defaultLessons = [
-    {
-      id: 1,
-      name: "ریاضی 1",
-      code: "45789",
-      capacity: 30,
-      units: 3,
-      teacher: "فاطمه فتاحی",
-      location: "مهندسی - کلاس 200",
-      schedule: "شنبه 16-14\nدوشنبه 16-14",
-    },
-    {
-      id: 2,
-      name: "برنامه‌نویسی پیشرفته",
-      code: "45800",
-      capacity: 40,
-      units: 3,
-      teacher: "علی حسینی",
-      location: "مهندسی - کلاس 305",
-      schedule: "یکشنبه 10-8\nسه‌شنبه 10-8",
-    },
-    {
-      id: 3,
-      name: "ساختمان داده‌ها",
-      code: "46012",
-      capacity: 35,
-      units: 3,
-      teacher: "مریم نادری",
-      location: "مهندسی - کلاس 150",
-      schedule: "شنبه 12-10\nسه‌شنبه 12-10",
-    },
-    {
-      id: 4,
-      name: "پایگاه داده‌ها",
-      code: "46200",
-      capacity: 30,
-      units: 3,
-      teacher: "سینا کریمی",
-      location: "مهندسی - کلاس 210",
-      schedule: "دوشنبه 12-10\nچهارشنبه 12-10",
-    },
-    {
-      id: 5,
-      name: "سیستم‌عامل",
-      code: "46510",
-      capacity: 25,
-      units: 3,
-      teacher: "نرگس آقایی",
-      location: "مهندسی - کلاس 120",
-      schedule: "یکشنبه 14-12\nسه‌شنبه 14-12",
-    },
-    {
-      id: 6,
-      name: "مدار منطقی",
-      code: "45220",
-      capacity: 28,
-      units: 3,
-      teacher: "مهدی مرادی",
-      location: "مهندسی - کلاس 220",
-      schedule: "شنبه 10-8\nدوشنبه 10-8",
-    },
-  ];
-
-  function loadLessons() {
     try {
-      const raw = localStorage.getItem("sabau-lessons");
-      if (!raw) return [...defaultLessons];
-      const parsed = JSON.parse(raw);
-      if (!Array.isArray(parsed) || parsed.length === 0) return [...defaultLessons];
-      return parsed;
-    } catch (e) {
-      console.error("Error reading lessons:", e);
-      showGlobalError("خطا در خواندن اطلاعات دروس. لطفاً صفحه را مجدداً باز کنید.");
-      return [...defaultLessons];
-    }
-  }
-
-  function saveLessons() {
-    localStorage.setItem("sabau-lessons", JSON.stringify(lessons));
-  }
-
-  let lessons = [];
-  let filteredLessons = [];
-
- 
-  function getTotalPages() {
-    if (!filteredLessons.length) return 1;
-    return Math.max(1, Math.ceil(filteredLessons.length / PAGE_SIZE));
-  }
-
-  function paginate(list, page, size) {
-    const start = (page - 1) * size;
-    return list.slice(start, start + size);
-  }
-
-  function updatePageIndicator() {
-    if (pageIndicatorEl) {
-      pageIndicatorEl.textContent = String(currentPage);
-    }
-  }
-
-  function updatePageInfo() {
-    if (!pageInfoEl) return;
-
-    const total = filteredLessons.length;
-    if (total === 0) {
-      pageInfoEl.textContent = "0 of 0";
-      return;
-    }
-
-    const totalPages = getTotalPages();
-    if (currentPage > totalPages) currentPage = totalPages;
-
-    const startIndex = (currentPage - 1) * PAGE_SIZE + 1;
-    const endIndex = Math.min(currentPage * PAGE_SIZE, total);
-
-    pageInfoEl.textContent = `${startIndex} - ${endIndex} of ${total}`;
-  }
-
-  
-  function createPageDropdown() {
-    if (pageDropdown) return pageDropdown;
-
-    const dropdown = document.createElement("div");
-    dropdown.className = "page-dropdown";
-
-    Object.assign(dropdown.style, {
-      position: "absolute",
-      background: "#ffffff",
-      borderRadius: "8px",
-      boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-      minWidth: "90px",
-      zIndex: "9999",
-      padding: "4px 0",
-      direction: "rtl",
-      display: "none",
-      fontFamily: "inherit",
-      fontSize: "13px",
-    });
-
-    document.body.appendChild(dropdown);
-    pageDropdown = dropdown;
-    return dropdown;
-  }
-
-  function renderPageDropdownOptions() {
-    const dropdown = createPageDropdown();
-    if (!dropdown) return;
-
-    dropdown.innerHTML = "";
-    const totalPages = getTotalPages();
-
-    for (let i = 1; i <= totalPages; i++) {
-      const item = document.createElement("div");
-      item.textContent = `صفحه ${i}`;
-      Object.assign(item.style, {
-        padding: "6px 12px",
-        cursor: "pointer",
-        whiteSpace: "nowrap",
-        background: i === currentPage ? "#f3f3ff" : "#ffffff",
-        color: i === currentPage ? "#3b175c" : "#333",
+      const res = await fetch(API_URL, {
+        method: "POST", 
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(payload),
       });
 
-      item.addEventListener("mouseenter", () => {
-        item.style.background = "#f5f5f5";
-      });
-      item.addEventListener("mouseleave", () => {
-        item.style.background = i === currentPage ? "#f3f3ff" : "#ffffff";
-      });
-
-      item.addEventListener("click", () => {
-        currentPage = i;
-        closePageDropdown();
-        renderTable();
-      });
-
-      dropdown.appendChild(item);
-    }
-  }
-  
-  
-
-  function openPageDropdown() {
-    const dropdown = createPageDropdown();
-    if (!dropdown || !pageSelectContainer) return;
-
-    renderPageDropdownOptions();
-
-    const rect = pageSelectContainer.getBoundingClientRect();
-
-    Object.assign(dropdown.style, {
-      display: "block",
-      top: rect.bottom + 4 + "px",
-      left: rect.left + "px",
-      minWidth: rect.width + "px",
-    });
-  }
-
-  function closePageDropdown() {
-    if (!pageDropdown) return;
-    pageDropdown.style.display = "none";
-  }
-
-  function togglePageDropdown() {
-    const dropdown = createPageDropdown();
-    if (dropdown.style.display === "block") {
-      closePageDropdown();
-    } else {
-      openPageDropdown();
-    }
-  }
-
-  
-  document.addEventListener("click", (e) => {
-    if (!pageSelectContainer) return;
-    if (
-      pageDropdown &&
-      pageDropdown.style.display === "block" &&
-      !pageSelectContainer.contains(e.target) &&
-      !pageDropdown.contains(e.target)
-    ) {
-      closePageDropdown();
-    }
-  });
-
-  
-  function repositionFooter() {
-    if (!datatable || !footer) return;
-
-    const rows = tbody ? tbody.querySelectorAll(".tr2") : [];
-    let topPx;
-
-    const dtRect = datatable.getBoundingClientRect();
-
-    if (rows && rows.length > 0) {
-      const lastRow = rows[rows.length - 1];
-      const rowRect = lastRow.getBoundingClientRect();
-      const offset = rowRect.bottom - dtRect.top;
-      topPx = offset + 10;
-    } else {
-      const thead = document.querySelector(".datatable .thead");
-      if (thead) {
-        const headRect = thead.getBoundingClientRect();
-        const offset = headRect.bottom - dtRect.top;
-        topPx = offset + 10;
-      } else {
-        topPx = 100;
-      }
-    }
-
-    footer.style.position = "absolute";
-    footer.style.top = topPx + "px";
-    footer.style.bottom = "auto";
-  }
-
-  window.addEventListener("resize", () => {
-    repositionFooter();
-  });
-
-  function clearTbody() {
-    if (tbody) tbody.innerHTML = "";
-  }
-
-  function createRow(lesson) {
-    const row = document.createElement("div");
-    row.className = "tr2";
-    row.dataset.lessonId = lesson.id;
-
-    row.innerHTML = `
-      <div class="td">
-        
-        <img class="group-11" src="../Image/Group 7.svg" alt="ویرایش" />
-      </div>
-      
-      
-      <div class="td2">
-        <div class="div3">${lesson.teacher || ""}</div>
-      </div>
-      <div class="td2">
-        <div class="_unit">${lesson.units != null ? lesson.units : ""}</div>
-      </div>
-      <div class="td2">
-        <div class="_30">${lesson.capacity != null ? lesson.capacity : ""}</div>
-      </div>
-      <div class="td2">
-        <div class="_45789">${lesson.code || ""}</div>
-      </div>
-      <div class="td2">
-        <div class="_1">${lesson.name || ""}</div>
-      </div>
-    `;
-
-    const deleteIcon = row.querySelector(".group-10");
-    const editIcon = row.querySelector(".group-11");
-
-    if (deleteIcon) {
-      deleteIcon.style.cursor = "pointer";
-      deleteIcon.addEventListener("click", () => handleDeleteLesson(lesson.id));
-    }
-
-    if (editIcon) {
-      editIcon.style.cursor = "pointer";
-      editIcon.addEventListener("click", () => handleEditLesson(lesson));
-    }
-
-    return row;
-  }
-
-  function renderTable() {
-    if (!tbody) return;
-
-    clearTbody();
-
-    if (!filteredLessons.length) {
-      const empty = document.createElement("div");
-      empty.style.padding = "12px";
-      empty.style.fontSize = "13px";
-      empty.style.color = "#777";
-      empty.style.textAlign = "center";
-      empty.textContent = "درسی برای نمایش وجود ندارد.";
-      tbody.appendChild(empty);
-
-      updatePageIndicator();
-      updatePageInfo();
-      renderPageDropdownOptions();
-      repositionFooter();
-      return;
-    }
-
-    const totalPages = getTotalPages();
-    if (currentPage > totalPages) currentPage = totalPages;
-
-    const pageItems = paginate(filteredLessons, currentPage, PAGE_SIZE);
-    pageItems.forEach((lesson) => tbody.appendChild(createRow(lesson)));
-
-    updatePageIndicator();
-    updatePageInfo();
-    renderPageDropdownOptions();
-    repositionFooter();
-  }
-
-  
- async function handleDeleteLesson(id) {
-  showConfirmDialog({
-    title: "حذف درس",
-    message: "آیا از حذف این درس مطمئن هستید؟",
-    confirmText: "حذف",
-    cancelText: "انصراف",
-
-    onConfirm: async () => {
-      const token = localStorage.getItem("sabau-token"); 
-
-      if (!token) {
-        showGlobalError("دوباره وارد حساب شوید.");
-        window.location.href = "login.html";
+      if (res.status === 401 || res.status === 403) {
+        const t = await res.text();
+        console.log("Auth error:", res.status, t);
+        alert("دسترسی ندارید. (این endpoint ممکن است Basic Auth بخواهد)");
         return;
       }
 
-      try {
-        const res = await fetch(`http://127.0.0.1:8000/api/courses/${id}/`, {
-          method: "DELETE",
-          headers: {
-            "Authorization": `Bearer ${token}`,
-          },
-        });
-
-        if (res.status === 204) {
-          
-          lessons = lessons.filter((l) => l.id !== id);
-          filteredLessons = filteredLessons.filter((l) => l.id !== id);
-          renderTable();
-          return;
-        }
-
-        if (res.status === 401) {
-          showGlobalError("جلسه شما منقضی شده است. دوباره وارد شوید.");
-          localStorage.removeItem("sabau-token");
-          window.location.href = "login.html";
-          return;
-        }
-
-        const text = await res.text();
-        console.error("DELETE ERROR BODY:", text);
-        showGlobalError("خطا در حذف درس از سرور.");
-
-      } catch (err) {
-        console.error("Delete error:", err);
-        showGlobalError("عدم ارتباط با سرور هنگام حذف درس.");
+      if (!res.ok) {
+        const t = await res.text();
+        console.log("POST error:", res.status, t);
+        alert("خطا در ثبت تنظیمات.");
+        return;
       }
-    },
-  });
-}
 
-
-
-  function handleEditLesson(lesson) {
-    localStorage.setItem("sabau-current-lesson-id", String(lesson.id));
-    
-    window.location.href = "edit-lesson.html";
-  }
-
-  function applySearch(term) {
-    const value = term.trim().toLowerCase();
-    if (!value) {
-      filteredLessons = [...lessons];
-      currentPage = 1;
-      renderTable();
-      return;
-    }
-
-    filteredLessons = lessons.filter((lesson) => {
-      return (
-        (lesson.name || "").toLowerCase().includes(value) ||
-        (lesson.code || "").toLowerCase().includes(value) ||
-        (lesson.teacher || "").toLowerCase().includes(value) ||
-        (lesson.location || "").toLowerCase().includes(value) ||
-        (lesson.schedule || "").toLowerCase().includes(value)
-      );
-    });
-
-    currentPage = 1;
-    renderTable();
-
-    if (!filteredLessons.length) {
-      showGlobalError("درسی با این مشخصات پیدا نشد.");
+      alert("تنظیمات با موفقیت ثبت شد ✅");
+    } catch (e) {
+      console.log("Network error:", e);
+      alert("عدم ارتباط با سرور.");
     }
   }
 
-  function debounce(fn, delay) {
-  let timeout;
-  return function (...args) {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => fn.apply(this, args), delay);
-  };
-}
-
-  function initSearchBox() {
-  if (!searchContainer) return;
-
-  const input = document.createElement("input");
-  input.type = "text";
-  input.className = "dashboard-search-input";
-  input.placeholder = "جستجو";
-
-  Object.assign(input.style, {
-    border: "none",
-    outline: "none",
-    background: "transparent",
-    fontFamily: "inherit",
-    fontSize: "14px",
-    flex: "1",
-    minWidth: "80px",
-    direction: "rtl",
-    textAlign: "right",
-    marginRight: "30px",
-  });
-
-  searchContainer.style.display = "flex";
-  searchContainer.style.alignItems = "center";
-  searchContainer.style.gap = "6px";
-
-  searchContainer.appendChild(input);
-
-  input.addEventListener("input", () => {
-    applySearch(input.value);
-  });
-
-  searchContainer.addEventListener("click", () => {
-    input.focus();
-  });
-}
-
- 
-  if (prevBtn) {
-    prevBtn.style.cursor = "pointer";
-    prevBtn.addEventListener("click", () => {
-      if (currentPage > 1) {
-        currentPage -= 1;
-        renderTable();
-      }
-    });
-  }
-
-  if (nextBtn) {
-    nextBtn.style.cursor = "pointer";
-    nextBtn.addEventListener("click", () => {
-      const totalPages = getTotalPages();
-      if (currentPage < totalPages) {
-        currentPage += 1;
-        renderTable();
-      }
-    });
-  }
-
-  
-  if (pageSelectContainer) {
-    pageSelectContainer.style.cursor = "pointer";
-    pageSelectContainer.addEventListener("click", (e) => {
+  if (saveBtn) {
+    saveBtn.style.cursor = "pointer";
+    saveBtn.addEventListener("click", (e) => {
+      e.preventDefault();
       e.stopPropagation();
-      togglePageDropdown();
+      saveSettings();
     });
   }
 
-  
-  if (logoutIcon) {
+  if (cancelBtn) {
+    cancelBtn.style.cursor = "pointer";
+    cancelBtn.addEventListener("click", () => {
+      window.location.href = "admin-dashboard-list.html";
+    });
+  }
+  if (bellWrapper) {
+    bellWrapper.style.cursor = "pointer";
+    bellWrapper.addEventListener("click", () => {
+      if (bellBadge) {
+        bellBadge.textContent = "";
+        bellBadge.parentElement.style.display = "none";
+      }
+      showGlobalError("اعلان جدیدی برای نمایش وجود ندارد.");
+    });
+  }
+   if (logoutIcon) {
   logoutIcon.style.cursor = "pointer";
 
   logoutIcon.addEventListener("click", () => {
@@ -986,45 +435,19 @@ function buildLocationText(sessions) {
     });
   });
 }
-
-if (newLessonBtn) {
-  newLessonBtn.style.cursor = "pointer";
-  newLessonBtn.addEventListener("click", () => {
-
-    window.location.href = "add-lesson.html";
-
-  });
-}
-
-if (lessonManagementBtn) {
-    lessonManagementBtn.style.cursor = "pointer";
-    lessonManagementBtn.addEventListener("click", () => {
+  if (lessonsLink) {
+    lessonsLink.style.cursor = "pointer";
+    lessonsLink.addEventListener("click", () => {
       window.location.href = "admin-dashboard-list.html";
     });
   }
- 
-  if (unitManagementBtn) {
-    unitManagementBtn.style.cursor = "pointer";
-
-    unitManagementBtn.addEventListener("click", () => {
+  if (unitsLink) {
+    unitsLink.style.cursor = "pointer";
+    unitsLink.addEventListener("click", () => {
       window.location.href = "unit-management.html";
     });
   }
-  if (bellWrapper) {
-    bellWrapper.style.cursor = "pointer";
-    bellWrapper.addEventListener("click", () => {
-      if (bellBadge) {
-        bellBadge.textContent = "";
-        bellBadge.parentElement.style.display = "none";
-      }
-      showGlobalError("اعلان جدیدی برای نمایش وجود ندارد.");
-    });
-  }
-
-  initSearchBox();
-  fetchLessonsFromApi();
 });
-
 
 (function () {
   function updateDateTime() {
@@ -1062,4 +485,3 @@ if (lessonManagementBtn) {
   
   setInterval(updateDateTime, 1000);
 })();
-

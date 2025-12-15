@@ -5,6 +5,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const $ = (s) => document.querySelector(s);
   const lessonManagementBtn = document.querySelector(".sidenav-link");
+  const unitManagementBtn = document.querySelector(".sidenav-link3");
+
 
   
   function createOverlayBase() {

@@ -1,3 +1,17 @@
 from django.test import TestCase
 
-# Create your tests here.
+from django.test import TestCase
+from rest_framework.test import APITestCase
+from .serializer import EnrollmentSettingsSerializer
+
+class EnrollmentSettingsSerializerTest(APITestCase):
+
+    def test_serializer_valid_data(self):
+        data = {
+            "min_units": 12,
+            "max_units": 20,
+            "is_active": True
+        }
+        serializer = EnrollmentSettingsSerializer(data=data)
+        self.assertTrue(serializer.is_valid())
+

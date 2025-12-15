@@ -61,8 +61,8 @@ class CourseSerializer(serializers.ModelSerializer):
         if not value.isdigit():
             raise serializers.ValidationError("کد درس باید فقط شامل اعداد باشد")
 
-        if len(value) != 6:
-            raise serializers.ValidationError("کد درس باید دقیقا 6 رقم داشته باشد.")
+        if len(value) < 3 or len(value) > 8:
+            raise serializers.ValidationError("کد درس باید بین 3 تا 8 رقم داشته باشد")
         
         return value
 

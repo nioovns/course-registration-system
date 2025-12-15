@@ -1,38 +1,50 @@
-from rest_framework import serializers
 from django.contrib.auth import get_user_model
+from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from .models import Student  # <--- مدل Student را حتما ایمپورت کنید
 
 User = get_user_model()
 
-
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
-    @classmethod
-    def get_token(cls, user):
-        token = super().get_token(user)
-
-        token['role'] = user.role
-        token['username'] = user.username
-
-        if user.is_student and user.student_id:
-            token['student_id'] = user.student_id
-        if user.is_professor and user.professor_code:
-            token['professor_code'] = user.professor_code
-
-        return token
-
     def validate(self, attrs):
         data = super().validate(attrs)
-        data.update({
-            'role': self.user.role,
-            'username': self.user.username,
-            'user_id': self.user.id ,
-            'first_name': self.user.first_name,
-            'last_name': self.user.last_name,
-        })
+
+        data['user_id'] = self.user.id
+        data['username'] = self.user.username
+        data['role'] = self.user.role
+
+        try:
+            if self.user.is_student and hasattr(self.user, 'student'):
+                data['profile_id'] = self.user.student.id
+                data['student_id'] = self.user.student.student_id
+                data['entry_year'] = self.user.student.entry_year
+                data['full_name'] = f"{self.user.student.first_name} {self.user.student.last_name}"
+
+            elif self.user.is_professor and hasattr(self.user, 'professor'):
+                data['profile_id'] = self.user.professor.id
+                data['professor_code'] = self.user.professor.professor_code
+                data['full_name'] = f"{self.user.professor.first_name} {self.user.professor.last_name}"
+
+            elif self.user.is_admin_role:
+                data['full_name'] = "Admin User"
+
+        except Exception as e:
+            print(f"Profile Error: {e}")
+            data['profile_error'] = "Profile data missing"
+
         return data
 
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'role', 'first_name', 'last_name', 'student_id', 'professor_code'] 
+        fields = ['id', 'username', 'email', 'role']
+
+
+class StudentListSerializer(serializers.ModelSerializer):
+    username = serializers.ReadOnlyField(source='user.username')
+    email = serializers.ReadOnlyField(source='user.email')
+
+    class Meta:
+        model = Student
+        fields = ['id', 'first_name', 'last_name', 'student_id', 'entry_year', 'username', 'email']

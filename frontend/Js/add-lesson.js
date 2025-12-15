@@ -6,6 +6,8 @@ const TOKEN_KEY = "sabau-token";
 const prereqWrapper = document.querySelector(".frame-3-pr");
 const prereqValueEl = document.querySelector(".frame-3-pr ._1-pr");
 const prereqMinusBtn = document.querySelector(".frame-3-pr .bitcoin-icons-minus-filled1");
+const lessonManagementBtn = document.querySelector(".sidenav-link");
+const unitManagementBtn = document.querySelector(".sidenav-link3");
 
 
  
@@ -1173,6 +1175,7 @@ function bindPrereqClearAll() {
       capacity,
       professor: teacher,
       sessions,
+       prerequisites: (selectedPrereqIds || []).map(Number),
     };
 
     console.log("payload being sent:", JSON.stringify(payload, null, 2));
@@ -1280,6 +1283,19 @@ function bindPrereqClearAll() {
     });
   }
 
+  if (lessonManagementBtn) {
+    lessonManagementBtn.style.cursor = "pointer";
+    lessonManagementBtn.addEventListener("click", () => {
+      window.location.href = "admin-dashboard-list.html";
+    });
+  }
+    if (unitManagementBtn) {
+    unitManagementBtn.style.cursor = "pointer";
+
+    unitManagementBtn.addEventListener("click", () => {
+      window.location.href = "unit-management.html";
+    });
+  }
   if (logoutIcon) {
     logoutIcon.style.cursor = "pointer";
     logoutIcon.addEventListener("click", () => {

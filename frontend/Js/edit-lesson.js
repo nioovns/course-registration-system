@@ -4,6 +4,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const CURRENT_COURSE_ID_KEY = "sabau-current-lesson-id";
 
   const $ = (s) => document.querySelector(s);
+  const lessonManagementBtn = document.querySelector(".sidenav-link");
+  const unitManagementBtn = document.querySelector(".sidenav-link3");
+
 
   
   function createOverlayBase() {
@@ -517,6 +520,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return el ? el.textContent.trim() : "";
   }
 
+  
  
   function dayCodeToFa(code) {
     const map = {
@@ -969,6 +973,30 @@ function attachPrereqDropdown() {
     return errors;
   }
 
+
+  async function patchPrerequisitesOnly(courseId) {
+  const token = localStorage.getItem(TOKEN_KEY);
+
+  const prereqIds = (selectedPrereqIds || [])
+    .map(Number)
+    .filter(id => id && id !== Number(courseId));
+
+  const res = await fetch(`${API_BASE}/courses/${courseId}/`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ prerequisites: prereqIds }),
+  });
+
+  if (!res.ok) {
+    const t = await res.text();
+    console.log("PATCH prerequisites failed:", res.status, t);
+    throw new Error("prereq patch failed");
+  }
+}
+
   
   async function handleSubmit() {
     const token = localStorage.getItem(TOKEN_KEY);
@@ -994,6 +1022,7 @@ function attachPrereqDropdown() {
     }
 
     try {
+      patchPrerequisitesOnly(payload.id);
       const res = await fetch(`${API_BASE}/courses/${payload.id}/`, {
         method: "PATCH",
         headers: {
@@ -1180,6 +1209,20 @@ function attachPrereqDropdown() {
       window.location.href = "admin-dashboard-list.html";
     });
   }
+  if (lessonManagementBtn) {
+    lessonManagementBtn.style.cursor = "pointer";
+    lessonManagementBtn.addEventListener("click", () => {
+      window.location.href = "admin-dashboard-list.html";
+    });
+  }
+  
+    if (unitManagementBtn) {
+    unitManagementBtn.style.cursor = "pointer";
+
+    unitManagementBtn.addEventListener("click", () => {
+      window.location.href = "unit-management.html";
+    });
+  }
 
   if (logoutIcon) {
     logoutIcon.style.cursor = "pointer";
@@ -1207,6 +1250,32 @@ function attachPrereqDropdown() {
       showNotificationMessage();
     });
   }
+
+  async function patchPrerequisitesOnly(courseId) {
+  const token = localStorage.getItem("sabau-token");
+
+  // selectedPrereqIds همون آرایه انتخاب‌های dropdown شماست
+  const prereqIds = (selectedPrereqIds || [])
+    .map(Number)
+    .filter((id) => id && id !== Number(courseId));
+
+  const res = await fetch(`http://127.0.0.1:8000/api/courses/${courseId}/`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({ prerequisites: prereqIds }),
+  });
+
+  if (!res.ok) {
+    const t = await res.text();
+    console.log("PATCH prerequisites failed:", res.status, t);
+    throw new Error("prereq patch failed");
+  }
+}
+
 
   (async function init() {
     await loadChoicesFromBackend();

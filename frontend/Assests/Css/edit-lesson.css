@@ -957,7 +957,7 @@ body {
   font-weight: 500;
   text-transform: uppercase;
   position: absolute;
-  left:993px;
+  left:980px;
   top: 16px;
   white-space: nowrap;
 }
@@ -1958,10 +1958,10 @@ body {
   font-weight: 500;
   position: absolute;
   right: 1.59%;
-  left: 110%;
-  width: 98.41%;
+  left: 45%;
+  width: 50.41%;
   bottom: 67.05%;
-  top: 85%;
+  top: 43%;
   height: 32.95%;
 }
 pre {
@@ -1991,13 +1991,13 @@ pre {
   border-color: #4f4f4f;
   border-width: 1px;
   padding: 13px 0px 13px 0px;
-  width: 386.27%;
-  height: 59.95%;
+  width: 53.20%;
+  height: 25.90%;
   position: absolute;
   right: 0%;
-  left: -176.73%;
+  left: 41.93%;
   bottom: 0%;
-  top: 120.9%;
+  top: 57.9%;
   overflow: hidden;
 }
 ._1-pr {
@@ -2051,8 +2051,8 @@ pre {
   height: 22px;
   position: absolute;
   right: 64.89%;
-  left: 9.57%;
-  top: 14px;
+  left: 3.57%;
+  top: 18px;
   overflow: hidden;
   aspect-ratio: 1;
 }

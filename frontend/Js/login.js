@@ -127,6 +127,44 @@ document.addEventListener("DOMContentLoaded", () => {
     loginBtn.insertAdjacentElement("afterend", successBox);
   }
 
+  async function redirectByRole(token) {
+  try {
+    // 1️⃣ تست دانشجو
+    const studentRes = await fetch(
+      "http://127.0.0.1:8000/api/users/dashboard/student/",
+      {
+        method: "GET",
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+
+    if (studentRes.ok) {
+      window.location.href = "student-dashboard.html";
+      return;
+    }
+
+    // 2️⃣ تست استاد
+    const professorRes = await fetch(
+      "http://127.0.0.1:8000/api/users/dashboard/professor/",
+      {
+        method: "GET",
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+
+    if (professorRes.ok) {
+      window.location.href = "professor-dashboard.html";
+      return;
+    }
+  } catch (err) {
+    console.error("Role detection error:", err);
+  }
+
+  // 3️⃣ در غیر این صورت → ادمین
+  window.location.href = "admin-dashboard-list.html";
+}
+
+
 async function handleLogin() {
   hideErrors();
 
@@ -187,10 +225,10 @@ async function handleLogin() {
   showSuccessBox();
 
   setTimeout(() => {
-    window.location.href = "admin-dashboard-list.html";
-  }, 800);
-}
+  redirectByRole(token);
+}, 800);
 
+}
 
   loginBtn.addEventListener("click", handleLogin);
 

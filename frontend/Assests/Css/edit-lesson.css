@@ -1950,9 +1950,23 @@ body {
   left:89.5%;
   bottom:  143%;
 }
+.div-my-pre {
+  text-align: right;
+  font-family: "Dana-Medium", sans-serif;
+  font-size: 14.399999618530273px;
+  line-height: 160%;
+  font-weight: 500;
+  position: absolute;
+  right: 1.59%;
+  left: 110%;
+  width: 98.41%;
+  bottom: 67.05%;
+  top: 85%;
+  height: 32.95%;
+}
 pre {
   text-align: right;
-  .div-my-font-family: "Dana-Medium", sans-serif;
+  font-family: "Dana-Medium", sans-serif;
   font-size: 14.399999618530273px;
   line-height: 160%;
   font-weight: 500;

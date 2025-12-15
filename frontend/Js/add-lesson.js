@@ -1175,6 +1175,7 @@ function bindPrereqClearAll() {
       capacity,
       professor: teacher,
       sessions,
+       prerequisites: (selectedPrereqIds || []).map(Number),
     };
 
     console.log("payload being sent:", JSON.stringify(payload, null, 2));

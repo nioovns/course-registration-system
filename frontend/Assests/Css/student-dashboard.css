@@ -177,7 +177,7 @@ body {
   left:25px;
   position: relative;
   white-space: nowrap;
-  left:35px;
+  left:32px;
 }
 .operation{
   color: var(--datatable-text-color, #212529);
@@ -233,8 +233,27 @@ body {
   flex-shrink: 0;
   position: relative;
 }
-
-
+.td {
+  padding: 16px 22.4px 16px 22.4px;
+  display: flex;
+  flex-direction: row;
+  gap: 0px;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  height: 55px;
+  position: relative;
+}
+.group-10 {
+  flex-shrink: 0;
+  width: 48px;
+  height: 24px;
+  top:-3px;
+  right: -8px ;
+  position: relative;
+  overflow: visible;
+  cursor: pointer;
+}
 .td2 {
   padding: 18px 22.4px 18px 22.4px;
   display: flex;
@@ -245,6 +264,7 @@ body {
   flex: 1;
   height: 55px;
   position: relative;
+  
   
 }
 ._200 {
@@ -260,7 +280,7 @@ body {
   font-weight: var(--datatable-body-font-font-weight, 300);
   position: relative;
   white-space: pre-line;
-  left:195px;
+  left:32px;
 }
 ._16-14-16-14 {
   color: var(--datatable-text-color, #212529);
@@ -274,7 +294,22 @@ body {
   line-height: var(--datatable-body-font-line-height, 160%);
   font-weight: var(--datatable-body-font-font-weight, 300);
   position: relative;
-  left:140px;
+  left:25px;
+  white-space: nowrap;
+}
+._pre {
+  color: var(--datatable-text-color, #212529);
+  text-align: left;
+  font-family: var(
+    --datatable-body-font-font-family,
+    "Roboto-Light",
+    sans-serif
+  );
+  font-size: var(--datatable-body-font-font-size, 12.299999618530273px);
+  line-height: var(--datatable-body-font-line-height, 160%);
+  font-weight: var(--datatable-body-font-font-weight, 300);
+  position: relative;
+  left:22px;
 }
 .div3 {
   color: var(--datatable-text-color, #212529);
@@ -288,7 +323,7 @@ body {
   line-height: var(--datatable-body-font-line-height, 160%);
   font-weight: var(--datatable-body-font-font-weight, 300);
   position: relative;
-  right: -22px;
+  left: 35px;
 }
 ._30 {
   color: #212529;
@@ -302,7 +337,7 @@ body {
   line-height: var(--datatable-body-font-line-height, 160%);
   font-weight: var(--datatable-body-font-font-weight, 300);
   position: relative;
-  left:60px;
+  left:2px;
 }
 ._45789 {
   color: #212529;
@@ -316,8 +351,10 @@ body {
   line-height: var(--datatable-body-font-line-height, 160%);
   font-weight: var(--datatable-body-font-font-weight, 300);
   position: relative;
-  left:25px;
+  left:3px;
+  
 }
+
 ._1 {
   color: var(--datatable-text-color, #212529);
   text-align: left;
@@ -596,7 +633,7 @@ body {
 .frame-29 {
   background: #fbfbfb;
   border-radius: 10px;
-  width: 47.5%;
+  width: 47%;
   height: 6%;
   position: absolute;
   right: 50%;
@@ -766,7 +803,9 @@ body {
   inset: 0;
   top:1%;
 }
-
+.group-11{
+  cursor: pointer;
+}
 .frame-19 {
   width: 100%;
   height: 6.35%;
@@ -893,7 +932,7 @@ body {
   font-weight: 500;
   text-transform: uppercase;
   position: absolute;
-  left:980px;
+  left:983px;
   top: 16px;
   white-space: nowrap;
 }
@@ -988,7 +1027,7 @@ body {
   line-height: 160%;
   font-weight: 300 !important;
   position: relative;
-  left:90px;
+  left:10px;
 }
 
 ._1 {

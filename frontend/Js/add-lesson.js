@@ -1,7 +1,12 @@
 document.addEventListener("DOMContentLoaded", () => {
   const API_BASE = "http://127.0.0.1:8000/api";
+const TOKEN_KEY = "sabau-token";
 
   const $ = (s) => document.querySelector(s);
+const prereqWrapper = document.querySelector(".frame-3-pr");
+const prereqValueEl = document.querySelector(".frame-3-pr ._1-pr");
+const prereqMinusBtn = document.querySelector(".frame-3-pr .bitcoin-icons-minus-filled1");
+
 
  
   const saveBtn = $(".group-98 .login-submit");
@@ -477,6 +482,258 @@ document.addEventListener("DOMContentLoaded", () => {
     return dropdown;
   }
 
+// -------------------- Prerequisites (chips + dropdown) --------------------
+let prereqCourseOptions = [];
+let selectedPrereqIds = [];
+
+async function loadPrereqCourses() {
+  const token = localStorage.getItem(TOKEN_KEY);
+
+  if (!token) {
+    console.error("No token in localStorage:", TOKEN_KEY);
+    prereqCourseOptions = [];
+    return;
+  }
+
+  const res = await fetch(`${API_BASE}/courses/`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+
+  console.log("courses status:", res.status);
+
+  if (!res.ok) {
+    console.error("courses error:", await res.text());
+    prereqCourseOptions = [];
+    return;
+  }
+
+  const data = await res.json();
+  const items = Array.isArray(data) ? data : (data.results || []);
+
+  prereqCourseOptions = items.map((c) => ({
+    value: c.id,
+    label: c.name || c.title || `Course #${c.id}`,
+  }));
+
+  console.log("courses count:", prereqCourseOptions.length);
+}
+
+
+function renderSelectedPrereqs() {
+  if (!prereqValueEl) return;
+
+  const selected = prereqCourseOptions.filter(o => selectedPrereqIds.includes(o.value));
+
+  const chipsHtml = selected.map(o => `
+    <span class="pr-chip" data-id="${o.value}">
+      ${o.label}
+      <span class="pr-chip-x">×</span>
+    </span>
+  `).join("");
+
+  prereqValueEl.innerHTML = chipsHtml || `<span class="pr-placeholder">انتخاب درس‌های پیش‌نیاز…</span>`;
+
+  // چون شما گفتی “× روی چیپ‌ها” مدنظر نیست، کلیکش کاری نکنه
+  // (اگر بعداً خواستی هر چیپ جدا حذف بشه، می‌گم چطور)
+}
+
+function addPrereq(id) {
+  if (!selectedPrereqIds.includes(id)) {
+    selectedPrereqIds.push(id);
+    renderSelectedPrereqs();
+  }
+}
+
+function initPrereqDropdown() {
+  if (!prereqWrapper || !prereqValueEl) return;
+
+  // اولین رندر
+  renderSelectedPrereqs();
+
+  // dropdown روی همین باکس پیش‌نیاز
+  createDropdown(
+    prereqWrapper,
+    () => prereqCourseOptions
+      .filter(o => !selectedPrereqIds.includes(o.value)), // تکراری نیاد
+    (opt) => {
+      addPrereq(opt.value);
+
+      // برای اینکه کاربر پشت سر هم انتخاب کنه:
+      // dropdown بسته میشه، دوباره بازش می‌کنیم
+      setTimeout(() => prereqWrapper.click(), 0);
+    }
+  );
+}
+
+// نکته مهم: createDropdown شما "options" رو آرایه می‌گیره، نه تابع.
+// پس یک نسخه کوچک از createDropdown برای options داینامیک می‌سازیم:
+function createDropdown(anchorEl, optionsOrFn, onSelect) {
+  const options = typeof optionsOrFn === "function" ? optionsOrFn() : optionsOrFn;
+
+  const dropdown = document.createElement("div");
+  dropdown.className = "lesson-dropdown";
+  Object.assign(dropdown.style, {
+    position: "absolute",
+    background: "#ffffff",
+    borderRadius: "8px",
+    boxShadow: "0 4px 16px rgba(0,0,0,0.15)",
+    minWidth: "100px",
+    zIndex: "9999",
+    padding: "4px 0",
+    direction: "rtl",
+    fontFamily: "inherit",
+    fontSize: "13px",
+    maxHeight: "220px",
+    overflowY: "auto",
+    display: "none",
+  });
+
+  function rebuild() {
+    dropdown.innerHTML = "";
+    const opts = typeof optionsOrFn === "function" ? optionsOrFn() : optionsOrFn;
+
+    opts.forEach((opt) => {
+      const item = document.createElement("div");
+      item.textContent = opt.label;
+      Object.assign(item.style, {
+        padding: "6px 12px",
+        cursor: "pointer",
+        whiteSpace: "nowrap",
+      });
+      item.addEventListener("mouseenter", () => (item.style.background = "#f5f5f5"));
+      item.addEventListener("mouseleave", () => (item.style.background = "#ffffff"));
+      item.addEventListener("click", () => {
+        onSelect(opt);
+        closeDropdown();
+      });
+      dropdown.appendChild(item);
+    });
+  }
+
+  document.body.appendChild(dropdown);
+
+  anchorEl.style.cursor = "pointer";
+  anchorEl.addEventListener("click", (e) => {
+    e.stopPropagation();
+    rebuild();
+
+    const rect = anchorEl.getBoundingClientRect();
+    dropdown.style.left = rect.left + "px";
+    dropdown.style.top = rect.bottom + 4 + "px";
+    dropdown.style.minWidth = rect.width + "px";
+
+    if (openDropdown && openDropdown !== dropdown) closeDropdown();
+    dropdown.style.display = "block";
+    openDropdown = dropdown;
+  });
+
+  return dropdown;
+}
+
+function bindPrereqClearAll() {
+  if (!prereqMinusBtn) return;
+  prereqMinusBtn.style.cursor = "pointer";
+
+  prereqMinusBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation(); // dropdown باز نشه
+    selectedPrereqIds = [];
+    renderSelectedPrereqs();
+  });
+}
+
+
+
+
+
+
+
+ 
+function createDropdown(anchorEl, optionsOrFn, onSelect) {
+  const options = typeof optionsOrFn === "function" ? optionsOrFn() : optionsOrFn;
+
+  const dropdown = document.createElement("div");
+  dropdown.className = "lesson-dropdown";
+  Object.assign(dropdown.style, {
+    position: "absolute",
+    background: "#ffffff",
+    borderRadius: "8px",
+    boxShadow: "0 4px 16px rgba(0,0,0,0.15)",
+    minWidth: "100px",
+    zIndex: "9999",
+    padding: "4px 0",
+    direction: "rtl",
+    fontFamily: "inherit",
+    fontSize: "13px",
+    maxHeight: "220px",
+    overflowY: "auto",
+    display: "none",
+  });
+
+  function rebuild() {
+    dropdown.innerHTML = "";
+    const opts = typeof optionsOrFn === "function" ? optionsOrFn() : optionsOrFn;
+
+    opts.forEach((opt) => {
+      const item = document.createElement("div");
+      item.textContent = opt.label;
+      Object.assign(item.style, {
+        padding: "6px 12px",
+        cursor: "pointer",
+        whiteSpace: "nowrap",
+      });
+      item.addEventListener("mouseenter", () => (item.style.background = "#f5f5f5"));
+      item.addEventListener("mouseleave", () => (item.style.background = "#ffffff"));
+      item.addEventListener("click", () => {
+        onSelect(opt);
+        closeDropdown();
+      });
+      dropdown.appendChild(item);
+    });
+  }
+
+  document.body.appendChild(dropdown);
+
+  anchorEl.style.cursor = "pointer";
+  anchorEl.addEventListener("click", (e) => {
+    e.stopPropagation();
+    rebuild();
+
+    const rect = anchorEl.getBoundingClientRect();
+    dropdown.style.left = rect.left + "px";
+    dropdown.style.top = rect.bottom + 4 + "px";
+    dropdown.style.minWidth = rect.width + "px";
+
+    if (openDropdown && openDropdown !== dropdown) closeDropdown();
+    dropdown.style.display = "block";
+    openDropdown = dropdown;
+  });
+
+  return dropdown;
+}
+
+function bindPrereqClearAll() {
+  if (!prereqMinusBtn) return;
+  prereqMinusBtn.style.cursor = "pointer";
+
+  prereqMinusBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation(); // dropdown باز نشه
+    selectedPrereqIds = [];
+    renderSelectedPrereqs();
+  });
+}
+
+
+
+
+
+
+
   function initDropdownField({ wrapper, labelEl }) {
     if (!wrapper || !labelEl) return null;
     const placeholder = (labelEl.textContent || "").trim();
@@ -656,7 +913,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   loadChoicesFromServer();
-
+  loadPrereqCourses();
+  initPrereqDropdown();
+  bindPrereqClearAll();
 
   const MSG_MAP = {
     "Course code must be unique": "کد درسی نباید تکراری باشد.",
@@ -1066,4 +1325,6 @@ document.addEventListener("DOMContentLoaded", () => {
     updateDateTime();
     setInterval(updateDateTime, 60000);
   })();
+
+
 });

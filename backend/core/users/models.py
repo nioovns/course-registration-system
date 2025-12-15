@@ -41,7 +41,6 @@ class Student(models.Model):
     entry_year = models.IntegerField(verbose_name=_("Entry Year"), null=True, blank=True)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
-    entry_year = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} ({self.student_id})"

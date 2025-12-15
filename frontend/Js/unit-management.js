@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const tableEl = document.querySelector(".datatable .table");
   const newLessonBtn = document.querySelector(".frame-28");
   const lessonManagementBtn = document.querySelector(".sidenav-link");
+  const unitManagementBtn = document.querySelector(".sidenav-link3");
   
 
   const pageIndicatorEl = document.querySelector(".table-footer .one"); 
@@ -1002,6 +1003,13 @@ if (lessonManagementBtn) {
     });
   }
  
+  if (unitManagementBtn) {
+    unitManagementBtn.style.cursor = "pointer";
+
+    unitManagementBtn.addEventListener("click", () => {
+      window.location.href = "unit-management.html";
+    });
+  }
   if (bellWrapper) {
     bellWrapper.style.cursor = "pointer";
     bellWrapper.addEventListener("click", () => {

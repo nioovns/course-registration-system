@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const CURRENT_COURSE_ID_KEY = "sabau-current-lesson-id";
 
   const $ = (s) => document.querySelector(s);
+  const lessonManagementBtn = document.querySelector(".sidenav-link");
 
   
   function createOverlayBase() {
@@ -1178,6 +1179,20 @@ function attachPrereqDropdown() {
     cancelBtn.style.cursor = "pointer";
     cancelBtn.addEventListener("click", () => {
       window.location.href = "admin-dashboard-list.html";
+    });
+  }
+  if (lessonManagementBtn) {
+    lessonManagementBtn.style.cursor = "pointer";
+    lessonManagementBtn.addEventListener("click", () => {
+      window.location.href = "admin-dashboard-list.html";
+    });
+  }
+  
+    if (unitManagementBtn) {
+    unitManagementBtn.style.cursor = "pointer";
+
+    unitManagementBtn.addEventListener("click", () => {
+      window.location.href = "unit-management.html";
     });
   }
 

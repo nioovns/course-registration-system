@@ -4,21 +4,20 @@ from rest_framework import status, viewsets
 from course.serializers.CourseSerializer import CourseSerializer
 from course.services.AdminServices import AdminService
 from course.models.Course import Course
-from users.permissions import IsAdmin , IsAdminOrStudent
 from course.services.CourseFilters import CourseFilter
-from course.models.Course import Course
+from users.permissions import IsAdmin, IsStudent, IsProfessor
+
 
 class CourseViewSet(viewsets.ViewSet):
 
     def get_permissions(self):
         if self.action in ['list', 'retrieve']:
-            permission_classes = [IsAdminOrStudent]
+            permission_classes = [IsAdmin | IsStudent | IsProfessor]
         else:
             permission_classes = [IsAdmin]
 
         return [permission() for permission in permission_classes]
-    
-    # permission_classes = [IsAdmin]
+
     service = AdminService()
 
     def list(self, request):
@@ -36,15 +35,15 @@ class CourseViewSet(viewsets.ViewSet):
         course = self.service.create_course(request.data)
         serializer = CourseSerializer(course)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    
-    #PUT
+
+    # PUT
     def update(self, request, pk=None):
         get_object_or_404(Course, pk=pk)
         course = self.service.update_course(pk, request.data)
         serializer = CourseSerializer(course)
         return Response(serializer.data)
 
-    #PATCH
+    # PATCH
     def partial_update(self, request, pk=None):
         get_object_or_404(Course, pk=pk)
         course = self.service.update_course(pk, request.data, partial=True)

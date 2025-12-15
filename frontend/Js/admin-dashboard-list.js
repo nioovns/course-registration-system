@@ -5,6 +5,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const datatable = document.querySelector(".datatable");
   const tableEl = document.querySelector(".datatable .table");
   const newLessonBtn = document.querySelector(".frame-28");
+  const unitManagementBtn = document.querySelector(".sidenav-link3");
+  
 
   const pageIndicatorEl = document.querySelector(".table-footer .one"); 
   const pageInfoEl = document.querySelector(".table-footer ._1-10-of-14");
@@ -29,6 +31,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   let globalOverlay = null;
+  let courseNameById = {};
+
 
   function createGlobalOverlay() {
     if (globalOverlay) return globalOverlay;
@@ -404,6 +408,13 @@ function buildLocationText(sessions) {
     const data = await res.json();
     const items = Array.isArray(data) ? data : data.results || [];
 
+    courseNameById = {};
+    data.forEach(c => {
+    if (c.id && c.name) {
+    courseNameById[c.id] = c.name;
+        }
+    });
+
     lessons = items.map((item, index) => {
       const sessions = Array.isArray(item.sessions) ? item.sessions : [];
 
@@ -417,6 +428,15 @@ function buildLocationText(sessions) {
 
       const schedule = buildScheduleText(sessions);
       const location = buildLocationText(sessions);
+      let prereqText = "—";
+
+if (Array.isArray(item.prerequisites) && item.prerequisites.length > 0) {
+  prereqText = item.prerequisites
+    .map(id => courseNameById[id])
+    .filter(Boolean)
+    .join("\n");
+}
+
 
       return {
         id: item.id ?? index + 1,
@@ -427,6 +447,8 @@ function buildLocationText(sessions) {
         teacher,
         schedule,
         location,
+        prerequisites: prereqText,
+
       };
     });
 
@@ -715,6 +737,15 @@ function buildLocationText(sessions) {
         <img class="group-10" src="../Image/trash.svg" alt="حذف" />
         <img class="group-11" src="../Image/Group 7.svg" alt="ویرایش" />
       </div>
+     
+      <div class="td2">
+       <div class="_pre">
+       ${lesson.prerequisites
+      ? lesson.prerequisites.replace(/\n/g, "<br />")
+      : "—"}
+         </div>
+      </div>
+
       <div class="td2">
         <div class="_200">${lesson.location || ""}</div>
       </div>
@@ -1010,6 +1041,16 @@ if (newLessonBtn) {
       showGlobalError("اعلان جدیدی برای نمایش وجود ندارد.");
     });
   }
+
+    if (unitManagementBtn) {
+    unitManagementBtn.style.cursor = "pointer";
+
+    unitManagementBtn.addEventListener("click", () => {
+      window.location.href = "unit-management.html";
+    });
+  }
+
+  
 
   initSearchBox();
   fetchLessonsFromApi();

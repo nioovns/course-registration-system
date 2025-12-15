@@ -4,6 +4,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const CURRENT_COURSE_ID_KEY = "sabau-current-lesson-id";
 
   const $ = (s) => document.querySelector(s);
+  const lessonManagementBtn = document.querySelector(".sidenav-link");
+  const unitManagementBtn = document.querySelector(".sidenav-link3");
+
 
   
   function createOverlayBase() {
@@ -467,6 +470,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const bellBadge = document.querySelector(".badge-with-notification ._12");
   const searchEl = document.querySelector(".search");
 
+  const prereqCountEl = document.querySelector(".frame-pre ._3-pre");
+  const prereqCourseValueEl = document.querySelector(".frame-3-pr ._1-pr");
+
+  const prereqCountBoxSel = ".frame-pre";
+  const prereqCourseBoxSel = ".frame-3-pr";
+
+
   if (searchEl) {
     searchEl.dataset.placeholder = "جستجو";
     searchEl.textContent = "جستجو";
@@ -510,6 +520,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return el ? el.textContent.trim() : "";
   }
 
+  
  
   function dayCodeToFa(code) {
     const map = {
@@ -586,6 +597,39 @@ document.addEventListener("DOMContentLoaded", () => {
   let timeOptions = [];
   let facultyOptions = [];
   let classroomChoicesByFaculty = {};
+
+  let prereqCourseOptions = [];
+
+  async function loadPrereqCourses() {
+  const token = localStorage.getItem(TOKEN_KEY);
+
+  try {
+    const res = await fetch(`${API_BASE}/courses/`, {
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!res.ok) {
+      console.warn("Failed to load courses list", res.status);
+      return;
+    }
+
+    const data = await res.json();
+
+    // اگر DRF pagination داشته باشی، معمولاً data.results هست
+    const items = Array.isArray(data) ? data : (data.results || []);
+
+    prereqCourseOptions = items.map((c) => ({
+      value: c.id,
+      label: c.name ? c.name : `Course #${c.id}`,
+      raw: c,
+    }));
+  } catch (err) {
+    console.error("loadPrereqCourses error:", err);
+  }
+}
 
   async function loadChoicesFromBackend() {
     const token = localStorage.getItem(TOKEN_KEY);
@@ -803,8 +847,103 @@ document.addEventListener("DOMContentLoaded", () => {
       units: unitsNum,
       professor: getText(teacherEl),
       sessions,
+      prerequisites: selectedPrereqIds,
     };
   }
+
+
+  function bindPrereqClearAllButton() {
+  const clearBtn = document.querySelector(".frame-3-pr .bitcoin-icons-minus-filled1");
+  if (!clearBtn) return;
+
+  clearBtn.style.cursor = "pointer";
+  clearBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation(); 
+
+    selectedPrereqIds = [];
+    renderSelectedPrereqs();
+  });
+}
+
+
+
+
+
+  
+
+  let selectedPrereqIds = [];
+
+function renderSelectedPrereqs() {
+  const selected = prereqCourseOptions.filter(o => selectedPrereqIds.includes(o.value));
+
+  
+  const chipsHtml = selected.map(o => `
+    <span class="pr-chip" data-id="${o.value}">
+      ${o.label}
+      <button type="button" class="pr-chip-x" data-id="${o.value}">×</button>
+    </span>
+  `).join("");
+
+  
+  prereqCourseValueEl.innerHTML = chipsHtml || `<span class="pr-placeholder">انتخاب درس پیش‌نیاز…</span>`;
+
+
+  if (prereqCountEl) prereqCountEl.textContent = String(selectedPrereqIds.length);
+
+  
+  prereqCourseValueEl.querySelectorAll(".pr-chip-x").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation(); 
+      const id = parseInt(btn.dataset.id, 10);
+      selectedPrereqIds = selectedPrereqIds.filter(x => x !== id);
+      renderSelectedPrereqs();
+    });
+  });
+}
+
+
+
+
+
+function addPrereq(id) {
+  if (!selectedPrereqIds.includes(id)) {
+    selectedPrereqIds.push(id);
+    renderSelectedPrereqs();
+  }
+}
+
+
+
+
+
+function attachPrereqDropdown() {
+
+  renderSelectedPrereqs();
+
+  attachDropdownToBox(
+    prereqCourseBoxSel,
+    prereqCourseValueEl,
+    () => {
+      const currentIdStr = localStorage.getItem(CURRENT_COURSE_ID_KEY);
+      const currentId = currentIdStr ? parseInt(currentIdStr, 10) : null;
+
+      return prereqCourseOptions
+        .filter(o => !currentId || o.value !== currentId)
+        .filter(o => !selectedPrereqIds.includes(o.value));
+    },
+    (opt) => {
+      addPrereq(opt.value);
+
+      
+      const box = document.querySelector(prereqCourseBoxSel);
+      if (box) setTimeout(() => box.click(), 0);
+    }
+  );
+}
+
+
+
 
   function validateLesson(data) {
     const errors = [];
@@ -834,6 +973,30 @@ document.addEventListener("DOMContentLoaded", () => {
     return errors;
   }
 
+
+  async function patchPrerequisitesOnly(courseId) {
+  const token = localStorage.getItem(TOKEN_KEY);
+
+  const prereqIds = (selectedPrereqIds || [])
+    .map(Number)
+    .filter(id => id && id !== Number(courseId));
+
+  const res = await fetch(`${API_BASE}/courses/${courseId}/`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ prerequisites: prereqIds }),
+  });
+
+  if (!res.ok) {
+    const t = await res.text();
+    console.log("PATCH prerequisites failed:", res.status, t);
+    throw new Error("prereq patch failed");
+  }
+}
+
   
   async function handleSubmit() {
     const token = localStorage.getItem(TOKEN_KEY);
@@ -859,6 +1022,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
+      patchPrerequisitesOnly(payload.id);
       const res = await fetch(`${API_BASE}/courses/${payload.id}/`, {
         method: "PATCH",
         headers: {
@@ -1045,6 +1209,20 @@ document.addEventListener("DOMContentLoaded", () => {
       window.location.href = "admin-dashboard-list.html";
     });
   }
+  if (lessonManagementBtn) {
+    lessonManagementBtn.style.cursor = "pointer";
+    lessonManagementBtn.addEventListener("click", () => {
+      window.location.href = "admin-dashboard-list.html";
+    });
+  }
+  
+    if (unitManagementBtn) {
+    unitManagementBtn.style.cursor = "pointer";
+
+    unitManagementBtn.addEventListener("click", () => {
+      window.location.href = "unit-management.html";
+    });
+  }
 
   if (logoutIcon) {
     logoutIcon.style.cursor = "pointer";
@@ -1072,6 +1250,32 @@ document.addEventListener("DOMContentLoaded", () => {
       showNotificationMessage();
     });
   }
+
+  async function patchPrerequisitesOnly(courseId) {
+  const token = localStorage.getItem("sabau-token");
+
+  // selectedPrereqIds همون آرایه انتخاب‌های dropdown شماست
+  const prereqIds = (selectedPrereqIds || [])
+    .map(Number)
+    .filter((id) => id && id !== Number(courseId));
+
+  const res = await fetch(`http://127.0.0.1:8000/api/courses/${courseId}/`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({ prerequisites: prereqIds }),
+  });
+
+  if (!res.ok) {
+    const t = await res.text();
+    console.log("PATCH prerequisites failed:", res.status, t);
+    throw new Error("prereq patch failed");
+  }
+}
+
 
   (async function init() {
     await loadChoicesFromBackend();
@@ -1116,6 +1320,13 @@ document.addEventListener("DOMContentLoaded", () => {
     
     await loadCourseFromServer();
   })();
+
+   loadChoicesFromBackend();
+   loadPrereqCourses();
+   attachPrereqDropdown();
+   loadCourseFromServer();
+   bindPrereqClearAllButton();
+
 });
 
 

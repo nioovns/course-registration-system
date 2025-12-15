@@ -4,13 +4,21 @@ from rest_framework import status, viewsets
 from course.serializers.CourseSerializer import CourseSerializer
 from course.services.AdminServices import AdminService
 from course.models.Course import Course
-from users.permissions import IsAdmin
+from users.permissions import IsAdmin , IsAdminOrStudent
 from course.services.CourseFilters import CourseFilter
 from course.models.Course import Course
 
-
 class CourseViewSet(viewsets.ViewSet):
-    permission_classes = [IsAdmin]
+
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            permission_classes = [IsAdminOrStudent]
+        else:
+            permission_classes = [IsAdmin]
+
+        return [permission() for permission in permission_classes]
+    
+    # permission_classes = [IsAdmin]
     service = AdminService()
 
     def list(self, request):

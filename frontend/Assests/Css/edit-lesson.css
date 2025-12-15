@@ -740,10 +740,11 @@ body {
   width: 200px;
 }
 .group-97 {
-  height: auto;
+  height: 150px;
+  width: 150px;
   position: absolute;
-  left: 89px;
-  top: 41px;
+  left: 65px;
+  top: 20px;
   overflow: visible;
 }
 .sidenav-menu {
@@ -767,18 +768,17 @@ body {
   
 }
 .sidenav-link {
-  border-radius: 5px;
-  padding: 6.4px 24px 6.4px 24px;
+ border-radius: 5px;
+  padding:  6.4px 24px;
   display: flex;
   flex-direction: row;
   gap: 16px;
   align-items: center;
   justify-content: flex-start;
+  flex-shrink: 0;
   width: 262px;
-  position: absolute;
-  left: 8px;
-  top: 0px;
-  cursor: pointer;
+  position: relative;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .material-symbols-folder-managed {
@@ -957,7 +957,7 @@ body {
   font-weight: 500;
   text-transform: uppercase;
   position: absolute;
-  left:993px;
+  left:980px;
   top: 16px;
   white-space: nowrap;
 }
@@ -1034,7 +1034,7 @@ body {
   right: 49.42%;
   left: 34.61%;
   bottom: 0.83%;
-  top: 95.37%;
+  top: 110.37%;
   box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.3);
   overflow: hidden;
 }
@@ -1055,7 +1055,7 @@ body {
   right: 49.42%;
   left: 34.61%;
   bottom: 0.83%;
-  top: 95.37%;
+  top: 110.37%;
   box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.3);
   overflow: hidden;
 }
@@ -1089,7 +1089,7 @@ body {
   right: 27.97%;
   left: 51.07%;
   bottom: 0%;
-  top: 95.37%;
+  top: 110.37%;
   box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.3);
   overflow: hidden;
 }
@@ -1110,7 +1110,7 @@ body {
   right: 27.97%;
   left: 51.07%;
   bottom: 0%;
-  top: 95.37%;
+  top: 110.37%;
   box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.3);
   overflow: hidden;
 }
@@ -1431,18 +1431,15 @@ body {
   height: 12.24%;
 }
 .manager{
-  text-align: right;
-  font-family: "Dana-Regular", sans-serif;
-  font-size: 18.399999618530273px;
+  color: #505d73;
+  text-align: center;
+  font-size: 25px;
   line-height: 160%;
   font-weight: 500;
   position: absolute;
-  right: 40.47%;
-  left: 44.73%;
-  width: 9.81%;
-  bottom: 100%;
-  top: 100.66%;
-  height: 12.24%;
+  left: 45px;
+  top: 165px;
+  width: 200px;
 
 }
 .div-6-span {
@@ -1736,6 +1733,7 @@ body {
 .sidenav-link:hover {
   background-color: #E6CD00;
   color: #000;
+
 }
 
 .material-symbols-folder-managed {
@@ -1960,10 +1958,24 @@ body {
   font-weight: 500;
   position: absolute;
   right: 1.59%;
-  left: 0%;
+  left: 45%;
+  width: 50.41%;
+  bottom: 67.05%;
+  top: 43%;
+  height: 32.95%;
+}
+pre {
+  text-align: right;
+  font-family: "Dana-Medium", sans-serif;
+  font-size: 14.399999618530273px;
+  line-height: 160%;
+  font-weight: 500;
+  position: absolute;
+  right: 1.59%;
+  left: 110%;
   width: 98.41%;
   bottom: 67.05%;
-  top: 0%;
+  top: 85%;
   height: 32.95%;
 }
 .div-span-pr {
@@ -1979,13 +1991,13 @@ body {
   border-color: #4f4f4f;
   border-width: 1px;
   padding: 13px 0px 13px 0px;
-  width: 91.27%;
-  height: 57.95%;
+  width: 53.20%;
+  height: 25.90%;
   position: absolute;
   right: 0%;
-  left: 8.73%;
+  left: 41.93%;
   bottom: 0%;
-  top: 42.05%;
+  top: 57.9%;
   overflow: hidden;
 }
 ._1-pr {
@@ -2014,7 +2026,22 @@ body {
   height: 19.61%;
   position: absolute;
   right: 5.93%;
-  left: 75.89%;
+  left: 65.89%;
+  bottom: 39.22%;
+  top: 41.18%;
+  overflow: visible;
+}
+.icon-pre {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  width: 18.18%;
+  height: 19.61%;
+  position: absolute;
+  right: 5.93%;
+  left: 85.89%;
   bottom: 39.22%;
   top: 41.18%;
   overflow: visible;
@@ -2024,8 +2051,8 @@ body {
   height: 22px;
   position: absolute;
   right: 64.89%;
-  left: 9.57%;
-  top: 14px;
+  left: 3.57%;
+  top: 18px;
   overflow: hidden;
   aspect-ratio: 1;
 }
@@ -2033,9 +2060,81 @@ body {
   width: 10px;
   height: 10px;
   position: absolute;
-  left: 0px;
+  left: -2px;
   top: 7.2px;
   overflow: visible;
   aspect-ratio: 1;
+  cursor: pointer;
+}
+
+.pr-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  background: #f2f2f2;
+  margin: 3px;
+  font-size: 12px;
+}
+
+.pr-chip-x {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.pr-placeholder {
+  opacity: 0.6;
+}
+.sidenav-link3 {
+  border-radius: 5px;
+  padding:  6.4px 24px;
+  margin-top: 0.5px;
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: center;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  top:2px;
+  width: 262px;
+  position: relative;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.sidenav-link3:hover {
+  background-color: #E6CD00; 
+  color: #000;
+}
+.unit-management-img {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  position: relative;
+  overflow: visible;
+  aspect-ratio: 1;
+}
+.unit-management-div {
+  color: #4f4f4f;
+  text-align: right;
+  font-family: "Dana-Regular", sans-serif;
+  font-size: 20px;
+  line-height: 160%;
+  font-weight: 500;
+  position: relative;
+  flex: 1;
+  cursor: pointer;
+}
+.div7 {
+  color: #4f4f4f;
+  text-align: right;
+  font-size: 20px;
+  line-height: 160%;
+  font-weight: 500;
+  position: relative;
+  flex: 1;
   cursor: pointer;
 }

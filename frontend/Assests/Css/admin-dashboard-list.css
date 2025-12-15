@@ -265,6 +265,7 @@ body {
   height: 55px;
   position: relative;
   
+  
 }
 ._200 {
   color: var(--datatable-text-color, #212529);
@@ -279,7 +280,7 @@ body {
   font-weight: var(--datatable-body-font-font-weight, 300);
   position: relative;
   white-space: pre-line;
-  left:140px;
+  left:32px;
 }
 ._16-14-16-14 {
   color: var(--datatable-text-color, #212529);
@@ -293,7 +294,22 @@ body {
   line-height: var(--datatable-body-font-line-height, 160%);
   font-weight: var(--datatable-body-font-font-weight, 300);
   position: relative;
-  left:95px;
+  left:25px;
+  white-space: nowrap;
+}
+._pre {
+  color: var(--datatable-text-color, #212529);
+  text-align: left;
+  font-family: var(
+    --datatable-body-font-font-family,
+    "Roboto-Light",
+    sans-serif
+  );
+  font-size: var(--datatable-body-font-font-size, 11.299999618530273px);
+  line-height: var(--datatable-body-font-line-height, 160%);
+  font-weight: var(--datatable-body-font-font-weight, 300);
+  position: relative;
+  left:22px;
 }
 .div3 {
   color: var(--datatable-text-color, #212529);
@@ -307,7 +323,7 @@ body {
   line-height: var(--datatable-body-font-line-height, 160%);
   font-weight: var(--datatable-body-font-font-weight, 300);
   position: relative;
-  right: -22px;
+  left: 35px;
 }
 ._30 {
   color: #212529;
@@ -321,7 +337,7 @@ body {
   line-height: var(--datatable-body-font-line-height, 160%);
   font-weight: var(--datatable-body-font-font-weight, 300);
   position: relative;
-  left:35px;
+  left:2px;
 }
 ._45789 {
   color: #212529;
@@ -335,8 +351,10 @@ body {
   line-height: var(--datatable-body-font-line-height, 160%);
   font-weight: var(--datatable-body-font-font-weight, 300);
   position: relative;
-  left:25px;
+  left:3px;
+  
 }
+
 ._1 {
   color: var(--datatable-text-color, #212529);
   text-align: left;
@@ -914,7 +932,7 @@ body {
   font-weight: 500;
   text-transform: uppercase;
   position: absolute;
-  left:993px;
+  left:983px;
   top: 16px;
   white-space: nowrap;
 }
@@ -1009,7 +1027,7 @@ body {
   line-height: 160%;
   font-weight: 300 !important;
   position: relative;
-  left:60px;
+  left:10px;
 }
 
 ._1 {

@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const tableEl = document.querySelector(".datatable .table");
   const newLessonBtn = document.querySelector(".frame-28");
   const lessonManagementBtn = document.querySelector(".sidenav-link");
+  
 
   const pageIndicatorEl = document.querySelector(".table-footer .one"); 
   const pageInfoEl = document.querySelector(".table-footer ._1-10-of-14");

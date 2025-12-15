@@ -1,3 +1,8 @@
-from django.shortcuts import render
+from rest_framework import viewsets
+from .models import EnrollmentSettings
+from .serializers import EnrollmentSettingsSerializer
 
-# Create your views here.
+class EnrollmentSettingsViewSet(viewsets.ModelViewSet):
+    queryset = EnrollmentSettings.objects.all()
+    serializer_class = EnrollmentSettingsSerializer
+    permission_classes = [IsAdmin]

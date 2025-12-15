@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import EnrollmentSettings
+from enrollment.models.EnrollmentSettings import EnrollmentSettings
 
 class EnrollmentSettingsSerializer(serializers.ModelSerializer):
     class Meta:

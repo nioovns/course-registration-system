@@ -307,7 +307,7 @@ body {
   line-height: var(--datatable-body-font-line-height, 160%);
   font-weight: var(--datatable-body-font-font-weight, 300);
   position: relative;
-  right: -22px;
+  left: 98px;
 }
 ._30 {
   color: #212529;

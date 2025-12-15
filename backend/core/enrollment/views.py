@@ -1,6 +1,6 @@
 from rest_framework import viewsets
-from .models import EnrollmentSettings
-from .serializers import EnrollmentSettingsSerializer
+from enrollment.models.EnrollmentSettings import EnrollmentSettings
+from enrollment.serializers.EnrollmentSettingsSerializer import EnrollmentSettingsSerializer
 
 class EnrollmentSettingsViewSet(viewsets.ModelViewSet):
     queryset = EnrollmentSettings.objects.all()

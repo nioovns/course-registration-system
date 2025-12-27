@@ -128,7 +128,10 @@ class CourseSerializer(serializers.ModelSerializer):
             instance.sessions.set(new_sessions)
 
         if prerequisites_data is not None:
-            instance.prerequisites.set(prerequisites_data)
+            if len(prerequisites_data) == 0:
+                instance.prerequisites.clear()
+            else:
+                instance.prerequisites.set(prerequisites_data)
 
         return instance
 

@@ -127,6 +127,73 @@ document.addEventListener("DOMContentLoaded", () => {
     loginBtn.insertAdjacentElement("afterend", successBox);
   }
 
+
+  function decodeJwtPayload(token) {
+  try {
+    const payloadPart = token.split(".")[1];
+    const base64 = payloadPart.replace(/-/g, "+").replace(/_/g, "/");
+    const json = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map((c) => "%" + c.charCodeAt(0).toString(16).padStart(2, "0"))
+        .join("")
+    );
+    return JSON.parse(json);
+  } catch {
+    return null;
+  }
+}
+
+function isAdminFromToken(token) {
+  const p = decodeJwtPayload(token);
+  if (!p) return false;
+
+  
+  const role = p.role || p.user_role || p.type;
+  if (role === "admin" || role === "manager") return true;
+
+  if (p.is_staff === true || p.is_superuser === true) return true;
+
+  return false;
+}
+
+
+async function redirectByRole(token) {
+  
+  if (isAdminFromToken(token)) {
+    window.location.href = "admin-dashboard-list.html";
+    return;
+  }
+
+  try {
+    
+    const studentRes = await fetch(
+      "http://127.0.0.1:8000/api/users/dashboard/student/",
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    if (studentRes.ok) {
+      window.location.href = "student-dashboard.html";
+      return;
+    }
+
+    
+    const professorRes = await fetch(
+      "http://127.0.0.1:8000/api/users/dashboard/professor/",
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    if (professorRes.ok) {
+      window.location.href = "professor-dashboard.html";
+      return;
+    }
+  } catch (e) {
+    console.error(e);
+  }
+
+  
+  window.location.href = "admin-dashboard-list.html";
+}
+
+
 async function handleLogin() {
   hideErrors();
 
@@ -187,10 +254,10 @@ async function handleLogin() {
   showSuccessBox();
 
   setTimeout(() => {
-    window.location.href = "admin-dashboard-list.html";
-  }, 800);
-}
+  redirectByRole(token);
+}, 800);
 
+}
 
   loginBtn.addEventListener("click", handleLogin);
 

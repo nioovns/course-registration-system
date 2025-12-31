@@ -734,6 +734,10 @@ if (Array.isArray(item.prerequisites) && item.prerequisites.length > 0) {
 
     row.innerHTML = `
       
+     <div class="td">
+        <img class="group-10" src="../Image/plus-lesson.svg" alt="اخذ درس" />
+        
+      </div>
      
       <div class="td2">
        <div class="_pre">

@@ -280,7 +280,7 @@ body {
   font-weight: var(--datatable-body-font-font-weight, 300);
   position: relative;
   white-space: pre-line;
-  left:32px;
+  left:20px;
 }
 ._16-14-16-14 {
   color: var(--datatable-text-color, #212529);
@@ -294,7 +294,7 @@ body {
   line-height: var(--datatable-body-font-line-height, 160%);
   font-weight: var(--datatable-body-font-font-weight, 300);
   position: relative;
-  left:25px;
+  left:10px;
   white-space: nowrap;
 }
 ._pre {
@@ -309,7 +309,7 @@ body {
   line-height: var(--datatable-body-font-line-height, 160%);
   font-weight: var(--datatable-body-font-font-weight, 300);
   position: relative;
-  left:22px;
+  left:0px;
 }
 .div3 {
   color: var(--datatable-text-color, #212529);
@@ -323,7 +323,7 @@ body {
   line-height: var(--datatable-body-font-line-height, 160%);
   font-weight: var(--datatable-body-font-font-weight, 300);
   position: relative;
-  left: 35px;
+  left: 30px;
 }
 ._30 {
   color: #212529;
@@ -337,7 +337,7 @@ body {
   line-height: var(--datatable-body-font-line-height, 160%);
   font-weight: var(--datatable-body-font-font-weight, 300);
   position: relative;
-  left:2px;
+  left:0px;
 }
 ._45789 {
   color: #212529;
@@ -351,7 +351,7 @@ body {
   line-height: var(--datatable-body-font-line-height, 160%);
   font-weight: var(--datatable-body-font-font-weight, 300);
   position: relative;
-  left:3px;
+  left:2px;
   
 }
 

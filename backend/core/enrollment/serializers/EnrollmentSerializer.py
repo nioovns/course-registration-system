@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
+from django.core.exceptions import ValidationError
 from course.models.Course import Course
 from enrollment.models.Enrollment import Enrollment
 from enrollment.services import enroll_student
@@ -7,6 +8,7 @@ from enrollment.services import enroll_student
 
 class EnrollmentSerializer(serializers.ModelSerializer):
     course_id = serializers.IntegerField(write_only=True)
+
     course_name = serializers.CharField(source='course.name', read_only=True)
     course_code = serializers.CharField(source='course.code', read_only=True)
     professor_name = serializers.CharField(source='course.professor.last_name', read_only=True, default="نامشخص")
@@ -30,5 +32,7 @@ class EnrollmentSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(_("درس مورد نظر یافت نشد."))
         try:
             return enroll_student(student, course)
+        except ValidationError as e:
+            raise serializers.ValidationError(e.messages)
         except Exception as e:
             raise serializers.ValidationError(str(e))

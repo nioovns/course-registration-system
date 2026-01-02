@@ -61,6 +61,7 @@ class EnrollmentLogicTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_prerequisite_fail(self):
+
         math2 = Course.objects.create(name="Math 2", code="102", units=3, capacity=10)
         math2.prerequisites.add(self.math1)
 
@@ -68,7 +69,7 @@ class EnrollmentLogicTests(APITestCase):
         response = self.client.post(self.url, data)
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn("پیش‌نیاز", str(response.data))
+        self.assertIn("پیش‌نیاز", str(response.data[0]))
 
     def test_prerequisite_success(self):
         math2 = Course.objects.create(name="Math 2", code="102", units=3, capacity=10)

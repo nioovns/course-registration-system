@@ -5,6 +5,7 @@ from users.models import User, Student
 from course.models.Course import Course
 from course.models.ClassSession import ClassSession
 from enrollment.models.Enrollment import Enrollment
+from enrollment.models.EnrollmentSettings import EnrollmentSettings
 from datetime import time
 
 
@@ -25,7 +26,7 @@ class EnrollmentLogicTests(APITestCase):
         )
         self.math1.sessions.add(self.session1)
 
-        self.url = reverse('student-enrollment-list')
+        self.url = reverse('enrollment-list')
 
     def test_enrollment_success(self):
         data = {'course_id': self.math1.id}
@@ -36,10 +37,8 @@ class EnrollmentLogicTests(APITestCase):
         self.assertEqual(Enrollment.objects.get().status, Enrollment.Status.ENROLLED)
 
     def test_enrollment_capacity_full(self):
-
         self.math1.capacity = 1
         self.math1.save()
-
 
         other_user = User.objects.create_user(username='std2', password='123', role=User.Roles.STUDENT)
         other_student = Student.objects.create(user=other_user, student_id="991002", first_name="B", last_name="B")
@@ -52,7 +51,6 @@ class EnrollmentLogicTests(APITestCase):
         self.assertIn("ظرفیت", str(response.data))
 
     def test_enrollment_already_taken(self):
-        """تست اخذ مجدد درس (تکراری)"""
         Enrollment.objects.create(student=self.student, course=self.math1)
 
         data = {'course_id': self.math1.id}
@@ -61,7 +59,6 @@ class EnrollmentLogicTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_prerequisite_fail(self):
-
         math2 = Course.objects.create(name="Math 2", code="102", units=3, capacity=10)
         math2.prerequisites.add(self.math1)
 
@@ -85,7 +82,6 @@ class EnrollmentLogicTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_time_conflict(self):
-
         Enrollment.objects.create(student=self.student, course=self.math1)
 
         session_conflict = ClassSession.objects.create(
@@ -99,3 +95,24 @@ class EnrollmentLogicTests(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("تداخل زمانی", str(response.data))
+
+    def test_max_units_limit(self):
+        EnrollmentSettings.objects.create(min_units=1, max_units=3, is_active=True)
+        Enrollment.objects.create(student=self.student, course=self.math1, status='enrolled')
+
+        physics = Course.objects.create(name="Physics", code="103", units=3, capacity=10)
+
+        data = {'course_id': physics.id}
+        response = self.client.post(self.url, data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("سقف مجاز", str(response.data))
+
+    def test_drop_course_success(self):
+        enrollment = Enrollment.objects.create(student=self.student, course=self.math1, status='enrolled')
+
+        url = f"{self.url}{enrollment.id}/"
+        response = self.client.delete(url)
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertFalse(Enrollment.objects.filter(id=enrollment.id).exists())

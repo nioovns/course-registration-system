@@ -24,6 +24,8 @@ urlpatterns = [
     path('api/auth/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/auth/logout/', LogoutView.as_view(), name='auth_logout'),
 
+    path('api/enrollment/', include('enrollment.urls')),
+
     # 2. Users and App Routes
     path('api/users/', include('users.urls')),
     path('api/courses/', include('course.urls')),

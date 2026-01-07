@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const datatable = document.querySelector(".datatable");
   const tableEl = document.querySelector(".datatable .table");
   const newLessonBtn = document.querySelector(".frame-28");
-  const unitManagementBtn = document.querySelector(".sidenav-link3");
+  const takeCourseBtn = document.querySelector(".sidenav-link");
   
 
   const pageIndicatorEl = document.querySelector(".table-footer .one"); 
@@ -19,7 +19,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const searchContainer = document.querySelector(".th4");
   const bellBadge = document.querySelector(".badge-with-notification ._12");
   const bellWrapper = document.querySelector(".badge-with-notification");
-  
 
   const PAGE_SIZE = 5;
   let currentPage = 1;
@@ -31,7 +30,13 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  
+
+  if (!takeCourseBtn) return;
+
+  takeCourseBtn.style.cursor = "pointer";
+  takeCourseBtn.addEventListener("click", () => {
+    window.location.href = "student-dashboard.html";
+  });
 
   let globalOverlay = null;
   let courseNameById = {};
@@ -738,7 +743,7 @@ if (Array.isArray(item.prerequisites) && item.prerequisites.length > 0) {
     row.innerHTML = `
       
      <div class="td">
-        <img class="group-10" src="../Image/plus-lesson.svg" alt="اخذ درس" />
+        <img class="group-10" src="../Image/trash.svg" alt="حذف درس" />
         
       </div>
      
@@ -1046,13 +1051,7 @@ if (newLessonBtn) {
     });
   }
 
-    if (unitManagementBtn) {
-    unitManagementBtn.style.cursor = "pointer";
-
-    unitManagementBtn.addEventListener("click", () => {
-      window.location.href = "student-weekly-plan.html";
-    });
-  }
+ 
 
   
 

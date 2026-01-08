@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
-from course.models import Course
+from course.models.Course import Course
 from enrollment.models import Enrollment
 from enrollment.services import enroll_student
 

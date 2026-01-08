@@ -1,6 +1,7 @@
 from django.db import models
-from users.models import Student
+
 from course.models.Course import Course
+from users.models import Student
 
 
 class Enrollment(models.Model):

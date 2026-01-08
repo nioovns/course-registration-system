@@ -730,11 +730,91 @@ if (Array.isArray(item.prerequisites) && item.prerequisites.length > 0) {
     if (tbody) tbody.innerHTML = "";
   }
 
+const ENROLL_URL = "http://127.0.0.1:8000/api/enrollment/my-courses/"; 
+const TOKEN_KEY = "sabau-token";
+
+function normalizeBackendError(data) {
+  if (!data) return "خطای نامشخص از سرور.";
+  if (typeof data === "string") return data;
+  if (data.detail) return data.detail;
+
+  const parts = [];
+  for (const k of Object.keys(data)) {
+    const v = data[k];
+    if (Array.isArray(v)) parts.push(v.join("، "));
+    else if (typeof v === "string") parts.push(v);
+  }
+  return parts.length ? parts.join("\n") : "درخواست نامعتبر است.";
+}
+
+async function enrollCourse(courseId) {
+  const token = localStorage.getItem(TOKEN_KEY);
+  if (!token) return { ok: false, error: "ابتدا وارد حساب شوید." };
+
+ 
+  const bodiesToTry = [
+    { course: Number(courseId) },
+    { course_id: Number(courseId) },
+  ];
+
+  for (const bodyObj of bodiesToTry) {
+    let res;
+    let data = null;
+    let rawText = "";
+
+    try {
+      res = await fetch(ENROLL_URL, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(bodyObj),
+      });
+    } catch (e) {
+      console.error("ENROLL NETWORK ERROR:", e);
+      return { ok: false, error: "عدم ارتباط با سرور." };
+    }
+
+    
+    try {
+      rawText = await res.text();
+      try {
+        data = rawText ? JSON.parse(rawText) : null;
+      } catch {
+        data = null;
+      }
+    } catch {
+      rawText = "";
+      data = null;
+    }
+
+    console.log("ENROLL TRY BODY:", bodyObj);
+    console.log("ENROLL STATUS:", res.status);
+    console.log("ENROLL RAW RESPONSE:", rawText);
+
+    if (res.ok) {
+      return { ok: true, data };
+    }
+
+    if (res.status === 401 || res.status === 403) {
+      const msg =
+        (data && (data.detail || data.message)) ||
+        "دسترسی ندارید یا توکن نامعتبر است. دوباره وارد شوید.";
+      return { ok: false, error: msg };
+    }
+  }
+
+  return { ok: false, error: "درخواست اخذ درس توسط سرور رد شد. (جزئیات در Console)" };
+}
+
+
   function createRow(lesson) {
     const row = document.createElement("div");
     row.className = "tr2";
     row.dataset.lessonId = lesson.id;
-
+    row.dataset.courseId = lesson.id;
     row.innerHTML = `
       
      <div class="td">
@@ -778,10 +858,26 @@ if (Array.isArray(item.prerequisites) && item.prerequisites.length > 0) {
     const deleteIcon = row.querySelector(".group-10");
     const editIcon = row.querySelector(".group-11");
 
-    if (deleteIcon) {
-      deleteIcon.style.cursor = "pointer";
-      deleteIcon.addEventListener("click", () => handleDeleteLesson(lesson.id));
-    }
+   if (deleteIcon) {
+  deleteIcon.style.cursor = "pointer";
+
+  deleteIcon.addEventListener("click", async () => {
+  const courseId = row.dataset.courseId;
+  console.log("CLICK + courseId =", courseId);
+
+  const result = await enrollCourse(courseId);
+
+  if (!result.ok) {
+    showGlobalError(result.error);
+    return;
+  }
+
+  showGlobalError("درس با موفقیت اخذ شد ✅");
+  window.location.href = "student-weekly-plan.html";
+});
+
+}
+
 
     if (editIcon) {
       editIcon.style.cursor = "pointer";

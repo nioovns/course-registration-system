@@ -1051,10 +1051,47 @@ if (newLessonBtn) {
     });
   }
 
+
+  async function fetchWeeklyPlan() {
+  const token = localStorage.getItem("sabau-token");
+  const res = await fetch("http://127.0.0.1:8000/api/enrollment/my-courses/", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: "application/json",
+    },
+  });
+
+  if (!res.ok) {
+    showGlobalError("خطا در دریافت برنامه هفتگی");
+    return;
+  }
+
+  const data = await res.json();
+  const items = Array.isArray(data) ? data : (data.results || []);
+  const courses = items.map(x => x.course || x); 
+
+  lessons = courses.map(c => ({
+    id: c.id,
+    name: c.name,
+    code: c.code,
+    capacity: c.capacity,
+    units: c.units,
+    teacher: typeof c.professor === "string" ? c.professor : (c.professor?.name || ""),
+    schedule: buildScheduleText(c.sessions || []),
+    location: buildLocationText(c.sessions || []),
+    prerequisites: (c.prerequisites || []).join("\n"),
+  }));
+
+  filteredLessons = [...lessons];
+  currentPage = 1;
+  renderTable();
+}
+
  
 
   
 
+  fetchWeeklyPlan();
   initSearchBox();
   fetchLessonsFromApi();
 });

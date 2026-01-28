@@ -1,8 +1,8 @@
 from rest_framework import serializers
 from django.db import transaction
 from django.db.models import F
-from django.core.exceptions import ValidationError
 from enrollment.models import Enrollment
+from enrollment.models.EnrollmentSettings import EnrollmentSettings
 from course.models.Course import Course
 
 
@@ -56,8 +56,13 @@ class EnrollmentSerializer(serializers.ModelSerializer):
 
     def get_location(self, obj):
         sessions = obj.course.sessions.all()
-        locations = [session.room for session in sessions if session.room]
-        unique_locations = list(set(locations))
+        location_strings = []
+        for session in sessions:
+            if session.room:
+                faculty_name = session.get_faculty_display()
+                location_strings.append(f"{faculty_name} {session.room}")
+
+        unique_locations = list(set(location_strings))
         return " | ".join(unique_locations) if unique_locations else "تعیین نشده"
 
     def get_prerequisites(self, obj):
@@ -97,11 +102,14 @@ class EnrollmentSerializer(serializers.ModelSerializer):
                 f"پیش‌نیازهای زیر رعایت نشده‌اند: {', '.join(missing_prereqs)}"
             )
 
+        settings = EnrollmentSettings.objects.first()
+        max_allowed_units = settings.max_units if settings else 20
+
         current_units = sum(
             e.course.units for e in Enrollment.objects.filter(student=student, status='enrolled')
         )
-        if current_units + new_course.units > 20:
-            raise serializers.ValidationError("مجموع واحدهای شما بیشتر از حد مجاز (۲۰ واحد) می‌شود.")
+        if current_units + new_course.units > max_allowed_units:
+            raise serializers.ValidationError(f"مجموع واحدهای شما بیشتر از حد مجاز ({max_allowed_units} واحد) می‌شود.")
 
         new_sessions = new_course.sessions.all()
         current_enrollments = Enrollment.objects.filter(student=student, status='enrolled')

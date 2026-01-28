@@ -1,56 +1,65 @@
 from rest_framework import serializers
-from django.utils.translation import gettext_lazy as _
-from django.core.exceptions import ValidationError
-from course.models.Course import Course
 from enrollment.models import Enrollment
-from enrollment.services import enroll_student
+from course.models import Course
 
 
 class EnrollmentSerializer(serializers.ModelSerializer):
+    course_name = serializers.CharField(source='course.name', read_only=True)
+    course_code = serializers.CharField(source='course.code', read_only=True)
+    capacity = serializers.IntegerField(source='course.capacity', read_only=True)
+    units = serializers.IntegerField(source='course.units', read_only=True)
+    professor = serializers.SerializerMethodField()
+    time = serializers.SerializerMethodField()
+    location = serializers.SerializerMethodField()
+    prerequisites = serializers.SerializerMethodField()
+    id = serializers.IntegerField(read_only=True)
+
     course = serializers.SlugRelatedField(
         slug_field='code',
         queryset=Course.objects.all(),
         write_only=True
     )
-    course_title = serializers.CharField(source='course.title',
-                                         read_only=True)
-    course_code = serializers.CharField(source='course.code', read_only=True)
-    professor_name = serializers.SerializerMethodField()
-    class_schedule = serializers.StringRelatedField(source='course.sessions', many=True, read_only=True)
 
     class Meta:
         model = Enrollment
         fields = [
             'id',
-            'course',
-            'course_title',
+            'prerequisites',
+            'location',
+            'time',
+            'professor',
+            'units',
+            'capacity',
             'course_code',
-            'professor_name',
-            'class_schedule',
-            'status',
-            'created_at'
+            'course_name',
+            'course',
         ]
-        read_only_fields = ['id', 'status', 'created_at', 'course_title', 'course_code']
+        read_only_fields = ['id', 'status', 'created_at']
 
-    def get_professor_name(self, obj):
+    def get_professor(self, obj):
         if obj.course.professor:
             return f"{obj.course.professor.first_name} {obj.course.professor.last_name}"
         return "نامشخص"
 
-    def create(self, validated_data):
-        user = self.context['request'].user
+    def get_time(self, obj):
+        sessions = obj.course.sessions.all()
+        time_strings = []
+        for session in sessions:
+            day_name = session.get_day_display()
+            start = session.start_time.strftime("%H:%M")
+            end = session.end_time.strftime("%H:%M")
+            time_strings.append(f"{day_name} {start}-{end}")
 
+        return " | ".join(time_strings) if time_strings else "تعیین نشده"
 
-        if not hasattr(user, 'student'):
-            raise serializers.ValidationError(_("فقط دانشجویان می‌توانند انتخاب واحد کنند."))
+    def get_location(self, obj):
+        sessions = obj.course.sessions.all()
+        locations = [session.room for session in sessions if session.room]
+        unique_locations = list(set(locations))
+        return " | ".join(unique_locations) if unique_locations else "تعیین نشده"
 
-        student = user.student
-        course = validated_data['course']
-
-        try:
-            return enroll_student(student, course)
-
-        except ValidationError as e:
-            raise serializers.ValidationError(e.messages)
-        except Exception as e:
-            raise serializers.ValidationError(str(e))
+    def get_prerequisites(self, obj):
+        prereqs = obj.course.prerequisites.all()
+        if not prereqs:
+            return "ندارد"
+        return "، ".join([p.name for p in prereqs])

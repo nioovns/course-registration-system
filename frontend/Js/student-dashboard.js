@@ -730,7 +730,7 @@ if (Array.isArray(item.prerequisites) && item.prerequisites.length > 0) {
     if (tbody) tbody.innerHTML = "";
   }
 
-const ENROLL_URL = "http://127.0.0.1:8000/api/enrollment/my-courses/"; 
+const ENROLL_URL = "http://127.0.0.1:8000/api/my-courses/"; 
 const TOKEN_KEY = "sabau-token";
 
 function normalizeBackendError(data) {

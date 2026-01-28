@@ -10,12 +10,10 @@ from .serializers.EnrollmentSettingsSerializer import EnrollmentSettingsSerializ
 from .serializers.EnrollmentSerializer import EnrollmentSerializer
 from .services import withdraw_student
 
-
 class EnrollmentSettingsViewSet(viewsets.ModelViewSet):
     queryset = EnrollmentSettings.objects.all()
     serializer_class = EnrollmentSettingsSerializer
     permission_classes = [IsAdmin]
-
 
 class EnrollmentViewSet(mixins.CreateModelMixin,
                         mixins.ListModelMixin,
@@ -29,6 +27,10 @@ class EnrollmentViewSet(mixins.CreateModelMixin,
         if hasattr(user, 'student'):
             return Enrollment.objects.filter(student=user.student).select_related('course', 'course__professor')
         return Enrollment.objects.none()
+
+    def perform_create(self, serializer):
+        serializer.save(student=self.request.user.student)
+
     def destroy(self, request, *args, **kwargs):
         course_code_lookup = kwargs.get('pk')
 
@@ -40,7 +42,6 @@ class EnrollmentViewSet(mixins.CreateModelMixin,
 
         try:
             withdraw_student(request.user.student, enrollment.id)
-
             return Response(status=status.HTTP_204_NO_CONTENT)
 
         except ValidationError as e:

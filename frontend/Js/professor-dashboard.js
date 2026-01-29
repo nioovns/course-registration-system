@@ -737,8 +737,8 @@ if (Array.isArray(item.prerequisites) && item.prerequisites.length > 0) {
       <img
         class="group-10"
         src="../Image/show.png"
-        alt= "نمایش دانشجویان"
-        title= "نمایش دانشجویان"
+        alt="نمایش دانشجویان"
+        title="نمایش دانشجویان"
       />
     </div>
 
@@ -781,17 +781,24 @@ if (Array.isArray(item.prerequisites) && item.prerequisites.length > 0) {
     </div>
   `;
 
-  // کلیک روی آیکون show
+  // 👁️ آیکون show
   const showIcon = row.querySelector(".group-10");
+
   if (showIcon) {
+    showIcon.style.cursor = "pointer";
+
     showIcon.addEventListener("click", () => {
-      console.log("نمایش دانشجوبان درس:", lesson);
-      // اینجا می‌تونی مودال یا صفحه جدید باز کنی
+      // ذخیره id درس
+      localStorage.setItem("selected-course-id", lesson.id);
+
+      // رفتن به صفحه ثبت‌نام‌ها
+      window.location.href = "professor-view-registrations.html";
     });
   }
 
   return row;
 }
+
 
 
   function renderTable() {
@@ -1056,6 +1063,8 @@ if (newLessonBtn) {
       window.location.href = "unit-management.html";
     });
   }
+
+
 
   
 

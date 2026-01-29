@@ -66,3 +66,15 @@ class ProfessorEnrollmentViewSet(mixins.ListModelMixin,
             course=course,
             status=Enrollment.Status.ENROLLED
         ).select_related('student','student__user')
+
+    def destroy(self, request, course_id=None, student_id=None):
+        try:
+            professor_remove_student(
+                professor = professor,
+                course_id = course_id,
+                student_id = student_id
+            )
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except ValidationError as e:
+            return Response({"detail": e.messages}, status=status.HTTP_400_BAD_REQUEST)
+            

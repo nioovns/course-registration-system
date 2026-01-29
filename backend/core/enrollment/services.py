@@ -3,7 +3,7 @@ from django.db import transaction
 from django.db.models import Sum
 from .models.Enrollment import Enrollment
 from .models.EnrollmentSettings import EnrollmentSettings
-
+from django.db.models import F
 
 def enroll_student(student, course):
     check_capacity(course)
@@ -117,3 +117,21 @@ def check_unit_limits(student, course):
 
 def time_overlap(start1, end1, start2, end2):
     return max(start1, start2) < min(end1, end2)
+
+def professor_remove_student(professor, course_id, student_id):
+    with transaction.atomic():
+        try:
+            enrollment = Enrollment.objects.select_related('course').select_for_update().get(
+                    course_id = course_id, 
+                    student_id = student_id, 
+                    status = Enrollment.Status.ENROLLED, 
+                    )
+        except Enrollment.DoesNotExist:
+            raise ValidationError("دانشجو در این  درس ثبت نام نشده است")
+        if enrollment.course.professor != professor.user:
+            raise ValidationError("شما اجازه حذف این دانشجو را ندارید")
+
+        course = enrollment.course
+        course.capacity = F('capacity') + 1
+        course.save(update_fields=['capacity'])
+        enrollment.delete()

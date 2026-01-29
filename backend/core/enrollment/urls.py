@@ -11,5 +11,10 @@ urlpatterns = [
         ProfessorEnrollmentViewSet.as_view({'get': 'list'}),
         name='course-enrollments'
     ),
+    path(
+        'courses/<int:course_id>/enrollments/<int:student_id>/', 
+        ProfessorEnrollmentViewSet.as_view({'delete': 'destroy'}), 
+        name='enrollment-delete'
+    ),
 
 ]

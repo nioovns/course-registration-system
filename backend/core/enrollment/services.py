@@ -128,7 +128,7 @@ def professor_remove_student(professor, course_id, student_id):
                     )
         except Enrollment.DoesNotExist:
             raise ValidationError("دانشجو در این  درس ثبت نام نشده است")
-        if enrollment.course.professor != professor.user:
+        if enrollment.course.professor != professor:
             raise ValidationError("شما اجازه حذف این دانشجو را ندارید")
 
         course = enrollment.course

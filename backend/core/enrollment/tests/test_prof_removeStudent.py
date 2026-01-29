@@ -4,6 +4,8 @@ from enrollment.services import professor_remove_student
 from enrollment.models import Enrollment
 from users.models import User, Professor, Student
 from course.models.Course import Course
+from rest_framework.test import APITestCase, APIClient
+from rest_framework import status
 
 class ProfessorRemoveStudentServiceTest(TestCase):
 
@@ -28,7 +30,7 @@ class ProfessorRemoveStudentServiceTest(TestCase):
         old_capacity = self.course.capacity
 
         professor_remove_student(
-            professor=self.prof1,
+            professor=self.prof_user1,
             course_id=self.course.id,
             student_id=self.student.id
         )
@@ -45,8 +47,14 @@ class ProfessorRemoveStudentServiceTest(TestCase):
 
         with self.assertRaises(ValidationError):
             professor_remove_student(
-                professor=other_professor,
+                professor=self.prof_user2,
                 course_id=self.course.id,
                 student_id=self.student.id
             )
 
+    def test_remove_student_api(self):
+        self.client = APIClient()
+        self.client.force_authenticate(user=self.prof_user1)
+        url = f"/api/enrollment/courses/{self.course.id}/enrollments/{self.student.id}/"
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)

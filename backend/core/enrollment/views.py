@@ -8,10 +8,9 @@ from .models.EnrollmentSettings import EnrollmentSettings
 from .models.Enrollment import Enrollment
 from .serializers.EnrollmentSettingsSerializer import EnrollmentSettingsSerializer
 from .serializers.EnrollmentSerializer import EnrollmentSerializer
-from .services import withdraw_student
+from .services import withdraw_student, professor_remove_student
 from enrollment.serializers.EnrollmentSerializer import ProfessorEnrollmentSerializer
 from course.models.Course import Course
-
 class EnrollmentSettingsViewSet(viewsets.ModelViewSet):
     queryset = EnrollmentSettings.objects.all()
     serializer_class = EnrollmentSettingsSerializer
@@ -70,11 +69,10 @@ class ProfessorEnrollmentViewSet(mixins.ListModelMixin,
     def destroy(self, request, course_id=None, student_id=None):
         try:
             professor_remove_student(
-                professor = professor,
+                professor = self.request.user,
                 course_id = course_id,
                 student_id = student_id
             )
             return Response(status=status.HTTP_204_NO_CONTENT)
         except ValidationError as e:
             return Response({"detail": e.messages}, status=status.HTTP_400_BAD_REQUEST)
-            

@@ -12,7 +12,7 @@ urlpatterns = [
         name='course-enrollments'
     ),
     path(
-        'courses/<int:course_id>/enrollments/<int:student_id>/', 
+        'courses/<int:course_id>/enrollments/<int:student_db_id>/', 
         ProfessorEnrollmentViewSet.as_view({'delete': 'destroy'}), 
         name='enrollment-delete'
     ),

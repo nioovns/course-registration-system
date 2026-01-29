@@ -63,3 +63,20 @@ class EnrollmentSerializer(serializers.ModelSerializer):
         if not prereqs:
             return "ندارد"
         return "، ".join([p.name for p in prereqs])
+
+class ProfessorEnrollmentSerializer(serializers.ModelSerializer):
+    student_id = serializers.CharField(source='student.student_id')
+    first_name = serializers.CharField(source='student.user.first_name', read_only=True)
+    last_name = serializers.CharField(source='student.user.last_name', read_only=True)
+
+    class Meta:
+        model = Enrollment
+        fields = [
+            'id',
+            'student_id',
+            'first_name',
+            'last_name',
+            'status',
+            'grade',
+            'created_at',
+        ]

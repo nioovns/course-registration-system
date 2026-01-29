@@ -689,7 +689,7 @@ function buildLocationText(sessions) {
   if (deleteIcon) {
     deleteIcon.style.cursor = "pointer";
     deleteIcon.addEventListener("click", () => {
-      handleDeleteLesson(lesson.id); // حذف از برنامه هفتگی
+      handleDeleteLesson(lesson.code); 
     });
   }
 
@@ -1000,6 +1000,49 @@ if (newLessonBtn) {
     showGlobalError("عدم ارتباط با سرور");
   }
 }
+
+async function handleDeleteLesson(courseCode) {
+  showConfirmDialog({
+    title: "حذف درس",
+    message: "آیا مطمئن هستید که می‌خواهید این درس را حذف کنید؟",
+    confirmText: "حذف",
+    cancelText: "انصراف",
+
+    onConfirm: async () => {
+      const token = localStorage.getItem("sabau-token");
+
+      try {
+        const res = await fetch(
+          `http://127.0.0.1:8000/api/enrollment/my-courses/${courseCode}/`,
+          {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: "application/json",
+            },
+          }
+        );
+
+        if (res.status === 204 || res.ok) {
+  
+          lessons = lessons.filter(l => l.code !== courseCode);
+          filteredLessons = filteredLessons.filter(l => l.code !== courseCode);
+          renderTable();
+          return;
+        }
+
+        const text = await res.text();
+        console.error("DELETE ERROR:", res.status, text);
+        showGlobalError("حذف درس ناموفق بود");
+
+      } catch (err) {
+        console.error(err);
+        showGlobalError("عدم ارتباط با سرور");
+      }
+    },
+  });
+}
+
 
  
   

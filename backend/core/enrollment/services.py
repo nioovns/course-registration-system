@@ -1,62 +1,63 @@
 from django.core.exceptions import ValidationError
 from django.db import transaction
-from django.db.models import Sum
+from django.db.models import Sum, F
+from django.shortcuts import get_object_or_404
 from .models.Enrollment import Enrollment
 from .models.EnrollmentSettings import EnrollmentSettings
-from django.db.models import F
+from course.models.Course import Course
+
 
 def enroll_student(student, course):
-    check_capacity(course)
     check_repetition(student, course)
     check_prerequisites(student, course)
     check_time_conflicts(student, course)
     check_unit_limits(student, course)
 
     with transaction.atomic():
-        return Enrollment.objects.create(student=student, course=course)
+        course_locked = Course.objects.select_for_update().get(pk=course.pk)
+
+        if course_locked.capacity <= 0:
+            raise ValidationError("ظرفیت این کلاس تکمیل شده است.")
+
+        enrollment = Enrollment.objects.create(student=student, course=course_locked)
+
+        course_locked.capacity = F('capacity') - 1
+        course_locked.save()
+
+        return enrollment
 
 
 def withdraw_student(student, enrollment_id):
-    try:
-        enrollment = Enrollment.objects.get(id=enrollment_id, student=student)
-    except Enrollment.DoesNotExist:
-        raise ValidationError("این درس یافت نشد.")
+    with transaction.atomic():
+        try:
+            enrollment = Enrollment.objects.select_related('course').get(id=enrollment_id, student=student)
+        except Enrollment.DoesNotExist:
+            raise ValidationError("این درس یافت نشد.")
 
-    settings = EnrollmentSettings.objects.first()
-    if settings and not settings.is_active:
-        raise ValidationError("مهلت حذف و اضافه به پایان رسیده است.")
+        settings = EnrollmentSettings.objects.first()
+        if settings and not settings.is_active:
+            raise ValidationError("مهلت حذف و اضافه به پایان رسیده است.")
 
-    enrollment.delete()
+        course_locked = Course.objects.select_for_update().get(pk=enrollment.course.pk)
+
+        enrollment.delete()
+
+        course_locked.capacity = F('capacity') + 1
+        course_locked.save()
 
 
 def check_capacity(course):
-    current_count = Enrollment.objects.filter(
-        course=course,
-        status=Enrollment.Status.ENROLLED
-    ).count()
-
-    if current_count >= course.capacity:
+    if course.capacity <= 0:
         raise ValidationError("ظرفیت این کلاس تکمیل شده است.")
 
 
 def check_repetition(student, course):
-    passed = Enrollment.objects.filter(
-        student=student,
-        course=course,
-        status=Enrollment.Status.PASSED
-    ).exists()
-
-    if passed:
-        raise ValidationError("شما این درس را قبلاً پاس کرده‌اید.")
-
-    already_enrolled = Enrollment.objects.filter(
-        student=student,
-        course=course,
-        status=Enrollment.Status.ENROLLED
-    ).exists()
-
-    if already_enrolled:
-        raise ValidationError("شما این درس را در همین ترم اخذ کرده‌اید.")
+    if Enrollment.objects.filter(
+            student=student,
+            course=course,
+            status__in=[Enrollment.Status.ENROLLED, Enrollment.Status.PASSED]
+    ).exists():
+        raise ValidationError("شما این درس را قبلاً اخذ کرده یا پاس نموده‌اید.")
 
 
 def check_prerequisites(student, course):
@@ -106,10 +107,12 @@ def check_unit_limits(student, course):
     if not settings:
         return
 
-    current_units = Enrollment.objects.filter(
+    result = Enrollment.objects.filter(
         student=student,
         status=Enrollment.Status.ENROLLED
-    ).aggregate(total=Sum('course__units'))['total'] or 0
+    ).aggregate(total=Sum('course__units'))
+
+    current_units = result['total'] or 0
 
     if current_units + course.units > settings.max_units:
         raise ValidationError(f"سقف مجاز واحد ({settings.max_units}) رعایت نشده است.")

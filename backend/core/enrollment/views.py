@@ -3,13 +3,14 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from django.core.exceptions import ValidationError
-from users.permissions import IsAdmin, IsStudent
+from users.permissions import IsAdmin, IsStudent, IsProfessor
 from .models.EnrollmentSettings import EnrollmentSettings
 from .models.Enrollment import Enrollment
 from .serializers.EnrollmentSettingsSerializer import EnrollmentSettingsSerializer
 from .serializers.EnrollmentSerializer import EnrollmentSerializer
-from .services import withdraw_student
-
+from .services import withdraw_student, professor_remove_student
+from enrollment.serializers.EnrollmentSerializer import ProfessorEnrollmentSerializer
+from course.models.Course import Course
 class EnrollmentSettingsViewSet(viewsets.ModelViewSet):
     queryset = EnrollmentSettings.objects.all()
     serializer_class = EnrollmentSettingsSerializer
@@ -48,3 +49,32 @@ class EnrollmentViewSet(mixins.CreateModelMixin,
             return Response({"detail": e.messages}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             return Response({"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+class ProfessorEnrollmentViewSet(mixins.ListModelMixin,
+                                 viewsets.GenericViewSet):
+    serializer_class = ProfessorEnrollmentSerializer
+    permission_classes = [IsAuthenticated, IsProfessor]
+    def get_queryset(self):
+        course_id = self.kwargs.get('course_id')
+
+        course = get_object_or_404(
+            Course,
+            id=course_id,
+            professor=self.request.user  
+        )
+
+        return Enrollment.objects.filter(
+            course=course,
+            status=Enrollment.Status.ENROLLED
+        ).select_related('student','student__user')
+
+    def destroy(self, request, course_id=None, student_db_id=None):
+        try:
+            professor_remove_student(
+                professor = self.request.user,
+                course_id = course_id,
+                student_id = student_db_id
+            )
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except ValidationError as e:
+            return Response({"detail": e.messages}, status=status.HTTP_400_BAD_REQUEST)

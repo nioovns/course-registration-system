@@ -143,3 +143,18 @@ class EnrollmentSerializer(serializers.ModelSerializer):
             course_locked.save()
 
             return enrollment
+
+class ProfessorEnrollmentSerializer(serializers.ModelSerializer):
+    student_id = serializers.CharField(source='student.student_id')
+    student_db_id = serializers.IntegerField(source='student.id')
+    first_name = serializers.CharField(source='student.user.first_name', read_only=True)
+    last_name = serializers.CharField(source='student.user.last_name', read_only=True)
+    class Meta:
+        model = Enrollment
+        fields = [
+            'id',
+            'student_db_id',
+            'student_id',
+            'first_name',
+            'last_name',
+        ]

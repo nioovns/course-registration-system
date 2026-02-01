@@ -20,7 +20,7 @@ class ProfessorEnrollmentViewSetTests(APITestCase):
             professor=self.prof_user1
         )
         self.student_user = User.objects.create_user(username='student1', password='pass123', role= User.Roles.STUDENT)
-        self.student = Student.objects.create(user=self.student_user)
+        self.student = Student.objects.create(user=self.student_user, first_name = "ali", last_name = "omidi", student_id = "40173109")
         self.enrollment = Enrollment.objects.create(student=self.student, course=self.course1)
 
         self.client = APIClient()
@@ -32,6 +32,7 @@ class ProfessorEnrollmentViewSetTests(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]['id'], self.enrollment.id)
+        print(response.data)
 
     def test_other_professor_cannot_view_enrollments(self):
         self.client.force_authenticate(user=self.prof_user2)

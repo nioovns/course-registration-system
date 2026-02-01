@@ -749,9 +749,6 @@ function normalizeBackendError(data) {
 
 async function enrollCourse(courseCode) {
   const token = localStorage.getItem("sabau-token");
-  if (!token) {
-    return { ok: false, error: "ابتدا وارد حساب شوید." };
-  }
 
   try {
     const res = await fetch(
@@ -759,34 +756,58 @@ async function enrollCourse(courseCode) {
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${token}`,
+          "Authorization": `Bearer ${token}`,
           "Content-Type": "application/json",
-          Accept: "application/json",
         },
         body: JSON.stringify({
-          course: String(courseCode), // 👈 دقیقاً طبق Swagger
+          course: String(courseCode),
         }),
       }
     );
 
-    const text = await res.text();
-    const data = text ? JSON.parse(text) : null;
-
-    if (!res.ok) {
-      return {
-        ok: false,
-        error: data?.detail || "اخذ درس ناموفق بود",
-      };
+    if (res.ok) {
+      return { ok: true };
     }
 
-    return { ok: true, data };
+   
+    let message = "اخذ درس ناموفق بود";
+
+    try {
+      const errorData = await res.json();
+
+      console.log("ENROLL ERROR:", errorData);
+
+     
+      if (errorData.non_field_errors?.length) {
+        message = errorData.non_field_errors.join("\n");
+      }
+      
+      else if (errorData.course?.length) {
+        message = errorData.course.join("\n");
+      }
+      
+      else if (typeof errorData.detail === "string") {
+        message = errorData.detail;
+      }
+    } catch {
+    
+      const text = await res.text();
+      console.error("RAW ERROR:", text);
+    }
+
+    return {
+      ok: false,
+      error: message,
+    };
 
   } catch (e) {
-    return { ok: false, error: "عدم ارتباط با سرور" };
+    console.error(e);
+    return {
+      ok: false,
+      error: "خطا در ارتباط با سرور",
+    };
   }
 }
-
-
 
 
 function createRow(lesson) {
@@ -824,7 +845,7 @@ function createRow(lesson) {
     addIcon.addEventListener("click", async () => {
       const courseCode = row.dataset.courseCode;
 
-      console.log("ENROLL course =", courseCode); // 🔥 حتماً ببین
+      console.log("ENROLL course =", courseCode); 
 
       const result = await enrollCourse(courseCode);
 

@@ -46,16 +46,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // ===============================
-  // رندر جدول
-  // ===============================
+ 
   function renderTable(list) {
     tbody.innerHTML = "";
 
     if (!Array.isArray(list) || list.length === 0) {
       tbody.innerHTML = `
         <div style="padding:14px; text-align:center; color:#777">
-          دانشجویی برای این درس ثبت‌نام نکرده است
+          دانشجویی برای این درس ثبت‌ نام نکرده است
         </div>
       `;
       return;

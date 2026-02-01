@@ -1216,7 +1216,7 @@ body {
   word-break: keep-all;
 }
 ._16-14-16-14 {
-  font-family: "Vazirmatn", sans-serif;
+  font-family: "Dana-Regular", sans-serif;
   font-size: 13.5px;
   font-weight: 400;
   color: #333;
@@ -1234,4 +1234,5 @@ body {
   font-size: 13px;
   font-weight: 400;
   text-align: right;
+  bottom: 10px;
 }

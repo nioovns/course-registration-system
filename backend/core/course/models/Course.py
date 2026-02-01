@@ -1,5 +1,4 @@
 from django.db import models
-from .ClassSession import ClassSession
 from course.choices import UnitChoices
 from users.models import User
 class Course(models.Model):
@@ -9,7 +8,7 @@ class Course(models.Model):
 
     capacity = models.PositiveIntegerField()
 
-    sessions = models.ManyToManyField(ClassSession, related_name="courses")
+    sessions = models.ManyToManyField("ClassSession", related_name="courses")
 
     professor = models.ForeignKey(
         User,
@@ -28,13 +27,13 @@ class Course(models.Model):
     )
 
     class Meta:
-        app_label = 'course' 
+        app_label = 'course'
         verbose_name = 'Course'
         verbose_name_plural = 'Courses'
 
     def __str__(self):
         return f"{self.name} ({self.code})"
-    
+
     def delete(self, *args, **kwargs):
         self.sessions.all().delete()
         super().delete(*args, **kwargs)

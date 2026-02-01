@@ -1,9 +1,10 @@
 from rest_framework import serializers
+# اصلاح آدرس ایمپورت
 from enrollment.models.EnrollmentSettings import EnrollmentSettings
 
 class EnrollmentSettingsSerializer(serializers.ModelSerializer):
     is_active = serializers.BooleanField(default=True)
-    
+
     class Meta:
         model = EnrollmentSettings
         fields = "__all__"

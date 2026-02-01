@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const datatable = document.querySelector(".datatable");
   const tableEl = document.querySelector(".datatable .table");
   const newLessonBtn = document.querySelector(".frame-28");
-  const unitManagementBtn = document.querySelector(".sidenav-link3");
+  const takeCourseBtn = document.querySelector(".sidenav-link");
   
 
   const pageIndicatorEl = document.querySelector(".table-footer .one"); 
@@ -29,6 +29,14 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.href = "login.html";
     return;
   }
+
+
+  if (!takeCourseBtn) return;
+
+  takeCourseBtn.style.cursor = "pointer";
+  takeCourseBtn.addEventListener("click", () => {
+    window.location.href = "student-dashboard.html";
+  });
 
   let globalOverlay = null;
   let courseNameById = {};
@@ -375,94 +383,6 @@ function buildLocationText(sessions) {
 }
 
 
-
- async function fetchLessonsFromApi(searchTerm = "") {
-  const token = localStorage.getItem("sabau-token");
-  if (!token) {
-    window.location.href = "login.html";
-    return;
-  }
-
-  let url = "http://127.0.0.1:8000/api/courses/";
-
-  if (searchTerm) {
-    const qs = encodeURIComponent(searchTerm.trim());
-    url += `?search=${qs}`;
-  }
-
-  try {
-    const res = await fetch(url, {
-      method: "GET",
-      headers: {
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!res.ok) {
-      console.log("LESSONS STATUS:", res.status);
-      showGlobalError("خطا در دریافت لیست دروس از سرور.");
-      return;
-    }
-
-    const data = await res.json();
-    const items = Array.isArray(data) ? data : data.results || [];
-
-    courseNameById = {};
-    data.forEach(c => {
-    if (c.id && c.name) {
-    courseNameById[c.id] = c.name;
-        }
-    });
-
-    lessons = items.map((item, index) => {
-      const sessions = Array.isArray(item.sessions) ? item.sessions : [];
-
-      let teacherRaw = "";
-      if (typeof item.professor === "string") {
-        teacherRaw = item.professor;
-      } else if (item.professor?.name) {
-        teacherRaw = item.professor.name;
-      }
-      const teacher = teacherRaw.replace(/\s*\(Professor\)\s*$/i, "").trim();
-
-      const schedule = buildScheduleText(sessions);
-      const location = buildLocationText(sessions);
-      let prereqText = "—";
-
-if (Array.isArray(item.prerequisites) && item.prerequisites.length > 0) {
-  prereqText = item.prerequisites
-    .map(id => courseNameById[id])
-    .filter(Boolean)
-    .join("\n");
-}
-
-
-      return {
-        id: item.id ?? index + 1,
-        name: item.name || "",
-        code: item.code || "",
-        capacity: item.capacity ?? "",
-        units: item.units ?? "",
-        teacher,
-        schedule,
-        location,
-        prerequisites: prereqText,
-
-      };
-    });
-
-    filteredLessons = [...lessons];
-    currentPage = 1;
-    renderTable();
-
-  } catch (err) {
-    console.error("LESSONS FETCH ERROR:", err);
-    showGlobalError("عدم ارتباط با سرور.");
-  }
-}
-
-
   
   const defaultLessons = [
     {
@@ -727,72 +647,49 @@ if (Array.isArray(item.prerequisites) && item.prerequisites.length > 0) {
     if (tbody) tbody.innerHTML = "";
   }
 
-  function createRow(lesson) {
+ function createRow(lesson) {
   const row = document.createElement("div");
   row.className = "tr2";
 
   row.innerHTML = `
-    <!-- ستون عملیات -->
     <div class="td">
-      <img
-        class="group-10"
-        src="../Image/show.png"
-        alt="نمایش دانشجویان"
-        title="نمایش دانشجویان"
-      />
+      <img class="group-10" src="../Image/trash.svg" alt="حذف درس" />
     </div>
 
     <div class="td2">
-      <div class="_pre">
-        ${lesson.prerequisites
-          ? lesson.prerequisites.replace(/\n/g, "<br />")
-          : "—"}
-      </div>
-    </div>
+  <div class="_pre">
+    ${
+      lesson.prerequisites
+        ? String(lesson.prerequisites).replace(/\n/g, "<br />")
+        : "—"
+    }
+  </div>
+</div>
+    <div class="td2"><div>${lesson.location}</div></div>
+   <div class="_16-14-16-14">
+  ${
+    lesson.schedule
+      ? String(lesson.schedule)
+          .replace(/\n/g, "<br />")
+          .replace(/\s*\|\s*/g, "<br />")
+      : "—"
+  }
+</div>
 
-    <div class="td2">
-      <div class="_200">${lesson.location || ""}</div>
-    </div>
 
-    <div class="td2">
-      <div class="_16-14-16-14">
-        ${lesson.schedule ? lesson.schedule.replace(/\n/g, "<br />") : ""}
-      </div>
-    </div>
-
-    <div class="td2">
-      <div class="div3">${lesson.teacher || ""}</div>
-    </div>
-
-    <div class="td2">
-      <div class="_unit">${lesson.units ?? ""}</div>
-    </div>
-
-    <div class="td2">
-      <div class="_30">${lesson.capacity ?? ""}</div>
-    </div>
-
-    <div class="td2">
-      <div class="_45789">${lesson.code || ""}</div>
-    </div>
-
-    <div class="td2">
-      <div class="_1">${lesson.name || ""}</div>
-    </div>
+    <div class="td2"><div>${lesson.teacher}</div></div>
+    <div class="td2"><div>${lesson.units}</div></div>
+    <div class="td2"><div>${lesson.capacity}</div></div>
+    <div class="td2"><div>${lesson.code}</div></div>
+    <div class="td2"><div>${lesson.name}</div></div>
   `;
 
-  // 👁️ آیکون show
-  const showIcon = row.querySelector(".group-10");
+  const deleteIcon = row.querySelector(".group-10");
 
-  if (showIcon) {
-    showIcon.style.cursor = "pointer";
-
-    showIcon.addEventListener("click", () => {
-      // ذخیره id درس
-      localStorage.setItem("selected-course-id", lesson.id);
-
-      // رفتن به صفحه ثبت‌نام‌ها
-      window.location.href = "professor-view-registrations.html";
+  if (deleteIcon) {
+    deleteIcon.style.cursor = "pointer";
+    deleteIcon.addEventListener("click", () => {
+      handleDeleteLesson(lesson.code); 
     });
   }
 
@@ -1056,20 +953,101 @@ if (newLessonBtn) {
     });
   }
 
-    if (unitManagementBtn) {
-    unitManagementBtn.style.cursor = "pointer";
 
-    unitManagementBtn.addEventListener("click", () => {
-      window.location.href = "unit-management.html";
-    });
+  async function fetchWeeklyPlan() {
+  const token = localStorage.getItem("sabau-token");
+
+  try {
+    const res = await fetch(
+      "http://127.0.0.1:8000/api/enrollment/my-courses/",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+      }
+    );
+
+    if (!res.ok) {
+      showGlobalError("خطا در دریافت برنامه هفتگی");
+      return;
+    }
+
+    const data = await res.json();
+    console.log("WEEKLY PLAN DATA:", data);
+
+    lessons = data.map(item => ({
+      id: item.id,                          
+      name: item.course_name,               
+      code: item.course_code,
+      capacity: item.capacity,
+      units: item.units,
+      teacher: item.professor,
+      schedule: item.time
+       .split("|")
+           .map(t => t.trim())
+                .join("<br />"),
+      location: item.location.replace(/\|/g, "<br />"),
+      prerequisites: item.prerequisites || "—",
+    }));
+
+    filteredLessons = [...lessons];
+    currentPage = 1;
+    renderTable();
+
+  } catch (err) {
+    console.error("WEEKLY PLAN ERROR:", err);
+    showGlobalError("عدم ارتباط با سرور");
   }
+}
 
+async function handleDeleteLesson(courseCode) {
+  showConfirmDialog({
+    title: "حذف درس",
+    message: "آیا مطمئن هستید که می‌خواهید این درس را حذف کنید؟",
+    confirmText: "حذف",
+    cancelText: "انصراف",
 
+    onConfirm: async () => {
+      const token = localStorage.getItem("sabau-token");
 
+      try {
+        const res = await fetch(
+          `http://127.0.0.1:8000/api/enrollment/my-courses/${courseCode}/`,
+          {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: "application/json",
+            },
+          }
+        );
+
+        if (res.status === 204 || res.ok) {
   
+          lessons = lessons.filter(l => l.code !== courseCode);
+          filteredLessons = filteredLessons.filter(l => l.code !== courseCode);
+          renderTable();
+          return;
+        }
 
+        const text = await res.text();
+        console.error("DELETE ERROR:", res.status, text);
+        showGlobalError("حذف درس ناموفق بود");
+
+      } catch (err) {
+        console.error(err);
+        showGlobalError("عدم ارتباط با سرور");
+      }
+    },
+  });
+}
+
+
+ 
+  
   initSearchBox();
-  fetchLessonsFromApi();
+  fetchWeeklyPlan();
 });
 
 
@@ -1104,6 +1082,7 @@ if (newLessonBtn) {
     dateTarget.textContent = `${persianTime} | ${persianDate}`;
   }
 }
+
 
   updateDateTime();
   

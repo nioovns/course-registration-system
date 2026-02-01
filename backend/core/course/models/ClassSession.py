@@ -1,9 +1,7 @@
 from django.db import models
 from django.core.exceptions import ValidationError
-# اگر ایمپورت‌های زیر ارور داد، از ..validators استفاده کنید
-from course.validators import validate_time_range
-from course.choices import TimeChoices, FacultyChoices, RoomChoices, DayChoices, UnitChoices
-
+# from course.validators import validate_time_range
+from course.choices import TimeChoices, FacultyChoices, RoomChoices, DayChoices
 
 class ClassSession(models.Model):
     day = models.CharField(max_length=10, choices=DayChoices.DAY_CHOICES)
@@ -13,15 +11,12 @@ class ClassSession(models.Model):
     room = models.CharField(max_length=20)
 
     class Meta:
-        app_label = 'course'  #
+        app_label = 'course'
         verbose_name = 'Class Session'
         verbose_name_plural = 'Class Sessions'
 
     def clean(self):
-        try:
-            validate_time_range(self.start_time, self.end_time)
-        except ValidationError as e:
-            raise e
+        pass
 
     def save(self, *args, **kwargs):
         self.full_clean()

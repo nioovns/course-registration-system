@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const searchContainer = document.querySelector(".th4");
   const bellBadge = document.querySelector(".badge-with-notification ._12");
   const bellWrapper = document.querySelector(".badge-with-notification");
+  
 
   const PAGE_SIZE = 5;
   let currentPage = 1;
@@ -29,6 +30,8 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.href = "login.html";
     return;
   }
+
+  
 
   let globalOverlay = null;
   let courseNameById = {};
@@ -727,62 +730,142 @@ if (Array.isArray(item.prerequisites) && item.prerequisites.length > 0) {
     if (tbody) tbody.innerHTML = "";
   }
 
-  function createRow(lesson) {
-    const row = document.createElement("div");
-    row.className = "tr2";
-    row.dataset.lessonId = lesson.id;
+const ENROLL_URL = "http://127.0.0.1:8000/api/enrollment/my-courses/";
+const TOKEN_KEY = "sabau-token";
 
-    row.innerHTML = `
-      
-     
-      <div class="td2">
-       <div class="_pre">
-       ${lesson.prerequisites
-      ? lesson.prerequisites.replace(/\n/g, "<br />")
-      : "—"}
-         </div>
-      </div>
+function normalizeBackendError(data) {
+  if (!data) return "خطای نامشخص از سرور.";
+  if (typeof data === "string") return data;
+  if (data.detail) return data.detail;
 
-      <div class="td2">
-        <div class="_200">${lesson.location || ""}</div>
-      </div>
-      <div class="td2">
-        <div class="_16-14-16-14">
-          ${lesson.schedule ? lesson.schedule.replace(/\n/g, "<br />") : ""}
-        </div>
-      </div>
-      <div class="td2">
-        <div class="div3">${lesson.teacher || ""}</div>
-      </div>
-      <div class="td2">
-        <div class="_unit">${lesson.units != null ? lesson.units : ""}</div>
-      </div>
-      <div class="td2">
-        <div class="_30">${lesson.capacity != null ? lesson.capacity : ""}</div>
-      </div>
-      <div class="td2">
-        <div class="_45789">${lesson.code || ""}</div>
-      </div>
-      <div class="td2">
-        <div class="_1">${lesson.name || ""}</div>
-      </div>
-    `;
-
-    const deleteIcon = row.querySelector(".group-10");
-    const editIcon = row.querySelector(".group-11");
-
-    if (deleteIcon) {
-      deleteIcon.style.cursor = "pointer";
-      deleteIcon.addEventListener("click", () => handleDeleteLesson(lesson.id));
-    }
-
-    if (editIcon) {
-      editIcon.style.cursor = "pointer";
-      editIcon.addEventListener("click", () => handleEditLesson(lesson));
-    }
-
-    return row;
+  const parts = [];
+  for (const k of Object.keys(data)) {
+    const v = data[k];
+    if (Array.isArray(v)) parts.push(v.join("، "));
+    else if (typeof v === "string") parts.push(v);
   }
+  return parts.length ? parts.join("\n") : "درخواست نامعتبر است.";
+}
+
+async function enrollCourse(courseCode) {
+  const token = localStorage.getItem("sabau-token");
+
+  try {
+    const res = await fetch(
+      "http://127.0.0.1:8000/api/enrollment/my-courses/",
+      {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          course: String(courseCode),
+        }),
+      }
+    );
+
+    if (res.ok) {
+      return { ok: true };
+    }
+
+   
+    let message = "اخذ درس ناموفق بود";
+
+    try {
+      const errorData = await res.json();
+
+      console.log("ENROLL ERROR:", errorData);
+
+     
+      if (errorData.non_field_errors?.length) {
+        message = errorData.non_field_errors.join("\n");
+      }
+      
+      else if (errorData.course?.length) {
+        message = errorData.course.join("\n");
+      }
+      
+      else if (typeof errorData.detail === "string") {
+        message = errorData.detail;
+      }
+    } catch {
+    
+      const text = await res.text();
+      console.error("RAW ERROR:", text);
+    }
+
+    return {
+      ok: false,
+      error: message,
+    };
+
+  } catch (e) {
+    console.error(e);
+    return {
+      ok: false,
+      error: "خطا در ارتباط با سرور",
+    };
+  }
+}
+
+
+function createRow(lesson) {
+  const row = document.createElement("div");
+  row.className = "tr2";
+
+  // 👈 کد درس
+  row.dataset.courseCode = lesson.code;
+
+  row.innerHTML = `
+    <div class="td">
+      <img class="group-10" src="../Image/plus-lesson.svg" alt="اخذ درس" />
+    </div>
+
+    <div class="td2"><div class="_pre">
+      ${lesson.prerequisites ? lesson.prerequisites.replace(/\n/g, "<br />") : "—"}
+    </div></div>
+
+    <div class="td2"><div class="_200">${lesson.location || ""}</div></div>
+    <div class="td2"><div class="_16-14-16-14">
+      ${lesson.schedule ? lesson.schedule.replace(/\n/g, "<br />") : ""}
+    </div></div>
+    <div class="td2"><div class="div3">${lesson.teacher || ""}</div></div>
+    <div class="td2"><div class="_unit">${lesson.units ?? ""}</div></div>
+    <div class="td2"><div class="_30">${lesson.capacity ?? ""}</div></div>
+    <div class="td2"><div class="_45789">${lesson.code || ""}</div></div>
+    <div class="td2"><div class="_1">${lesson.name || ""}</div></div>
+  `;
+
+  const addIcon = row.querySelector(".group-10");
+
+  if (addIcon) {
+    addIcon.style.cursor = "pointer";
+
+    addIcon.addEventListener("click", async () => {
+      const courseCode = row.dataset.courseCode;
+
+      console.log("ENROLL course =", courseCode); 
+
+      const result = await enrollCourse(courseCode);
+
+      if (!result.ok) {
+        showGlobalError(result.error);
+        return;
+      }
+
+      showGlobalError("درس با موفقیت اخذ شد ✅");
+      await fetchLessonsFromApi();
+    
+       setTimeout(() => {
+       window.location.href = "student-weekly-plan.html";
+        }, 800);
+    });
+  }
+
+  return row;
+}
+
 
   function renderTable() {
     if (!tbody) return;
@@ -1043,7 +1126,7 @@ if (newLessonBtn) {
     unitManagementBtn.style.cursor = "pointer";
 
     unitManagementBtn.addEventListener("click", () => {
-      window.location.href = "unit-management.html";
+      window.location.href = "student-weekly-plan.html";
     });
   }
 

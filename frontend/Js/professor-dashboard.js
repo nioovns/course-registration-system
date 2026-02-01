@@ -728,61 +728,78 @@ if (Array.isArray(item.prerequisites) && item.prerequisites.length > 0) {
   }
 
   function createRow(lesson) {
-    const row = document.createElement("div");
-    row.className = "tr2";
-    row.dataset.lessonId = lesson.id;
+  const row = document.createElement("div");
+  row.className = "tr2";
 
-    row.innerHTML = `
-      
-     
-      <div class="td2">
-       <div class="_pre">
-       ${lesson.prerequisites
-      ? lesson.prerequisites.replace(/\n/g, "<br />")
-      : "—"}
-         </div>
-      </div>
+  row.innerHTML = `
+    <!-- ستون عملیات -->
+    <div class="td">
+      <img
+        class="group-10"
+        src="../Image/show.png"
+        alt="نمایش دانشجویان"
+        title="نمایش دانشجویان"
+      />
+    </div>
 
-      <div class="td2">
-        <div class="_200">${lesson.location || ""}</div>
+    <div class="td2">
+      <div class="_pre">
+        ${lesson.prerequisites
+          ? lesson.prerequisites.replace(/\n/g, "<br />")
+          : "—"}
       </div>
-      <div class="td2">
-        <div class="_16-14-16-14">
-          ${lesson.schedule ? lesson.schedule.replace(/\n/g, "<br />") : ""}
-        </div>
-      </div>
-      <div class="td2">
-        <div class="div3">${lesson.teacher || ""}</div>
-      </div>
-      <div class="td2">
-        <div class="_unit">${lesson.units != null ? lesson.units : ""}</div>
-      </div>
-      <div class="td2">
-        <div class="_30">${lesson.capacity != null ? lesson.capacity : ""}</div>
-      </div>
-      <div class="td2">
-        <div class="_45789">${lesson.code || ""}</div>
-      </div>
-      <div class="td2">
-        <div class="_1">${lesson.name || ""}</div>
-      </div>
-    `;
+    </div>
 
-    const deleteIcon = row.querySelector(".group-10");
-    const editIcon = row.querySelector(".group-11");
+    <div class="td2">
+      <div class="_200">${lesson.location || ""}</div>
+    </div>
 
-    if (deleteIcon) {
-      deleteIcon.style.cursor = "pointer";
-      deleteIcon.addEventListener("click", () => handleDeleteLesson(lesson.id));
-    }
+    <div class="td2">
+      <div class="_16-14-16-14">
+        ${lesson.schedule ? lesson.schedule.replace(/\n/g, "<br />") : ""}
+      </div>
+    </div>
 
-    if (editIcon) {
-      editIcon.style.cursor = "pointer";
-      editIcon.addEventListener("click", () => handleEditLesson(lesson));
-    }
+    <div class="td2">
+      <div class="div3">${lesson.teacher || ""}</div>
+    </div>
 
-    return row;
+    <div class="td2">
+      <div class="_unit">${lesson.units ?? ""}</div>
+    </div>
+
+    <div class="td2">
+      <div class="_30">${lesson.capacity ?? ""}</div>
+    </div>
+
+    <div class="td2">
+      <div class="_45789">${lesson.code || ""}</div>
+    </div>
+
+    <div class="td2">
+      <div class="_1">${lesson.name || ""}</div>
+    </div>
+  `;
+
+  // 👁️ آیکون show
+  const showIcon = row.querySelector(".group-10");
+
+  if (showIcon) {
+    showIcon.style.cursor = "pointer";
+
+    showIcon.addEventListener("click", () => {
+      // ذخیره id درس
+      localStorage.setItem("selected-course-id", lesson.id);
+
+      // رفتن به صفحه ثبت‌نام‌ها
+      window.location.href = "professor-view-registrations.html";
+    });
   }
+
+  return row;
+}
+
+
 
   function renderTable() {
     if (!tbody) return;
@@ -1046,6 +1063,8 @@ if (newLessonBtn) {
       window.location.href = "unit-management.html";
     });
   }
+
+
 
   
 

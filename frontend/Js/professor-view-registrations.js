@@ -56,31 +56,50 @@ if (viewCoursesBtn) {
   });
 }
 
-  function renderTable(list) {
-    tbody.innerHTML = "";
+ function renderTable(list) {
+  // پاک‌کردن جدول
+  tbody.innerHTML = "";
 
-    if (!Array.isArray(list) || list.length === 0) {
-      tbody.innerHTML = `
-        <div style="padding:14px; text-align:center; color:#777">
-          دانشجویی برای این درس ثبت‌ نام نکرده است
-        </div>
-      `;
-      return;
-    }
-
-    list.forEach((item, index) => {
-      const row = document.createElement("div");
-      row.className = "tr2";
-
-      row.innerHTML = `
-        <div class="td2">${index + 1}</div>
-        <div class="td2">${item.full_name || "—"}</div>
-        <div class="td2">${item.student_number || "—"}</div>
-      `;
-
-      tbody.appendChild(row);
-    });
+  // اگر لیست خالی است
+  if (!Array.isArray(list) || list.length === 0) {
+    const emptyRow = document.createElement("div");
+    emptyRow.style.padding = "14px";
+    emptyRow.style.textAlign = "center";
+    emptyRow.style.color = "#777";
+    emptyRow.textContent = "دانشجویی برای این درس ثبت‌نام نکرده است";
+    tbody.appendChild(emptyRow);
+    return;
   }
+
+  // ساخت ردیف‌ها
+  list.forEach((item, index) => {
+    const row = document.createElement("div");
+    row.className = "tr2";
+
+    row.innerHTML = `
+      <!-- عملیات -->
+      <div class="td operation">—</div>
+
+      <!-- شماره دانشجویی -->
+      <div class="td2">
+        ${item.student_number || "—"}
+      </div>
+
+      <!-- نام و نام خانوادگی -->
+      <div class="td2">
+        ${item.full_name || "—"}
+      </div>
+
+      <!-- ردیف -->
+      <div class="td2">
+        ${index + 1}
+      </div>
+    `;
+
+    tbody.appendChild(row);
+  });
+}
+
 
   // ===============================
   // پیام ساده

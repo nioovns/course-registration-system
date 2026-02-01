@@ -1166,3 +1166,7 @@ body {
 }
 
 
+.group-10:hover {
+  filter: brightness(0) saturate(100%) invert(24%) sepia(88%)
+          saturate(2766%) hue-rotate(346deg) brightness(95%) contrast(95%);
+}

@@ -46,7 +46,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
- 
+ const viewCoursesBtn = document.querySelector(".sidenav-link");
+
+if (viewCoursesBtn) {
+  viewCoursesBtn.style.cursor = "pointer";
+
+  viewCoursesBtn.addEventListener("click", () => {
+    window.location.href = "professor-dashboard.html";
+  });
+}
+
   function renderTable(list) {
     tbody.innerHTML = "";
 

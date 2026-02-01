@@ -147,14 +147,15 @@ class EnrollmentSerializer(serializers.ModelSerializer):
 class ProfessorEnrollmentSerializer(serializers.ModelSerializer):
     student_id = serializers.CharField(source='student.student_id')
     student_db_id = serializers.IntegerField(source='student.id')
-    first_name = serializers.CharField(source='student.user.first_name', read_only=True)
-    last_name = serializers.CharField(source='student.user.last_name', read_only=True)
+    full_name = serializers.SerializerMethodField()    
     class Meta:
         model = Enrollment
         fields = [
             'id',
             'student_db_id',
             'student_id',
-            'first_name',
-            'last_name',
+            'full_name',
         ]
+
+    def get_full_name(self, obj):
+        return f"{obj.student.first_name} {obj.student.last_name}"

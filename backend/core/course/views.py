@@ -21,13 +21,13 @@ class CourseViewSet(viewsets.ViewSet):
     service = AdminService()
 
     def list(self, request):
-        queryset = self.service.list_courses()
+        queryset = self.service.list_courses(user=request.user)
         filtered = CourseFilter.apply(queryset, request.query_params)
         serializer = CourseSerializer(filtered, many=True)
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
-        course = get_object_or_404(Course, pk=pk)
+        course = self.service.get_course(pk, user=request.user)
         serializer = CourseSerializer(course)
         return Response(serializer.data)
 

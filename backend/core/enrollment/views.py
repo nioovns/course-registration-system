@@ -66,7 +66,7 @@ class ProfessorEnrollmentViewSet(mixins.ListModelMixin,
         return Enrollment.objects.filter(
             course=course,
             status=Enrollment.Status.ENROLLED
-        ).select_related('student','student__user')
+        ).select_related('student','student__user').order_by('student__last_name')
 
     def destroy(self, request, course_id=None, student_db_id=None):
         try:

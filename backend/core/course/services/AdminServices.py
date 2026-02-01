@@ -4,11 +4,24 @@ from course.serializers.CourseSerializer import CourseSerializer
 
 
 class AdminService:
-    def list_courses(self):
-        return Course.objects.all()
+    def list_courses(self, user=None):
+        queryset = Course.objects.all()
 
-    def get_course(self, course_id):
-        return get_object_or_404(Course, id=course_id)
+        if user and user.role == user.Roles.PROFESSOR:
+            queryset = queryset.filter(professor=user)
+            
+        return queryset
+
+
+
+    def get_course(self, course_id, user=None):
+        course = get_object_or_404(Course, id=course_id)
+        
+        if user and user.role == user.Roles.PROFESSOR:
+            if course.professor != user:
+                raise PermissionDenied("شما اجازه دسترسی به این درس را ندارید")
+            
+        return course
 
     def create_course(self, data):
         serializer = CourseSerializer(data=data)

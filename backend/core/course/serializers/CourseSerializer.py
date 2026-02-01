@@ -128,7 +128,10 @@ class CourseSerializer(serializers.ModelSerializer):
             instance.sessions.set(new_sessions)
 
         if prerequisites_data is not None:
-            instance.prerequisites.set(prerequisites_data)
+            if len(prerequisites_data) == 0:
+                instance.prerequisites.clear()
+            else:
+                instance.prerequisites.set(prerequisites_data)
 
         return instance
 
@@ -156,3 +159,25 @@ class CourseSerializer(serializers.ModelSerializer):
                 "Courses with 2 or fewer units must have exactly 1 session."
             )
             
+    def validate_prerequisites(self, value):
+        if not value:
+            return value
+
+        current_course = self.instance  
+
+        if not current_course:
+            return value
+
+        for course in value:
+            if course == current_course:
+                raise serializers.ValidationError(
+                    "درس نمیتواند پیش نیاز خودش باشد"
+                )
+                
+            if current_course in course.prerequisites.all():
+                raise serializers.ValidationError(
+                    f"'{course.name} نمی‌تواند پیش‌نیاز این درس باشد زیرا خودش به این درس نیاز دارد"
+
+                )
+
+        return value

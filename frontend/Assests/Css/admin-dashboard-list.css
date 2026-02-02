@@ -28,7 +28,7 @@ body {
   position: relative;
 }
 .main-page {
-  background: #3b175c;
+   background: #3b175c;
   position: absolute;
   top: 0;
   left: 0;
@@ -41,7 +41,7 @@ body {
 .datatable {
   background: var(--white, #ffffff);
   border-radius: 20px;
-  padding: 70px 0px 20px 0px;
+  padding: 20px 0px 20px 0px;
   width: 1189px;
   height: 594px;
   position: absolute;
@@ -537,8 +537,8 @@ body {
 .frame-28  {
   background: #fbfbfb;
   border-radius: 10px;
-  width: 26%;
-  height: 9%;
+  width: 24%;
+  height: 6%;
   position: absolute;
   cursor: pointer;
   right: 23.7%;
@@ -549,8 +549,8 @@ body {
 .frame-28:hover{
   background: #E6CD00;
   border-radius: 10px;
-  width: 26%;
-  height: 9%;
+  width: 24%;
+  height: 6%;
   position: absolute;
   right: 23.7%;
   left: 48%;
@@ -561,8 +561,8 @@ body {
 .frame-28.active{
   background: #E6CD00;
   border-radius: 10px;
-  width: 26%;
-  height: 9%;
+  width: 24%;
+  height: 6%;
   position: absolute;
   right: 23.7%;
   left: 48%;
@@ -576,7 +576,7 @@ body {
 .frame-25 {
   border-radius: 10px;
   border-style: solid;
-  border-color: #3b175c;
+  border-color: #fbfbfb;
   border-width: 2px;
   width: 100%;
   height: 100%;
@@ -634,13 +634,12 @@ body {
   background: #fbfbfb;
   border-radius: 10px;
   width: 23%;
-  height: 9%;
+  height: 6%;
   position: absolute;
   right: 50%;
   left: 24%;
   bottom: 95.11%;
   top: 0.89%;
-  border-color: #dc4c64;
 }
 .group-28 {
   position: absolute;
@@ -1154,195 +1153,3 @@ body {
   cursor: pointer;
 }
 
-
-
-
-
-/* =====================================
-   FINAL WEB-SAFE LAYOUT PATCH
-   DO NOT TOUCH HTML
-   ===================================== */
-
-html, body {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
-
-/* === Sidebar: fixed & predictable === */
-.sidenav {
-  position: fixed !important;
-  top: 16px !important;
-  right: 16px !important;
-  width: 280px !important;
-  height: calc(100vh - 32px) !important;
-
-  left: auto !important;
-  bottom: auto !important;
-}
-
-/* === Main page wrapper === */
-.admin-dashboard-lesson-list {
-  position: relative !important;
-  width: calc(100vw - 320px) !important;
-  height: 100vh !important;
-
-  margin-right: 320px !important;
-  margin-left: 0 !important;
-  padding: 0 !important;
-}
-
-/* === Purple background layer === */
-.main-page {
-  position: absolute !important;
-  inset: 0 !important;
-  background: #3b175c !important;
-}
-
-/* === Navbar === */
-.navbar {
-  position: relative !important;
-  width: calc(100% - 64px) !important;
-  margin: 16px auto 0 auto !important;
-
-  left: auto !important;
-}
-
-/* === Datatable card === */
-.datatable {
-  position: relative !important;
-  top: auto !important;
-  right: auto !important;
-
-  width: calc(100% - 64px) !important;
-  height: auto !important;
-
-  margin: 24px auto !important;
-  padding-bottom: 24px !important;
-}
-
-/* === Table always full width === */
-.table {
-  position: relative !important;
-  width: 100% !important;
-  height: auto !important;
-}
-/* =====================================
-   FINAL HEIGHT FIX – NO EMPTY SPACE
-   ===================================== */
-
-html, body {
-  height: 100%;
-}
-
-/* کانتینر اصلی = حداقل قد صفحه */
-.admin-dashboard-lesson-list {
-  height: auto !important;
-  min-height: 100vh !important;
-}
-
-/* کارت سفید محتوا */
-.datatable {
-  height: auto !important;
-  min-height: calc(100vh - 160px) !important;
-  display: flex;
-  flex-direction: column;
-}
-
-/* جدول اجازه رشد بگیرد */
-.table {
-  height: auto !important;
-  flex: 1;
-}
-
-/* فوتر جدول همیشه پایین کارت */
-.table-footer {
-  position: relative !important;
-  top: auto !important;
-  bottom: auto !important;
-  margin-top: auto !important;
-}
-/* =====================================
-   FINAL UX FIX – CONTENT-BASED HEIGHT
-   ===================================== */
-
-/* صفحه کل ارتفاع viewport رو داشته باشه */
-.admin-dashboard-lesson-list {
-  min-height: 100vh !important;
-  height: auto !important;
-}
-
-/* کارت سفید فقط به اندازه محتوا */
-.datatable {
-  height: auto !important;
-  min-height: unset !important;
-  padding-bottom: 16px;
-}
-
-/* جدول رشد طبیعی */
-.table {
-  height: auto !important;
-}
-
-/* فوتر جدول درست زیر ردیف‌ها */
-.table-footer {
-  position: static !important;
-  margin-top: 12px;
-}
-/* =====================================
-   BALANCED DASHBOARD HEIGHT (FINAL)
-   ===================================== */
-
-/* کانتینر اصلی */
-.admin-dashboard-lesson-list {
-  min-height: 100vh;
-  height: auto;
-}
-
-/* کارت سفید */
-.datatable {
-  height: auto !important;
-  min-height: 70vh;          /* 👈 کلیدی */
-  max-height: calc(100vh - 140px);
-  padding-bottom: 16px;
-}
-
-/* جدول */
-.table {
-  height: auto;
-}
-
-/* فوتر جدول */
-.table-footer {
-  position: static !important;
-  margin-top: 16px;
-}
-
-.frame-26 {
-  border-bottom: 1.5px solid rgba(59, 23, 92, 0.4) !important;
-}
-.frame-26:hover,
-.frame-26:focus-within {
-  border-bottom: 2.5px solid #3b175c !important;
-}
-.frame-25 {
-  background: #fbfbfb;
-  border-radius: 12px;
-  position: absolute;
-  cursor: pointer;
-  overflow: hidden;
-
-  transition:
-    background-color 0.25s ease,
-    transform 0.18s ease,
-    box-shadow 0.25s ease;
-}
-.frame-25:hover {
-  background: #E6CD00;
-  transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(59, 23, 92, 0.25);
-}
-.frame-25:active {
-  transform: translateY(0);
-  box-shadow: 0 4px 10px rgba(59, 23, 92, 0.35);
-}

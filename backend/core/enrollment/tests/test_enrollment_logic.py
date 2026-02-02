@@ -8,7 +8,6 @@ from enrollment.models.Enrollment import Enrollment
 from enrollment.models.EnrollmentSettings import EnrollmentSettings
 from datetime import time
 
-
 class EnrollmentLogicTests(APITestCase):
 
     def setUp(self):
@@ -58,6 +57,19 @@ class EnrollmentLogicTests(APITestCase):
         data = {'course': self.math1.code}
         response = self.client.post(self.list_url, data)
 
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_enrollment_already_passed(self):
+        Enrollment.objects.create(student=self.student, course=self.math1, status='passed')
+
+        data = {'course': self.math1.code}
+        response = self.client.post(self.list_url, data)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_enrollment_invalid_course_code(self):
+        data = {'course': '999999'}
+        response = self.client.post(self.list_url, data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_prerequisite_fail(self):

@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+  let globalOverlay = null;
   const tbody = document.querySelector(".datatable .tbody");
 
   const token = localStorage.getItem("sabau-token");
@@ -11,6 +12,13 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!courseId) {
     alert("شناسه درس یافت نشد");
     return;
+  }
+
+   function showGlobalError(message) {
+    const overlay = createGlobalOverlay();
+    const msgEl = overlay.querySelector(".global-error-message");
+    if (msgEl) msgEl.textContent = message;
+    overlay.style.display = "flex";
   }
 
   function showGlobalErrorList(items) {
@@ -27,6 +35,111 @@ document.addEventListener("DOMContentLoaded", () => {
     if (titleEl) titleEl.textContent = "خطا در ثبت درس";
 
     overlay.style.display = "flex";
+  }
+
+  function createGlobalOverlay() {
+    if (globalOverlay) return globalOverlay;
+
+    const overlay = document.createElement("div");
+    overlay.className = "global-message-overlay";
+    Object.assign(overlay.style, {
+      position: "fixed",
+      inset: "0",
+      background: "rgba(15,23,42,0.45)",
+      display: "none",
+      alignItems: "center",
+      justifyContent: "center",
+      zIndex: "9999",
+    });
+
+    const box = document.createElement("div");
+    box.className = "global-message-box";
+    Object.assign(box.style, {
+      background: "#ffffff",
+      borderRadius: "16px",
+      padding: "18px 22px 14px 22px",
+      maxWidth: "400px",
+      width: "90%",
+      boxShadow: "0 12px 40px rgba(15,23,42,0.35)",
+      direction: "rtl",
+      fontFamily: "inherit",
+      textAlign: "right",
+    });
+
+    const titleEl = document.createElement("div");
+    titleEl.className = "global-message-title";
+    Object.assign(titleEl.style, {
+      fontSize: "15px",
+      fontWeight: "600",
+      marginBottom: "8px",
+      color: "#b91c1c",
+      display: "flex",
+      alignItems: "center",
+      gap: "6px",
+    });
+
+    const dot = document.createElement("span");
+    dot.textContent = "!";
+    Object.assign(dot.style, {
+      width: "20px",
+      height: "20px",
+      borderRadius: "50%",
+      background: "#fee2e2",
+      color: "#b91c1c",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontSize: "12px",
+      fontWeight: "700",
+    });
+
+    const titleTextNode = document.createElement("span");
+    titleTextNode.textContent = "خطا در ثبت درس";
+    titleEl.appendChild(dot);
+    titleEl.appendChild(titleTextNode);
+
+    const msgEl = document.createElement("div");
+    msgEl.className = "global-message-text";
+    Object.assign(msgEl.style, {
+      fontSize: "13px",
+      color: "#4b5563",
+      lineHeight: "1.8",
+      marginBottom: "12px",
+      whiteSpace: "pre-line",
+    });
+
+    const btnRow = document.createElement("div");
+    Object.assign(btnRow.style, {
+      display: "flex",
+      justifyContent: "flex-end",
+    });
+
+    const btn = document.createElement("button");
+    btn.textContent = "متوجه شدم";
+    Object.assign(btn.style, {
+      border: "none",
+      borderRadius: "999px",
+      padding: "7px 18px",
+      background: "#3b175c",
+      color: "#ffffff",
+      cursor: "pointer",
+      fontSize: "13px",
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center",
+    });
+    btn.addEventListener("click", () => {
+      overlay.style.display = "none";
+    });
+    btnRow.appendChild(btn);
+
+    box.appendChild(titleEl);
+    box.appendChild(msgEl);
+    box.appendChild(btnRow);
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+    globalOverlay = overlay;
+    return overlay;
   }
 
   function showGlobalSuccess(message, onClose) {
@@ -385,39 +498,37 @@ function renderTable(list) {
       </div>
     `;
 
-    console.log("ROW ITEM:", item);
-
     const trashIcon = row.querySelector(".group-10");
 
-   trashIcon.addEventListener("click", () => {
-  showConfirmDialog({
-    title: "حذف دانشجو",
-    message: `آیا از حذف «${item.full_name}» از این درس مطمئن هستید؟`,
-    confirmText: "حذف",
-    cancelText: "انصراف",
+    trashIcon.addEventListener("click", () => {
+      showConfirmDialog({
+        title: "حذف دانشجو",
+        message: `آیا از حذف «${item.full_name}» از این درس مطمئن هستید؟`,
+        confirmText: "حذف",
+        cancelText: "انصراف",
 
-    onConfirm: async () => {
-      const result = await deleteEnrollment(
-        courseId,
-        item.student_db_id
-      );
+        onConfirm: async () => {
+          const result = await deleteEnrollment(
+            courseId,
+            item.student_db_id
+          );
 
-      if (!result.ok) {
-        showGlobalError(result.error);
-        return;
-      }
+          if (!result.ok) {
+            showGlobalError(result.error);
+            return;
+          }
 
-      showGlobalError("دانشجو با موفقیت حذف شد ✅");
-      fetchEnrollments(courseId);
-    },
-  });
-});
-
-
+          showGlobalSuccess("دانشجو با موفقیت حذف شد ✅", () => {
+            fetchEnrollments(courseId);
+          });
+        },
+      });
+    });
 
     tbody.appendChild(row);
   });
 }
+
 
   function showMessage(text) {
     const div = document.createElement("div");

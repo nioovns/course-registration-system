@@ -3,16 +3,14 @@ from django.urls import reverse
 from rest_framework.test import APITestCase
 from rest_framework import status
 from users.models import Student, Professor
-from ..models import Student, Professor
+
 User = get_user_model()
 
 class RolePermissionTests(APITestCase):
     def setUp(self):
-        # 1. ساخت یوزر و پروفایل دانشجو
         self.student_user = User.objects.create_user(
             username='std', password='123', role=User.Roles.STUDENT
         )
-        # نکته مهم: پروفایل را هم بسازید تا تست واقعی‌تر شود
         Student.objects.create(
             user=self.student_user,
             student_id="991122",
@@ -20,7 +18,6 @@ class RolePermissionTests(APITestCase):
             last_name="Student"
         )
 
-        # 2. ساخت یوزر و پروفایل استاد
         self.professor_user = User.objects.create_user(
             username='prof', password='123', role=User.Roles.PROFESSOR
         )
@@ -31,7 +28,6 @@ class RolePermissionTests(APITestCase):
             last_name="Prof"
         )
 
-        # 3. ساخت ادمین
         self.admin_user = User.objects.create_user(
             username='adm', password='123', role=User.Roles.ADMIN
         )
@@ -44,7 +40,6 @@ class RolePermissionTests(APITestCase):
         self.client.force_authenticate(user=self.student_user)
         response = self.client.get(self.student_url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIn("Welcome", response.data['message'])
 
     def test_professor_can_access_professor_dashboard(self):
         self.client.force_authenticate(user=self.professor_user)

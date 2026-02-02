@@ -53,7 +53,6 @@ Before running the project, ensure the following are installed:
 
 Check Python installation:
 ```bash
-
 python --version
 ```
 
@@ -85,7 +84,15 @@ Creating a Virtual Environment
 ### Installing Dependencies
 `pip install -r requirements.txt`
 
-#### Database Setup (Migrations)
+### Database Setup
+
+- Navigate to the backend directory containing manage.py:
+```bash 
+    cd backend/core
+```
+
+## Run migrations:
+
 ```bash
 python manage.py makemigrations
 python manage.py migrate
@@ -93,7 +100,7 @@ python manage.py migrate
 
 ### Creating Admin (Superuser)
 ```python manage.py createsuperuser```
--Enter the required credentials (username and password).
+- Enter the required credentials (username and password).
 
 ### Running the Project
 
@@ -104,6 +111,7 @@ python manage.py migrate
 
 
 ### Backend URLs:
+
 ```bash
 http://127.0.0.1:8000/
 http://127.0.0.1:8000/admin/
@@ -131,7 +139,7 @@ Some endpoints require authentication.
 - To test protected endpoints:
 - Obtain a token from the login endpoint
 - Click the Authorize button in Swagger
-Enter the token in the following format:
+- Enter the token in the following format:
 ```
 Bearer <your_access_token>
 ``` 
@@ -140,13 +148,13 @@ Bearer <your_access_token>
 The frontend runs independently and does not require Django rendering.
 
 Navigate to the frontend directory:
-```
-cd frontend/Pages
+```bash 
+      cd frontend/Pages
 ```
 
 Then open the login page directly in your browser:
-```
-login.html
+```bash 
+ login.html
 ```
 
 Alternatively, run the frontend using a simple local server (recommended), for example with Live Server:
@@ -176,20 +184,17 @@ After creating users, open login.html in your browser to use the system.
 #### Features by Role
 
 ## Admin
-
 - Admin authentication
 - Create, update, delete, and view courses
 - Set minimum and maximum allowed units
 
 ## Student
-
 - View available courses
 - Search courses
 - Enroll in courses
 - Drop enrolled courses
 
 ## Professor
-
 - View assigned courses
 - View enrolled students for each course
 - Remove students from courses if necessary

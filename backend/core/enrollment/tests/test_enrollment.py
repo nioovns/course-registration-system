@@ -9,7 +9,7 @@ from enrollment.models.EnrollmentSettings import EnrollmentSettings
 from datetime import time
 
 
-class EnrollmentCycleTests(APITestCase):
+class EnrollmentIntegrationTests(APITestCase):
 
     def setUp(self):
         self.user = User.objects.create_user(username='std_cycle', password='password', role=User.Roles.STUDENT)
@@ -55,3 +55,29 @@ class EnrollmentCycleTests(APITestCase):
 
         self.assertFalse(Enrollment.objects.filter(student=self.student, course=self.course_a).exists())
         self.assertTrue(Enrollment.objects.filter(student=self.student, course=self.course_b).exists())
+
+    def test_unauthorized_access(self):
+        self.client.logout()
+        data = {'course': self.course_a.code}
+        response = self.client.post(self.list_url, data)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_professor_cannot_enroll(self):
+        prof_user = User.objects.create_user(username='prof1', password='password', role=User.Roles.PROFESSOR)
+        self.client.force_authenticate(user=prof_user)
+
+        data = {'course': self.course_a.code}
+        response = self.client.post(self.list_url, data)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_delete_other_student_enrollment(self):
+        other_user = User.objects.create_user(username='std2', password='password', role=User.Roles.STUDENT)
+        other_student = Student.objects.create(user=other_user, student_id="999999", first_name="Other",
+                                               last_name="Student")
+        Enrollment.objects.create(student=other_student, course=self.course_a)
+
+        delete_url = f"{self.list_url}{self.course_a.code}/"
+        response = self.client.delete(delete_url)
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertTrue(Enrollment.objects.filter(student=other_student, course=self.course_a).exists())

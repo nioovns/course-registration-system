@@ -192,7 +192,7 @@ function createConfirmOverlay() {
   });
   msgEl.textContent = "آیا مطمئن هستید که می‌خواهید از حساب خود خارج شوید؟";
 
-  // دکمه‌ها
+  
   const btnRow = document.createElement("div");
   Object.assign(btnRow.style, {
     display: "flex",

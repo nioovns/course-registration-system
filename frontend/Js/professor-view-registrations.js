@@ -549,3 +549,44 @@ function renderTable(list) {
     setTimeout(() => div.remove(), 2500);
   }
 });
+
+
+
+(function () {
+  function updateDateTime() {
+  const now = new Date();
+
+  const dateFormatter = new Intl.DateTimeFormat("fa-IR-u-ca-persian", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+
+  const timeFormatter = new Intl.DateTimeFormat("fa-IR", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
+
+  const parts = dateFormatter.formatToParts(now);
+  const weekday = parts.find(p => p.type === "weekday")?.value ?? "";
+  const day = parts.find(p => p.type === "day")?.value ?? "";
+  const month = parts.find(p => p.type === "month")?.value ?? "";
+  const year = parts.find(p => p.type === "year")?.value ?? "";
+
+  const persianTime = timeFormatter.format(now);
+  const persianDate = `${weekday} ${day} ${month} ${year}`;
+
+  const dateTarget = document.querySelector("._1-1404");
+  if (dateTarget) {
+    dateTarget.textContent = `${persianTime} | ${persianDate}`;
+  }
+}
+
+
+  updateDateTime();
+  
+  setInterval(updateDateTime, 1000);
+})();
+

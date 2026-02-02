@@ -6,19 +6,18 @@ class SwaggerTests(APITestCase):
 
     def test_swagger_ui_loads_successfully(self):
 
-        url = reverse('schema-swagger-ui')  # نامی که در urls.py دادیم
+        url = reverse('schema-swagger-ui')
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_redoc_loads_successfully(self):
 
-        url = reverse('schema-redoc')  # نامی که در urls.py دادیم
+        url = reverse('schema-redoc')
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_schema_json_loads_successfully(self):
 
-        # try two common variations for the format argument
         try:
             url = reverse('schema-json', kwargs={'format': 'json'})
         except Exception:

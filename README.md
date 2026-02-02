@@ -97,6 +97,40 @@ Creating a Virtual Environment
 python manage.py makemigrations
 python manage.py migrate
 ```
+Alternative Database Setup (Using Preloaded Data)
+
+Instead of running Django migrations, you can use a preloaded database that already contains the required schema and initial data.
+
+This approach allows you to quickly set up and run the project without executing makemigrations and migrate.
+
+Using Preloaded Database
+
+Navigate to the backend core directory:
+
+``cd course-registration-system/backend/core``
+
+Run the import script:
+
+python import_sql.py
+
+The script will automatically:
+
+Create the database structure
+
+Import all required initial data
+
+Prepare the project for *immediate use*
+
+Important Notes
+
+**Do not run** the following commands when using this method:
+
+python manage.py makemigrations
+python manage.py migrate
+
+
+Ensure the database settings in settings.py are correctly configured before running the script.
+
 
 ### Creating Admin (Superuser)
 ```python manage.py createsuperuser```

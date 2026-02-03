@@ -131,6 +131,39 @@ python manage.py migrate
 
 Ensure the database settings in settings.py are correctly configured before running the script.
 
+After importing the database using the import_sql.py script, you can log in to the system using predefined user accounts.
+
+The usernames, passwords, and their corresponding roles are provided in the Authorization.txt file.
+
+Login Information
+
+The Authorization.txt file contains:
+
+Username
+
+Password
+
+Assigned role (Admin, Student, Professor)
+
+After importing the database:
+
+You can log in using these credentials
+
+Each user will have access based on their assigned role
+
+Available Roles:
+
+*Admin*: Full access to course and system management
+
+*Student*: Course browsing, enrollment, and drop operations
+
+*Professor*: Viewing assigned courses and managing enrolled students
+
+**Note**
+
+Do not change the credentials in the database unless you update the Authorization.txt file accordingly.
+
+These accounts are intended for testing and demonstration purposes.
 
 ### Creating Admin (Superuser)
 ```python manage.py createsuperuser```

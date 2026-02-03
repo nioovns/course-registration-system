@@ -11,6 +11,6 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "selenium-webdriver": "^4.38.0"
+    "selenium-webdriver": "^4.40.0"
   }
 }
